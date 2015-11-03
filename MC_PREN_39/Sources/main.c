@@ -40,12 +40,16 @@
 #include "ASerialLdd1.h"
 #include "CS1.h"
 #include "TU1.h"
+#include "FRTOS1.h"
+#include "XF1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
 #include "PE_Const.h"
 #include "IO_Map.h"
 /* User includes (#include below this line is not maintained by Processor Expert) */
+#include "UART_Shell.h"
+#include "RTOS.h"
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
 int main(void)
@@ -58,20 +62,10 @@ int main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
+  CreateTasks();
 
-  unsigned char cmd[100];
 
-  /* table with shell parser/handler */
-  static const CLS1_ParseCommandCallback CmdParserTable[] =
-  {
-    CLS1_ParseCommand,
-    LED1_ParseCommand,
-    NULL /* sentinel */
-  };
 
- for(;;){
-	  CLS1_ReadAndParseWithCommandTable(cmd,sizeof(cmd),CLS1_GetStdio(),CmdParserTable);
- }
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
