@@ -10,7 +10,7 @@
 static portTASK_FUNCTION(Task1, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
-    getCommands();
+	 handleCommunication();
     FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
   }
 }

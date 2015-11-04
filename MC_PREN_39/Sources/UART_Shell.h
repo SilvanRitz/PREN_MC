@@ -5,10 +5,21 @@
  *      Author: Silvan Ritz
  */
 
+
 #ifndef SOURCES_UART_SHELL_H_
 #define SOURCES_UART_SHELL_H_
 
+
+unsigned int MyXprintf(const char *fmt, ...);
+/*
+/**
+ * \brief Gets all Commands from the Shell.
+ */
 void getCommands(void);
-void debugPrint(void);
+/*
+/**
+ * \brief Mainfunction of this module. Call frequently in a task.
+ */
+void handleCommunication(void);
 
 #endif /* SOURCES_UART_SHELL_H_ */
