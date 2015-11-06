@@ -6,11 +6,20 @@
  */
 #include "FRTOS1.h"
 #include "UART_Shell.h"
+#include "UltraSonic.h"
 
 static portTASK_FUNCTION(Task1, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
-	 handleCommunication();
+	handleCommunication();
+    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+  }
+}
+
+static portTASK_FUNCTION(Task2, pvParameters) {
+  (void)pvParameters; /* parameter not used */
+  for(;;) {
+	startMeasurement();
     FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
   }
 }
@@ -19,7 +28,18 @@ static portTASK_FUNCTION(Task1, pvParameters) {
 bool CreateTasks(void){
 	if (FRTOS1_xTaskCreate(
         Task1,  /* pointer to the task */
-        "Task1", /* task name for kernel awareness debugging */
+        "Shell", /* task name for kernel awareness debugging */
+        configMINIMAL_STACK_SIZE, /* task stack size */
+        (void*)NULL, /* optional task startup argument */
+        tskIDLE_PRIORITY,  /* initial priority */
+        (xTaskHandle*)NULL /* optional task handle to create */
+      ) != pdPASS){
+		return FALSE;
+	  }
+
+	if (FRTOS1_xTaskCreate(
+        Task2,  /* pointer to the task */
+        "UltraSonic", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE, /* task stack size */
         (void*)NULL, /* optional task startup argument */
         tskIDLE_PRIORITY,  /* initial priority */

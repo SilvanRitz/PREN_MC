@@ -45,6 +45,9 @@
 #include "SERVO1.h"
 #include "Pwm1.h"
 #include "PwmLdd2.h"
+#include "TRIG.h"
+#include "WAIT_UltaSonic.h"
+#include "TU2.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
