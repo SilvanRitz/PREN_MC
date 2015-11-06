@@ -45,6 +45,9 @@
 #include "TU1.h"
 #include "FRTOS1.h"
 #include "XF1.h"
+#include "SERVO1.h"
+#include "Pwm1.h"
+#include "PwmLdd2.h"
 
 #ifdef __cplusplus
 extern "C" {
