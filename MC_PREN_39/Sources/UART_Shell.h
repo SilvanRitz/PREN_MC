@@ -11,6 +11,7 @@
 
 
 unsigned int MyXprintf(const char *fmt, ...);
+
 /*
 /**
  * \brief Gets all Commands from the Shell.
@@ -21,5 +22,7 @@ void getCommands(void);
  * \brief Mainfunction of this module. Call frequently in a task.
  */
 void handleCommunication(void);
+
+unsigned int debugPrintf(const char *fmt, ...);
 
 #endif /* SOURCES_UART_SHELL_H_ */

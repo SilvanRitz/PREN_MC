@@ -68,7 +68,9 @@ int main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  CreateTasks();
+  if(!CreateTasks()){
+	  debugPrintf("Fehler beim erstellen der Tasks\r\n");
+  }
 
 
 

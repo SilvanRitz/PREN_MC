@@ -11,6 +11,7 @@
 #include "PwmLdd2.h"
 #include "TRIG.h"
 #include "UltraSonic.h"
+#include "UART_Shell.h"
 
 enum US_GenaralState_ {
   US_INIT, /* device not used */
@@ -41,12 +42,15 @@ void startMeasurement(void){
 	for(;;){
 		switch (US_GenaralState){
 		case US_INIT:
+			debugPrintf("US: Init done.\r\n");
+
 			US_Init();
 		break;
 		case US_MEASURE:
 			echotime_us=US_Measure_us();
 			if (!echotime_us){
 				//Hier kommt die Fehlermeldung für keine Messung!
+				debugPrintf("Keine Messung! Zu grosse Distanz?\r\n");
 				echotime_us=0;		//nur für den Breakpoint
 			}
 			US_GenaralState=US_CALC_DIST;

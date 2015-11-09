@@ -17,7 +17,7 @@
 **  @addtogroup UART_Shell_module  UART_Shell module documentation
 **  @{
 */
-
+#include <stdio.h>
 #include "CLS1.h"
 #include "LED1.h"
 #include "SERVO1.h"
@@ -45,12 +45,6 @@ void getCommands(void){
 }
 
 
-void debugPrint(void){
-	  char buf[64];
-	  XF1_xsprintf(buf, "Hello world\r\n");
-	  CLS1_SendStr((unsigned char*)buf, CLS1_GetStdio()->stdOut);
-}
-
 static void MyPutChar(void *arg, char c) {
   CLS1_StdIO_OutErr_FctType fct = arg;
 
@@ -71,17 +65,23 @@ unsigned int MyXprintf(const char *fmt, ...) {
   return count;
 }
 
+
+unsigned int debugPrintf(const char *fmt, ...) {
+  return MyXprintf(fmt);
+}
+
+
 void handleCommunication(void){
 	switch (shellStates){
 	case INIT:
-		MyXprintf("TEST\r\n");
+		debugPrintf("\nWelcome\r\n");
 		shellStates=GET_COMMANDS;
 		break;
 	case GET_COMMANDS:
 		getCommands();
 		break;
 	case EXIT:
-		debugPrint();
+		debugPrintf("Exit\r\n");
 		break;
 	}
 }

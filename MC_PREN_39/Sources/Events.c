@@ -191,6 +191,42 @@ void TU2_OnChannel0(LDD_TUserData *UserDataPtr)
 	US_EventEchoCapture(UserDataPtr);
 }
 
+/*
+** ===================================================================
+**     Event       :  Cpu_OnSupervisorCall (module Events)
+**
+**     Component   :  Cpu [MKL25Z128LK4]
+*/
+/*!
+**     @brief
+**         This event is called when the Supervisor Call exception had
+**         occurred. This event is automatically enabled when the
+**         [Supervisor Call] property is set to 'Enabled'.
+*/
+/* ===================================================================*/
+void Cpu_OnSupervisorCall(void)
+{
+	vPortSVCHandler();
+}
+
+/*
+** ===================================================================
+**     Event       :  Cpu_OnPendableService (module Events)
+**
+**     Component   :  Cpu [MKL25Z128LK4]
+*/
+/*!
+**     @brief
+**         This event is called when the Pendable Service exception had
+**         occurred. This event is automatically enabled when the
+**         [Pendable Service] property is set to 'Enabled'.
+*/
+/* ===================================================================*/
+void Cpu_OnPendableService(void)
+{
+	vPortPendSVHandler();
+}
+
 /* END Events */
 
 #ifdef __cplusplus
