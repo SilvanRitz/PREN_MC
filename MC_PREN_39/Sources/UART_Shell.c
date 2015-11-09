@@ -22,6 +22,8 @@
 #include "LED1.h"
 #include "SERVO1.h"
 #include "XF1.h"
+#include "config.h"
+#include "FRTOS1.h"
 
 enum shellStates_t{
 	INIT,
@@ -37,6 +39,7 @@ enum shellStates_t{
     CLS1_ParseCommand,
     LED1_ParseCommand,
 	SERVO1_ParseCommand,
+	FRTOS1_ParseCommand,
     NULL /* sentinel */
   };
 
@@ -67,8 +70,11 @@ unsigned int MyXprintf(const char *fmt, ...) {
 
 
 unsigned int debugPrintf(const char *fmt, ...) {
-  return MyXprintf(fmt);
+#ifdef CFG_DEBUG_MSG
+		return MyXprintf(fmt);
+#endif
 }
+
 
 
 void handleCommunication(void){

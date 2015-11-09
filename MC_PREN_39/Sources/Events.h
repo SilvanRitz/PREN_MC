@@ -44,6 +44,7 @@
 #include "CS1.h"
 #include "TU1.h"
 #include "FRTOS1.h"
+#include "RTOSTRC1.h"
 #include "XF1.h"
 #include "SERVO1.h"
 #include "Pwm1.h"
@@ -202,6 +203,20 @@ void Cpu_OnSupervisorCall(void);
 */
 /* ===================================================================*/
 void Cpu_OnPendableService(void);
+
+void RTOSTRC1_OnTraceWrap(void);
+/*
+** ===================================================================
+**     Event       :  RTOSTRC1_OnTraceWrap (module Events)
+**
+**     Component   :  RTOSTRC1 [PercepioTrace]
+**     Description :
+**         Called for trace ring buffer wrap around. This gives the
+**         application a chance to dump the trace buffer.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
 
 /* END Events */
 

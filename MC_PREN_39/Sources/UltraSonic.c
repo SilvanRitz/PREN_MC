@@ -5,15 +5,15 @@
  *      Author: Wallpaper
  */
 
-#include "BitIoLdd1.h"
+//#include "BitIoLdd1.h"
 #include "WAIT_UltaSonic.h"
 #include "TU2.h"
-#include "PwmLdd2.h"
+//#include "PwmLdd2.h"
 #include "TRIG.h"
 #include "UltraSonic.h"
 #include "UART_Shell.h"
 
-enum US_GenaralState_ {
+static enum US_GenaralState_ {
   US_INIT, /* device not used */
   US_MEASURE, /* started trigger pulse */
   US_CALC_DIST, /* measuring echo pulse */
@@ -43,13 +43,12 @@ void startMeasurement(void){
 		switch (US_GenaralState){
 		case US_INIT:
 			debugPrintf("US: Init done.\r\n");
-
+			US_GenaralState=US_MEASURE;
 			US_Init();
 		break;
 		case US_MEASURE:
 			echotime_us=US_Measure_us();
 			if (!echotime_us){
-				//Hier kommt die Fehlermeldung für keine Messung!
 				debugPrintf("Keine Messung! Zu grosse Distanz?\r\n");
 				echotime_us=0;		//nur für den Breakpoint
 			}
@@ -57,9 +56,11 @@ void startMeasurement(void){
 			break;
 		case US_CALC_DIST:
 			distance_cm=US_usToCentimeters(echotime_us,25);
+			debugPrintf("Distanz: %i\r\n",distance_cm);
 			US_GenaralState=US_MEASURE;
 			break;
 		}
+		WAIT_UltaSonic_Waitms(100);
 	}
 }
 
@@ -67,7 +68,7 @@ void US_Init(void) {
   usDevice.state = ECHO_IDLE;
   usDevice.capture = 0;
   usDevice.trigDevice = TRIG_Init(NULL);
-  usDevice.echoDevice = TU1_Init(&usDevice);
+  usDevice.echoDevice = TU2_Init(&usDevice);
 }
 
 void US_EventEchoOverflow(LDD_TUserData *UserDataPtr) {
@@ -80,7 +81,7 @@ void US_EventEchoOverflow(LDD_TUserData *UserDataPtr) {
 void US_EventEchoCapture(LDD_TUserData *UserDataPtr){
 	US_DeviceType *ptr = (US_DeviceType*)UserDataPtr;
 	if (ptr->state==ECHO_TRIGGERED) { /* 1st edge, this is the raising edge, start measurement */
-	  TU1_ResetCounter(ptr->echoDevice);
+	  TU2_ResetCounter(ptr->echoDevice);
 	  ptr->state = ECHO_MEASURE;
 	} else if (ptr->state==ECHO_MEASURE) { /* 2nd edge, this is the falling edge: use measurement */
 	  (void)TU2_GetCaptureValue(ptr->echoDevice, 0, &ptr->capture);

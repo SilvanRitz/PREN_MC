@@ -41,6 +41,7 @@
 #include "CS1.h"
 #include "TU1.h"
 #include "FRTOS1.h"
+#include "RTOSTRC1.h"
 #include "XF1.h"
 #include "SERVO1.h"
 #include "Pwm1.h"
@@ -62,12 +63,14 @@ int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */
 {
   /* Write your local variable definition here */
+//enum runStates_ runStates;//=DEBUG;
 
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
+  //runStates=DEBUG;
   if(!CreateTasks()){
 	  debugPrintf("Fehler beim erstellen der Tasks\r\n");
   }

@@ -14,5 +14,4 @@ uint16_t US_Measure_us(void);
 uint16_t US_usToCentimeters(uint16_t microseconds, uint8_t temperatureCelsius);
 void US_EventEchoCapture(LDD_TUserData *UserDataPtr);
 void US_EventEchoOverflow(LDD_TUserData *UserDataPtr);
-
 #endif /* SOURCES_ULTRASONIC_H_ */
