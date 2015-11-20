@@ -9,6 +9,7 @@
 #ifndef SOURCES_UART_SHELL_H_
 #define SOURCES_UART_SHELL_H_
 
+#include "config.h"
 
 unsigned int MyXprintf(const char *fmt, ...);
 

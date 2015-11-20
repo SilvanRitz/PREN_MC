@@ -39,6 +39,8 @@
 #include "AS1.h"
 #include "ASerialLdd1.h"
 #include "CS1.h"
+#include "AD1.h"
+#include "AdcLdd1.h"
 #include "TU1.h"
 #include "FRTOS1.h"
 #include "RTOSTRC1.h"

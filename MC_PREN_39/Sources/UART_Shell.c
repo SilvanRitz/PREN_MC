@@ -70,7 +70,7 @@ unsigned int MyXprintf(const char *fmt, ...) {
 
 
 unsigned int debugPrintf(const char *fmt, ...) {
-#ifdef CFG_DEBUG_MSG
+#if CFG_DEBUG_MSG
 		return MyXprintf(fmt);
 #endif
 }

@@ -12,6 +12,7 @@
 #include "TRIG.h"
 #include "UltraSonic.h"
 #include "UART_Shell.h"
+#include "config.h"
 
 static enum US_GenaralState_ {
   US_INIT, /* device not used */
@@ -42,21 +43,21 @@ void startMeasurement(void){
 	for(;;){
 		switch (US_GenaralState){
 		case US_INIT:
-			debugPrintf("US: Init done.\r\n");
+			debugPrintfUltraSonic("US: Init done.\r\n");
 			US_GenaralState=US_MEASURE;
 			US_Init();
 		break;
 		case US_MEASURE:
 			echotime_us=US_Measure_us();
 			if (!echotime_us){
-				debugPrintf("Keine Messung! Zu grosse Distanz?\r\n");
+				debugPrintfUltraSonic("Keine Messung! Zu grosse Distanz?\r\n");
 				echotime_us=0;		//nur für den Breakpoint
 			}
 			US_GenaralState=US_CALC_DIST;
 			break;
 		case US_CALC_DIST:
 			distance_cm=US_usToCentimeters(echotime_us,25);
-			debugPrintf("Distanz: %i\r\n",distance_cm);
+			debugPrintfUltraSonic("Distanz: %i\r\n",distance_cm);
 			US_GenaralState=US_MEASURE;
 			break;
 		}
@@ -120,4 +121,10 @@ static uint16_t calcAirspeed_dms(uint8_t temperatureCelsius) {
 
 uint16_t US_usToCentimeters(uint16_t microseconds, uint8_t temperatureCelsius) {
   return (microseconds*100UL)/calcAirspeed_dms(temperatureCelsius)/2; /* 2 because of two way */
+}
+
+void debugPrintfUltraSonic(const char *fmt, ...) {
+#if CFG_ULTRASONIC_MSG
+	debugPrintf(fmt);
+#endif
 }
