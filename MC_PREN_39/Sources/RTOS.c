@@ -8,8 +8,9 @@
 #include "UART_Shell.h"
 #include "UltraSonic.h"
 #include "InfraredSensor.h"
+#include "DCDrive.h"
 
-static portTASK_FUNCTION(Task1, pvParameters) {
+static portTASK_FUNCTION(Task_Shell, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	handleCommunication();
@@ -17,7 +18,7 @@ static portTASK_FUNCTION(Task1, pvParameters) {
   }
 }
 
-static portTASK_FUNCTION(Task2, pvParameters) {
+static portTASK_FUNCTION(Task_Us, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	startMeasurement();
@@ -25,10 +26,18 @@ static portTASK_FUNCTION(Task2, pvParameters) {
   }
 }
 
-static portTASK_FUNCTION(Task3, pvParameters) {
+static portTASK_FUNCTION(Task_IR, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	getDistance();
+    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+  }
+}
+
+static portTASK_FUNCTION(Task_Drive, pvParameters) {
+  (void)pvParameters; /* parameter not used */
+  for(;;) {
+	DCDhandleSpeed();
     FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
   }
 }
@@ -38,7 +47,7 @@ static portTASK_FUNCTION(Task3, pvParameters) {
 bool CreateTasks(void){
 #if CFG_SHELL
 	if (FRTOS1_xTaskCreate(
-        Task1,  /* pointer to the task */
+        Task_Shell,  /* pointer to the task */
         "Shell", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE, /* task stack size */
         (void*)NULL, /* optional task startup argument */
@@ -51,7 +60,7 @@ bool CreateTasks(void){
 
 #if CFG_ULTRASONIC
 	if (FRTOS1_xTaskCreate(
-        Task2,  /* pointer to the task */
+        Task_Us,  /* pointer to the task */
         "UltraSonic", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE, /* task stack size */
         (void*)NULL, /* optional task startup argument */
@@ -64,8 +73,21 @@ bool CreateTasks(void){
 
 #if CFG_INFRARED
 	if (FRTOS1_xTaskCreate(
-        Task3,  /* pointer to the task */
+        Task_IR,  /* pointer to the task */
         "InfraRed", /* task name for kernel awareness debugging */
+        configMINIMAL_STACK_SIZE, /* task stack size */
+        (void*)NULL, /* optional task startup argument */
+        tskIDLE_PRIORITY,  /* initial priority */
+        (xTaskHandle*)NULL /* optional task handle to create */
+      ) != pdPASS){
+		return FALSE;
+	  }
+#endif
+
+#if CFG_DCDRIVE
+	if (FRTOS1_xTaskCreate(
+        Task_Drive,  /* pointer to the task */
+        "DCDrive", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE, /* task stack size */
         (void*)NULL, /* optional task startup argument */
         tskIDLE_PRIORITY,  /* initial priority */

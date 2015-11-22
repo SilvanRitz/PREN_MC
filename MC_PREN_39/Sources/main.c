@@ -60,6 +60,7 @@
 #include "UART_Shell.h"
 #include "RTOS.h"
 
+
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
 int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */

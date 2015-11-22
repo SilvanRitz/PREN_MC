@@ -266,7 +266,8 @@ void RTOSTRC1_OnTraceWrap(void)
 */
 void AD1_OnEnd(void)
 {
-  /* Write your code here ... */
+	extern volatile bool IR_AD_finished;
+	IR_AD_finished = TRUE;
 }
 
 /*

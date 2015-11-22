@@ -4,27 +4,43 @@
  *  Created on: 20.11.2015
  *      Author: Wallpaper
  */
+#include "InfraredSensor.h"
+#include "PE_Types.h"
+#include "AD1.h"
+#include "config.h"
+#include "UART_Shell.h"
 
 enum infraRedStates_t{
 	INIT,
+	START_MEASUREMENT,
 	GET_DISTANCE,
 	EXIT
 }infraRedStates;
 
 
-//AD1_Measure();
+
 
 void getDistance(void){
+	static uint16_t IRvalue;
 	switch (infraRedStates){
 	case INIT:
-		debugPrintf("\nInfrared\r\n");
+		debugPrintfInfraRedSensor("Init IR Distance\r\n");
+		infraRedStates=START_MEASUREMENT;
+		break;
+	case START_MEASUREMENT:
+		(void)AD1_Measure(FALSE);
 		infraRedStates=GET_DISTANCE;
 		break;
 	case GET_DISTANCE:
-		//getCommands();
+		if(IR_AD_finished){
+			(void)AD1_GetValue16(&IRvalue); // get the result into value variable
+			IR_AD_finished=FALSE;
+			infraRedStates=START_MEASUREMENT;
+			debugPrintfInfraRedSensor("IR Distance (ADWert): %d\r\n",IRvalue);
+		}
 		break;
 	case EXIT:
-		debugPrintf("Exit\r\n");
+		debugPrintfInfraRedSensor("Exit\r\n");
 		break;
 	}
 }
