@@ -13,7 +13,7 @@ enum runStates_{
 	RUN
 };
 
-volatile bool IR_AD_finished;
+volatile bool AD_finished;
 /*
  * Module
  */

@@ -5,10 +5,11 @@
  *      Author: Wallpaper
  */
 
-#ifndef SOURCES_INFRAREDSENSOR_H_
-#define SOURCES_INFRAREDSENSOR_H_
+#ifndef SOURCES_ADC_HANDLER_H_
+#define SOURCES_ADC_HANDLER_H_
 
 void debugPrintfInfraRedSensor(const char *fmt, ...);
+void debugPrintfFlexSensor(const char *fmt, ...);
 void getDistance(void);
 
-#endif /* SOURCES_INFRAREDSENSOR_H_ */
+#endif /* SOURCES_ADC_HANDLER_H_ */
