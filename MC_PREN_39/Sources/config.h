@@ -30,7 +30,7 @@ volatile bool AD_finished;
 #if CFG_SHELL
 	#define CFG_ULTRASONIC_MSG		(0)
 	#define CFG_DEBUG_MSG			(1)
-	#define CFG_INFRAREDSENSOR_MSG	(1)
+	#define CFG_INFRAREDSENSOR_MSG	(0)
 	#define CFG_DCDRIVE_MSG			(1)
 #endif
 #endif /* SOURCES_CONFIG_H_ */

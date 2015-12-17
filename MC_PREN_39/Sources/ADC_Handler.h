@@ -1,5 +1,4 @@
 /*
- * ADC_Handler.h
  *
  *  Created on: 20.11.2015
  *      Author: Wallpaper

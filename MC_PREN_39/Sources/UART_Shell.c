@@ -21,6 +21,7 @@
 #include "CLS1.h"
 #include "LED1.h"
 #include "SERVO1.h"
+#include "SERVO2.h"
 #include "XF1.h"
 #include "config.h"
 #include "FRTOS1.h"
@@ -39,6 +40,7 @@ enum shellStates_t{
     CLS1_ParseCommand,
     LED1_ParseCommand,
 	SERVO1_ParseCommand,
+	SERVO2_ParseCommand,
 	FRTOS1_ParseCommand,
     NULL /* sentinel */
   };
