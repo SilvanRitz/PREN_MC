@@ -7,7 +7,7 @@
 #include "FRTOS1.h"
 #include "UART_Shell.h"
 #include "UltraSonic.h"
-#include "InfraredSensor.h"
+#include "ADC_Handler.h"
 #include "DCDrive.h"
 
 static portTASK_FUNCTION(Task_Shell, pvParameters) {
