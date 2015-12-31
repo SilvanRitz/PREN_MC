@@ -28,7 +28,7 @@ volatile bool AD_finished;
  * Messages
  */
 #if CFG_SHELL
-	#define CFG_ULTRASONIC_MSG		(0)
+	#define CFG_ULTRASONIC_MSG		(1)
 	#define CFG_DEBUG_MSG			(1)
 	#define CFG_INFRAREDSENSOR_MSG	(0)
 	#define CFG_DCDRIVE_MSG			(1)
