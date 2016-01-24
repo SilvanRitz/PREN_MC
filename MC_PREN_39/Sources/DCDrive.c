@@ -6,6 +6,7 @@
  */
 #include "DCDrive.h"
 #include "Bit_DC_Vor.h"
+#include "Bit_DC_Ruck.h"
 
 
 
@@ -27,9 +28,10 @@ void DCDhandleSpeed(void){
 	case INIT:
 		debugPrintfDCDrive("\nDCDrive intialized\r\n");
 		dcDriveStates=HANDLE_SPEED;
+		Bit_DC_Vor_SetVal();
 		break;
 	case HANDLE_SPEED:
-		Bit_DC_Vor_SetVal();
+
 		//getCommands();
 		break;
 	case EXIT:
@@ -56,6 +58,9 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
 		*handled = TRUE;
 		CLS1_SendHelpStr((unsigned char*)"PWM3", (unsigned char*)"Group of PWM3 commands\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Print help or status information\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)"  pos", (unsigned char*)"Values 0..20 ändert den dutycycle (20 = off)\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)"  vdir", (unsigned char*)"Drehe in Vorwärtsrichtung\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)"  rdir", (unsigned char*)"Drehe in Rückwärtsrichtung\r\n", io->stdOut);
 		return ERR_OK;
   } else if ((UTIL1_strcmp((char*)cmd, PWM3_CMD_STATUS)==0) || (UTIL1_strcmp((char*)cmd, "PWM* status")==0)) {
 		*handled = TRUE;
@@ -71,6 +76,16 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
         CLS1_SendStr((const unsigned char*)"Wrong pos argument, must be in the range 0..20\r\n", io->stdErr);
         res = ERR_FAILED;
       }
+  return ERR_OK;
+  }
+  else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " vdir", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
+	  Bit_DC_Vor_SetVal();
+	  Bit_DC_Ruck_ClrVal();
+  return ERR_OK;
+  }
+  else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " rdir", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
+	  Bit_DC_Vor_ClrVal();
+	  Bit_DC_Ruck_SetVal();
   return ERR_OK;
   }
 }

@@ -54,6 +54,8 @@
 #include "TU3.h"
 #include "PWM4.h"
 #include "PwmLdd5.h"
+#include "Bit_DC_Ruck.h"
+#include "BitIoLdd3.h"
 #include "TU1.h"
 #include "FRTOS1.h"
 #include "RTOSTRC1.h"
