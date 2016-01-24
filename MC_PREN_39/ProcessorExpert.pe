@@ -3,7 +3,7 @@
   <Header>
     <Name>MC_PREN_39</Name>
     <SavedBy>Wallpaper</SavedBy>
-    <ModificationStamp>57</ModificationStamp>
+    <ModificationStamp>60</ModificationStamp>
     <Date>2015-10-19</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -19529,7 +19529,7 @@
               <ReqDevPrescSpeedMode5>-1</ReqDevPrescSpeedMode5>
               <ReqDevPrescSpeedMode6>-1</ReqDevPrescSpeedMode6>
               <ReqDevPrescSpeedMode7>-1</ReqDevPrescSpeedMode7>
-              <ReqExtCompPrescHigh>25</ReqExtCompPrescHigh>
+              <ReqExtCompPrescHigh>45</ReqExtCompPrescHigh>
               <ReqExtCompPrescLow>-1</ReqExtCompPrescLow>
               <ReqExtCompPrescSlow>-1</ReqExtCompPrescSlow>
               <ReqExtCompPrescSpeedMode3>-1</ReqExtCompPrescSpeedMode3>
@@ -19545,7 +19545,7 @@
               <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
               <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
               <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-              <InitValue>19.230769 us</InitValue>
+              <InitValue>34.615385 us</InitValue>
               <Precision>5.0</Precision>
               <PrecInProc>true</PrecInProc>
               <LowLimit />
@@ -19560,19 +19560,19 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>SingleConversionTimeSE</ItemSymbol>
-              <Value>23.126 us</Value>
+              <Value>36.859 us</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>SingleConversionTimeDiff</ItemSymbol>
-              <Value>29.993 us</Value>
+              <Value>43.725 us</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>AdditionalConversionTimeSE</ItemSymbol>
-              <Value>19.073 us</Value>
+              <Value>34.332 us</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>AdditionalConversionTimeDiff</ItemSymbol>
-              <Value>25.939 us</Value>
+              <Value>41.198 us</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>StandbyFeatureGroup</ItemSymbol>
@@ -19728,7 +19728,7 @@
               <ItemSymbol>VolatgeReferenceGrp</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Expanded>false</Expanded>
+              <Expanded>true</Expanded>
             </ItemState>
             <ItemState>
               <ItemSymbol>HighVoltageReferenceGrp</ItemSymbol>
@@ -20741,7 +20741,7 @@
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
         <Value>false</Value>
-        <Expanded>false</Expanded>
+        <Expanded>true</Expanded>
       </ItemState>
       <ItemState>
         <ItemSymbol>AD_21</ItemSymbol>
@@ -20973,7 +20973,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>0</Index>
+        <Index>5</Index>
       </ItemState>
       <ItemState>
         <ItemSymbol>RVAFetureGrp</ItemSymbol>
@@ -20999,7 +20999,7 @@
         <ItemSymbol>_CnvTmg</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>19.230769 µs</Value>
+        <Value>34.615385 µs</Value>
         <RuntimeSetting>0</RuntimeSetting>
         <ReqDevPrescHigh>-1</ReqDevPrescHigh>
         <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -21009,7 +21009,7 @@
         <ReqDevPrescSpeedMode5>-1</ReqDevPrescSpeedMode5>
         <ReqDevPrescSpeedMode6>-1</ReqDevPrescSpeedMode6>
         <ReqDevPrescSpeedMode7>-1</ReqDevPrescSpeedMode7>
-        <ReqExtCompPrescHigh>25</ReqExtCompPrescHigh>
+        <ReqExtCompPrescHigh>45</ReqExtCompPrescHigh>
         <ReqExtCompPrescLow>-1</ReqExtCompPrescLow>
         <ReqExtCompPrescSlow>-1</ReqExtCompPrescSlow>
         <ReqExtCompPrescSpeedMode3>-1</ReqExtCompPrescSpeedMode3>
@@ -21025,7 +21025,7 @@
         <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
         <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
         <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-        <InitValue>19.230769 us</InitValue>
+        <InitValue>34.615385 us</InitValue>
         <Precision>5.0</Precision>
         <PrecInProc>true</PrecInProc>
         <LowLimit />
@@ -21128,8 +21128,8 @@
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
         <TypeSpecNameState>typeSampleExtendedLongTime</TypeSpecNameState>
-        <Index>0</Index>
-        <EnumSymbVal>0</EnumSymbVal>
+        <Index>1</Index>
+        <EnumSymbVal>20</EnumSymbVal>
       </ItemState>
       <ItemState>
         <ItemSymbol>HCS12Grp</ItemSymbol>

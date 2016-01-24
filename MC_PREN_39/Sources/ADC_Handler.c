@@ -46,9 +46,10 @@ void getDistance(void){
 		}
 		break;
 	case FLEX_GET_DISTANCE:
-		(void)AD1_GetValue16(&adValue[AD_FLEX1]); // get the result into value variable
-		debugPrintfInfraRedSensor("Flex Distance (ADWert): %d\r\n",adValue[AD_FLEX1]);
+		//(void)AD1_GetValue16(&adValue[AD_FLEX1]); // get the result into value variable
+		debugPrintfFlexSensor("Flex Distance (ADWert): %d\r\n",adValue[AD_FLEX1]);
 		adStates=START_MEASUREMENT;
+		break;
 	case EXIT:
 		debugPrintfInfraRedSensor("Exit\r\n");
 		break;
