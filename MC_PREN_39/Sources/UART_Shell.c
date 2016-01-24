@@ -24,6 +24,8 @@
 #include "XF1.h"
 #include "config.h"
 #include "FRTOS1.h"
+#include "DCDrive.h".h"
+
 
 enum shellStates_t{
 	INIT,
@@ -41,6 +43,7 @@ enum shellStates_t{
 	SERVO1_ParseCommand,
 	//SERVO2_ParseCommand,
 	FRTOS1_ParseCommand,
+	PWM3_ParseCommand,
     NULL /* sentinel */
   };
 
