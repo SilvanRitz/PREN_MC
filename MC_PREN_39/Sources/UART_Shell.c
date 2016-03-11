@@ -24,7 +24,8 @@
 #include "XF1.h"
 #include "config.h"
 #include "FRTOS1.h"
-#include "DCDrive.h".h"
+#include "DCDrive.h"
+#include "UART_Shell.h"
 
 
 enum shellStates_t{
@@ -94,6 +95,12 @@ void handleCommunication(void){
 		debugPrintf("Exit\r\n");
 		break;
 	}
+}
+
+void debugPrintfShell(const char *fmt, ...) {
+#if CFG_SHELL_DEBUG_OUT
+	debugPrintf(fmt);
+#endif
 }
 /*
 /*!

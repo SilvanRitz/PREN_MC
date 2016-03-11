@@ -23,6 +23,7 @@ void getCommands(void);
  * \brief Mainfunction of this module. Call frequently in a task.
  */
 void handleCommunication(void);
+void debugPrintfShell(const char *fmt, ...);
 
 unsigned int debugPrintf(const char *fmt, ...);
 
