@@ -34,5 +34,6 @@ volatile bool AD_finished;
 	#define CFG_FLEXSENSOR_MSG		(0)
 	#define CFG_DCDRIVE_MSG			(0)
 	#define CFG_SHELL_DEBUG_OUT		(1)
+	#define CFG_PWR_MSG 			(1)
 #endif
 #endif /* SOURCES_CONFIG_H_ */

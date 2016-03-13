@@ -21,6 +21,8 @@ enum adStates_t{
 enum adChannels_t{
 	AD_IR1,
 	AD_FLEX1,
+	AD_FLEX2,
+	AD_AKKU_5V_1
 };
 
 uint16_t adValue[AD1_CHANNEL_COUNT];

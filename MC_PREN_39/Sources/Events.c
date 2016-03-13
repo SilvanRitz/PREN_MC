@@ -289,6 +289,23 @@ void AD1_OnCalibrationEnd(void)
   /* Write your code here ... */
 }
 
+/*
+** ===================================================================
+**     Event       :  IR_In_Interrupt_OnInterrupt (module Events)
+**
+**     Component   :  IR_In_Interrupt [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void IR_In_Interrupt_OnInterrupt(void)
+{
+  /* Write your code here ... */
+}
+
 /* END Events */
 
 #ifdef __cplusplus

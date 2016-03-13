@@ -63,6 +63,10 @@
 #include "TU3.h"
 #include "PWM4.h"
 #include "PwmLdd5.h"
+#include "Bit_5V_2_Enable.h"
+#include "BitIoLdd4.h"
+#include "IR_In_Interrupt.h"
+#include "ExtIntLdd1.h"
 #include "Bit_DC_Ruck.h"
 #include "BitIoLdd3.h"
 #include "TU1.h"
@@ -268,6 +272,20 @@ void AD1_OnCalibrationEnd(void);
 **         User should check if the calibration pass or fail by
 **         Calibration status method./nThis event is enabled only if
 **         the <Interrupt service/event> property is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void IR_In_Interrupt_OnInterrupt(void);
+/*
+** ===================================================================
+**     Event       :  IR_In_Interrupt_OnInterrupt (module Events)
+**
+**     Component   :  IR_In_Interrupt [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
 **     Parameters  : None
 **     Returns     : Nothing
 ** ===================================================================
