@@ -10,9 +10,11 @@
 
 
 
-#define PWM3_CMD_HELP   "help"
-#define PWM3_CMD_STATUS "status"
-#define PWM3_SHELL_NAME_STR      "PWM3" /*!< Name used for servo in shell */
+#define PWM3_CMD_HELP   			"help"
+#define PWM3_CMD_STATUS 			"status"
+#define PWM3_SHELL_NAME_STR      	"PWM3" /*!< Name used for servo in shell */
+#define TIMER_PERIOD_DUR			500		//in us
+#define PWM3_PERIOD_VALUE_PROZENT 	TIMER_PERIOD_DUR/100
 
 enum dcDriveStates_t{
 	INIT,
@@ -47,6 +49,11 @@ void debugPrintfDCDrive(const char *fmt, ...) {
 #endif
 }
 
+void setDutyCycle(unsigned int val){	//get called by Shell
+
+	PWM3_SetDutyUS((uint8_t)(val*PWM3_PERIOD_VALUE_PROZENT));
+}
+
 
 //--------Shellpart------------
 uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io)
@@ -58,7 +65,7 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
 		*handled = TRUE;
 		CLS1_SendHelpStr((unsigned char*)"PWM3", (unsigned char*)"Group of PWM3 commands\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Print help or status information\r\n", io->stdOut);
-		CLS1_SendHelpStr((unsigned char*)"  pos", (unsigned char*)"Values 0..20 ändert den dutycycle (20 = off)\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)"  pos", (unsigned char*)"Values 0..100 ändert den dutycycle (0 = off)\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  vdir", (unsigned char*)"Drehe in Vorwärtsrichtung\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  rdir", (unsigned char*)"Drehe in Rückwärtsrichtung\r\n", io->stdOut);
 		return ERR_OK;
@@ -69,18 +76,19 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
   }
   else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " pos", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
       p = cmd+sizeof(PWM3_SHELL_NAME_STR " pos");
-      if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=255) {
-        PWM3_SetDutyMS((uint8_t)val);
+      if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=100) {
+    	  setDutyCycle(val);
+        //PWM3_SetDutyMS((uint8_t)val);
 		*handled = TRUE;
       } else {
-        CLS1_SendStr((const unsigned char*)"Wrong pos argument, must be in the range 0..20\r\n", io->stdErr);
+        CLS1_SendStr((const unsigned char*)"Wrong pos argument, must be in the range 0..100\r\n", io->stdErr);
         res = ERR_FAILED;
       }
   return ERR_OK;
   }
   else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " vdir", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
-	  Bit_DC_Vor_SetVal();
 	  Bit_DC_Ruck_ClrVal();
+	  Bit_DC_Vor_SetVal();
   return ERR_OK;
   }
   else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " rdir", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {

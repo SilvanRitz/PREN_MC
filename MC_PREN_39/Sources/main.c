@@ -58,8 +58,6 @@
 #include "Bit_DC_Vor.h"
 #include "BitIoLdd2.h"
 #include "TU3.h"
-#include "PWM4.h"
-#include "PwmLdd5.h"
 #include "Bit_5V_2_Enable.h"
 #include "BitIoLdd4.h"
 #include "IR_In_Interrupt.h"
