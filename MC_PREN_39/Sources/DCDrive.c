@@ -51,7 +51,7 @@ void debugPrintfDCDrive(const char *fmt, ...) {
 
 void setDutyCycle(unsigned int val){	//get called by Shell
 
-	PWM3_SetDutyUS((uint8_t)(val*PWM3_PERIOD_VALUE_PROZENT));
+	PWM3_SetDutyUS((uint16_t)(val*PWM3_PERIOD_VALUE_PROZENT));
 }
 
 
