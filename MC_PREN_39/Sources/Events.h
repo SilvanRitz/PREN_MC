@@ -65,6 +65,10 @@
 #include "BitIoLdd4.h"
 #include "IR_In_Interrupt.h"
 #include "ExtIntLdd1.h"
+#include "Encoder_A.h"
+#include "ExtIntLdd2.h"
+#include "Encoder_B.h"
+#include "ExtIntLdd3.h"
 #include "Bit_DC_Ruck.h"
 #include "BitIoLdd3.h"
 #include "TU1.h"
@@ -281,6 +285,34 @@ void IR_In_Interrupt_OnInterrupt(void);
 **     Event       :  IR_In_Interrupt_OnInterrupt (module Events)
 **
 **     Component   :  IR_In_Interrupt [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void Encoder_B_OnInterrupt(void);
+/*
+** ===================================================================
+**     Event       :  Encoder_B_OnInterrupt (module Events)
+**
+**     Component   :  Encoder_B [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void Encoder_A_OnInterrupt(void);
+/*
+** ===================================================================
+**     Event       :  Encoder_A_OnInterrupt (module Events)
+**
+**     Component   :  Encoder_A [ExtInt]
 **     Description :
 **         This event is called when an active signal edge/level has
 **         occurred.

@@ -306,6 +306,40 @@ void IR_In_Interrupt_OnInterrupt(void)
   /* Write your code here ... */
 }
 
+/*
+** ===================================================================
+**     Event       :  Encoder_B_OnInterrupt (module Events)
+**
+**     Component   :  Encoder_B [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void Encoder_B_OnInterrupt(void)
+{
+  /* Write your code here ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  Encoder_A_OnInterrupt (module Events)
+**
+**     Component   :  Encoder_A [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void Encoder_A_OnInterrupt(void)
+{
+  /* Write your code here ... */
+}
+
 /* END Events */
 
 #ifdef __cplusplus
