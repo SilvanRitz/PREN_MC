@@ -11,6 +11,8 @@
 
 #include "config.h"
 
+#define DEBUG_MSG_CMD "DBG"
+
 unsigned int MyXprintf(const char *fmt, ...);
 
 /*

@@ -7,6 +7,7 @@
 #include "DCDrive.h"
 #include "Bit_DC_Vor.h"
 #include "Bit_DC_Ruck.h"
+#include "UART_Shell.h"
 
 
 
@@ -23,12 +24,14 @@ enum dcDriveStates_t{
 }dcDriveStates;
 
 
+#define DCDRIVE_MSG_CMD		"DCDr"
+
 //AD1_Measure();
 
 void DCDhandleSpeed(void){
 	switch (dcDriveStates){
 	case INIT:
-		debugPrintfDCDrive("\nDCDrive intialized\r\n");
+		debugPrintfDCDrive("%s %s: intialized\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		dcDriveStates=HANDLE_SPEED;
 		Bit_DC_Vor_SetVal();
 		break;

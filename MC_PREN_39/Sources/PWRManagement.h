@@ -5,8 +5,8 @@
  *      Author: Wallpaper
  */
 
-#ifndef SOURCES_ULTRASONIC_H_
-#define SOURCES_ULTRASONIC_H_
+#ifndef SOURCES_PWR_MANAGEMENT_H_
+#define SOURCES_PWR_MANAGEMENT_H_
 
 void startPWMonitoring(void);
 void PWRMan_Init(void);

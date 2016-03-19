@@ -25,7 +25,9 @@
 #include "config.h"
 #include "FRTOS1.h"
 #include "DCDrive.h"
+#include "ServoParse.h"
 #include "UART_Shell.h"
+
 
 
 enum shellStates_t{
@@ -44,6 +46,7 @@ enum shellStates_t{
 	SERVO1_ParseCommand,
 	//SERVO2_ParseCommand,
 	FRTOS1_ParseCommand,
+	SERVO_Lenkung_ParseCommand,
 	PWM3_ParseCommand,
     NULL /* sentinel */
   };
@@ -85,7 +88,7 @@ unsigned int debugPrintf(const char *fmt, ...) {
 void handleCommunication(void){
 	switch (shellStates){
 	case INIT:
-		debugPrintf("\nWelcome\r\n");
+		debugPrintf("\nWelcome\r\n\0");
 		shellStates=GET_COMMANDS;
 		break;
 	case GET_COMMANDS:

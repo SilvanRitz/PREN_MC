@@ -37,27 +37,29 @@ typedef struct {
 
 static US_DeviceType usDevice;
 
+#define US_MSG_CMD		"Ul"
+
 void startMeasurement(void){
 	uint16_t echotime_us=0;
 	uint16_t distance_cm=0;
 	for(;;){
 		switch (US_GenaralState){
 		case US_INIT:
-			debugPrintfUltraSonic("US: Init done.\r\n");
+			debugPrintfUltraSonic("%s %s: Init done.\r\n",DEBUG_MSG_CMD, US_MSG_CMD);
 			US_GenaralState=US_MEASURE;
 			US_Init();
 		break;
 		case US_MEASURE:
 			echotime_us=US_Measure_us();
 			if (!echotime_us){
-				debugPrintfUltraSonic("Keine Messung! Zu grosse Distanz?\r\n");
+				debugPrintfUltraSonic("%s %s: Keine Messung! Zu grosse Distanz?\r\n",DEBUG_MSG_CMD, US_MSG_CMD);
 				echotime_us=0;		//nur für den Breakpoint
 			}
 			US_GenaralState=US_CALC_DIST;
 			break;
 		case US_CALC_DIST:
 			distance_cm=US_usToCentimeters(echotime_us,25);
-			debugPrintfUltraSonic("Distanz: %i\r\n",distance_cm);
+			debugPrintfUltraSonic("%s: %i\r\n",US_MSG_CMD,distance_cm);
 			US_GenaralState=US_MEASURE;
 			break;
 		}

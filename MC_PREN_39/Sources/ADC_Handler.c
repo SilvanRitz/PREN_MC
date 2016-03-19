@@ -25,6 +25,8 @@ enum adChannels_t{
 	AD_AKKU_5V_1
 };
 
+#define FLEX1_MSG_CMD		"Fldist1"
+
 uint16_t adValue[AD1_CHANNEL_COUNT];
 
 
@@ -49,7 +51,7 @@ void getDistance(void){
 		break;
 	case FLEX_GET_DISTANCE:
 		//(void)AD1_GetValue16(&adValue[AD_FLEX1]); // get the result into value variable
-		debugPrintfFlexSensor("Flex Distance (ADWert): %d\r\n",adValue[AD_FLEX1]);
+		debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,adValue[AD_FLEX1]);
 		adStates=START_MEASUREMENT;
 		break;
 	case EXIT:
