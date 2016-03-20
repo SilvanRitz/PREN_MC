@@ -96,5 +96,6 @@ uint8_t SERVO_Lenkung_ParseCommand(const unsigned char *cmd, bool *handled, cons
 	  Bit_DC_Ruck_SetVal();
   return ERR_OK;
   }*/
+  return ERR_OK;
 }
 

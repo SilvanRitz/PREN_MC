@@ -124,6 +124,7 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
     	  setDCSpeed(val);
 		*handled = TRUE;
       } else {
+    	  *handled = TRUE;
         CLS1_SendStr((const unsigned char*)"Wrong pos argument, must be in the range 0.."DC_MAXSPEED_STR"\r\n",io->stdErr);
         res = ERR_FAILED;
       }
@@ -142,15 +143,18 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
   return ERR_OK;
   }
   else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " vdir", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
+	  *handled = TRUE;
 	  Bit_DC_Ruck_ClrVal();
 	  Bit_DC_Vor_SetVal();
   return ERR_OK;
   }
   else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " rdir", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
+	  *handled = TRUE;
 	  Bit_DC_Vor_ClrVal();
 	  Bit_DC_Ruck_SetVal();
   return ERR_OK;
   }
+  return ERR_OK;
 }
 
 

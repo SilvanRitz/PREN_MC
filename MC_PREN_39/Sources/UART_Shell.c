@@ -41,11 +41,11 @@ enum shellStates_t{
   /* table with shell parser/handler */
   static const CLS1_ParseCommandCallback CmdParserTable[] =
   {
+	LED1_ParseCommand,
     CLS1_ParseCommand,
-    LED1_ParseCommand,
 	SERVO1_ParseCommand,
 	//SERVO2_ParseCommand,
-	FRTOS1_ParseCommand,
+	//FRTOS1_ParseCommand,
 	SERVO_Lenkung_ParseCommand,
 	PWM3_ParseCommand,
     NULL /* sentinel */
