@@ -69,6 +69,17 @@
 #include "ExtIntLdd2.h"
 #include "Encoder_B.h"
 #include "ExtIntLdd3.h"
+#include "Tacho1.h"
+#include "Q4C1.h"
+#include "C11.h"
+#include "BitIoLdd5.h"
+#include "C21.h"
+#include "BitIoLdd6.h"
+#include "Q4C2.h"
+#include "C12.h"
+#include "BitIoLdd7.h"
+#include "C22.h"
+#include "BitIoLdd8.h"
 #include "Bit_DC_Ruck.h"
 #include "BitIoLdd3.h"
 #include "TU1.h"
@@ -320,6 +331,27 @@ void Encoder_A_OnInterrupt(void);
 **     Returns     : Nothing
 ** ===================================================================
 */
+
+/*
+** ===================================================================
+**     Event       :  TU1_OnChannel5 (module Events)
+**
+**     Component   :  TU1 [TimerUnit_LDD]
+*/
+/*!
+**     @brief
+**         Called if compare register match the counter registers or
+**         capture register has a new content. OnChannel5 event and
+**         Timer unit must be enabled. See [SetEventMask] and
+**         [GetEventMask] methods. This event is available only if a
+**         [Interrupt] is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. The pointer passed as
+**                           the parameter of Init method.
+*/
+/* ===================================================================*/
+void TU1_OnChannel5(LDD_TUserData *UserDataPtr);
 
 /* END Events */
 

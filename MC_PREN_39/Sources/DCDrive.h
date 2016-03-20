@@ -20,5 +20,6 @@
 void debugPrintfDCDrive(const char *fmt, ...);
 void DCDhandleSpeed(void);
 uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
+void setNomValue(uint16 actSpeed);
 
 #endif /* SOURCES_DCDRIVE_H_ */

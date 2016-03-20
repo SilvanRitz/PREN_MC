@@ -36,6 +36,9 @@ extern "C" {
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #include "UltraSonic.h"
+#include "Encoder.h"
+#include "UART_Shell.h"
+
 /*
 ** ===================================================================
 **     Event       :  Cpu_OnNMIINT (module Events)
@@ -188,7 +191,7 @@ void TU2_OnCounterRestart(LDD_TUserData *UserDataPtr)
 /* ===================================================================*/
 void TU2_OnChannel0(LDD_TUserData *UserDataPtr)
 {
-	US_EventEchoCapture(UserDataPtr);
+
 }
 
 /*
@@ -337,7 +340,38 @@ void Encoder_B_OnInterrupt(void)
 */
 void Encoder_A_OnInterrupt(void)
 {
-  /* Write your code here ... */
+  counterA++;
+}
+
+/*
+** ===================================================================
+**     Event       :  TU1_OnChannel5 (module Events)
+**
+**     Component   :  TU1 [TimerUnit_LDD]
+*/
+/*!
+**     @brief
+**         Called if compare register match the counter registers or
+**         capture register has a new content. OnChannel5 event and
+**         Timer unit must be enabled. See [SetEventMask] and
+**         [GetEventMask] methods. This event is available only if a
+**         [Interrupt] is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. The pointer passed as
+**                           the parameter of Init method.
+*/
+/* ===================================================================*/
+void TU1_OnChannel5(LDD_TUserData *UserDataPtr)
+{
+	static unsigned int temp;
+	temp=counterA;
+	US_EventEchoCapture(UserDataPtr);
+	//updatePID Regler
+	//debugPrintfEncoder("%s %s: Die Zahl ist %u\r\n\0",DEBUG_MSG_CMD,ENCODER_MSG_CMD,temp);
+	//debugPrintfEncoder("%s  Die Zahl ist %u\r\n\0",DEBUG_MSG_CMD,temp);
+	setNomValue(temp);
+	counterA=0;
 }
 
 /* END Events */
