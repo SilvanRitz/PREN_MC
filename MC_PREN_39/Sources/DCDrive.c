@@ -10,17 +10,21 @@
 #include "UART_Shell.h"
 
 
+//Shell
+#define DCDRIVE_MSG_CMD				"DCDr"		//Shellout
 
-#define PWM3_CMD_HELP   			"help"
-#define PWM3_CMD_STATUS 			"status"
-#define PWM3_SHELL_NAME_STR      	"PWM3" /*!< Name used for servo in shell */
+#define DCDRIVE_SHELL_NAME_STR		"DCDr"
+#define DCDR_CMD_HELP   			"help"
+#define DCDR_CMD_STATUS 			"status"
+#define DCDRIVE_CMD_SPEED			"spd"
+#define DC_MAXSPEED					190
+#define DC_MAXSPEED_STR				"190"
+
+
 #define TIMER_PERIOD_DUR			500		//in us
 #define PWM3_PERIOD_VALUE_PROZENT 	TIMER_PERIOD_DUR/100
 
-#define DCDRIVE_CMD_SPEED			"spd"
-#define DCDRIVE_SHELL_NAME_STR		"PWM3"//"DCDr"
-#define DC_MAXSPEED					190
-#define DC_MAXSPEED_STR				"190"
+
 
 #define TICKS_MAXSPEED				100
 #define DC_SPD_PER_TICK				TICKS_
@@ -46,10 +50,6 @@ enum dcDriveStates_t{
 	EXIT
 }dcDriveStates;
 
-
-#define DCDRIVE_MSG_CMD		"DCDr"
-
-//AD1_Measure();
 
 void DCDhandleSpeed(void){
 	switch (dcDriveStates){
@@ -101,18 +101,18 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
 	  int32_t val;
 	  const unsigned char *p;
 	  uint8_t res=ERR_OK;
-  if (UTIL1_strcmp((char*)cmd, PWM3_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, "PWM3 help")==0) {
+  if (UTIL1_strcmp((char*)cmd, DCDR_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, DCDRIVE_SHELL_NAME_STR" help")==0) {
 		*handled = TRUE;
-		CLS1_SendHelpStr((unsigned char*)"PWM3", (unsigned char*)"Group of PWM3 commands\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)DCDRIVE_SHELL_NAME_STR, (unsigned char*)"Group of "DCDRIVE_SHELL_NAME_STR" commands\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Print help or status information\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  pos", (unsigned char*)"Values 0..100 ändert den dutycycle (0 = off)\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  vdir", (unsigned char*)"Drehe in Vorwärtsrichtung\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  rdir", (unsigned char*)"Drehe in Rückwärtsrichtung\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  spd", (unsigned char*)"Gibt die Geschwindigkeit in mm pro s an\nWerte zwischen 0 und "DC_MAXSPEED_STR"\r\n", io->stdOut);
 		return ERR_OK;
-  } else if ((UTIL1_strcmp((char*)cmd, PWM3_CMD_STATUS)==0) || (UTIL1_strcmp((char*)cmd, "PWM* status")==0)) {
+  } else if ((UTIL1_strcmp((char*)cmd, DCDR_CMD_STATUS)==0) || (UTIL1_strcmp((char*)cmd, "PWM* status")==0)) {
 		*handled = TRUE;
-		  CLS1_SendStatusStr((unsigned char*)"PWM3", (unsigned char*)"\r\n", io->stdOut);
+		  CLS1_SendStatusStr((unsigned char*)DCDRIVE_SHELL_NAME_STR, (unsigned char*)"\r\n", io->stdOut);
 		return ERR_OK;
   }
  // else if ((UTIL1_strcmp((char*)cmd, DCDRIVE_CMD_SPEED)==0) || (UTIL1_strcmp((char*)cmd, DCDRIVE_CMD_MSG" "DCDRIVE_CMD_SPEED)==0))
@@ -130,8 +130,8 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
       }
   return ERR_OK;
   }
-  else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " pos", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
-      p = cmd+sizeof(PWM3_SHELL_NAME_STR " pos");
+  else if (strncmp((const char*)cmd, (const char*)DCDRIVE_SHELL_NAME_STR " pos", sizeof(DCDRIVE_SHELL_NAME_STR " pos")-1)==0) {
+      p = cmd+sizeof(DCDRIVE_SHELL_NAME_STR " pos");
       if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=100) {
     	  setDutyCycle(val);
         //PWM3_SetDutyMS((uint8_t)val);
@@ -142,13 +142,13 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
       }
   return ERR_OK;
   }
-  else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " vdir", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
+  else if (strncmp((const char*)cmd, (const char*)DCDRIVE_SHELL_NAME_STR" vdir", sizeof(DCDRIVE_SHELL_NAME_STR" vdir")-1)==0) {
 	  *handled = TRUE;
 	  Bit_DC_Ruck_ClrVal();
 	  Bit_DC_Vor_SetVal();
   return ERR_OK;
   }
-  else if (strncmp((const char*)cmd, (const char*)PWM3_SHELL_NAME_STR " rdir", sizeof(PWM3_SHELL_NAME_STR " pos")-1)==0) {
+  else if (strncmp((const char*)cmd, (const char*)DCDRIVE_SHELL_NAME_STR" rdir", sizeof(DCDRIVE_SHELL_NAME_STR" rdir")-1)==0) {
 	  *handled = TRUE;
 	  Bit_DC_Vor_ClrVal();
 	  Bit_DC_Ruck_SetVal();
