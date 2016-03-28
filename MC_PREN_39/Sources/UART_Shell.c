@@ -27,6 +27,7 @@
 #include "DCDrive.h"
 #include "ServoParse.h"
 #include "UART_Shell.h"
+#include "AutonomBeladen.h"
 
 
 
@@ -49,6 +50,7 @@ enum shellStates_t{
 	SERVO_Lenkung_ParseCommand,
 	SERVO_Kamera_ParseCommand,
 	PWM3_ParseCommand,
+	A_Beladen_ParseCommand,
     NULL /* sentinel */
   };
 

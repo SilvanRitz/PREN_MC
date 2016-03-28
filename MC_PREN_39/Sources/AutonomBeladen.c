@@ -1,0 +1,96 @@
+/*
+ * DCDrive.c
+ *
+ *  Created on: 20.11.2015
+ *      Author: Wallpaper
+ */
+#include "AutonomBeladen.h"
+#include "UART_Shell.h"
+#include "config.h"
+
+
+//-----------Shell Autonom Beladen--------
+#define A_BELADEN_CMD_HELP			"help"
+
+#define A_BELADEN_SHELL_NAME_STR 	"StA"
+#define A_BELADEN_POS_CMD			"dist"
+	#define A_BELADEN_MAXDIST		1000
+	#define A_BELADEN_MAXDIST_STR	"1000"
+
+
+
+enum aBeladenStates_t{
+	DO_NOTHING,
+	INIT,
+	CHECK_IR,
+	CONTAINER_FOUND,
+	GET_CONTAINER,
+	EMPTY_CONTAINER,
+	PLACE_CONTAINER,
+	SEND_REPORT,
+	EXIT
+}aBeladenStates=DO_NOTHING;
+
+
+void autoBeladen(void){
+	switch (aBeladenStates){
+	case DO_NOTHING:
+		break;
+	case INIT:
+		debugPrintfABeladen("%s %s: freigegben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
+		aBeladenStates=CHECK_IR;
+		break;
+	case CHECK_IR:
+		break;
+	case CONTAINER_FOUND:
+		break;
+	case GET_CONTAINER:
+		break;
+	case EMPTY_CONTAINER:
+		break;
+	case PLACE_CONTAINER:
+		break;
+	case SEND_REPORT:
+		break;
+	}
+}
+
+
+void debugPrintfABeladen(const char *fmt, ...) {
+#if CFG_ABELADEN_MSG
+	debugPrintf(fmt);
+#endif
+}
+
+//---------Shellpart----------
+
+uint8_t A_Beladen_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io)
+{
+	  int32_t val;
+	  const unsigned char *p;
+	  uint8_t res=ERR_OK;
+  if (UTIL1_strcmp((char*)cmd, A_BELADEN_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, A_BELADEN_SHELL_NAME_STR" help")==0) {
+		*handled = TRUE;
+		CLS1_SendHelpStr((unsigned char*)A_BELADEN_SHELL_NAME_STR, (unsigned char*)"Group of Statusübergabe commands\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Print help or status information\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)" "A_BELADEN_POS_CMD, (unsigned char*)"Leitet den Aufldeprozess ein, mit der ungefähren Position zum Container\r\n", io->stdOut);
+		return ERR_OK;
+} else if ((UTIL1_strcmp((char*)cmd, A_BELADEN_POS_CMD)==0) || (UTIL1_strcmp((char*)cmd, A_BELADEN_SHELL_NAME_STR" status")==0)) {
+	*handled = TRUE;
+	  CLS1_SendStatusStr((unsigned char*)A_BELADEN_SHELL_NAME_STR, (unsigned char*)"\r\n", io->stdOut);
+	return ERR_OK;
+}
+else if (strncmp((const char*)cmd, (const char*)A_BELADEN_SHELL_NAME_STR " " A_BELADEN_POS_CMD, sizeof(A_BELADEN_SHELL_NAME_STR " "A_BELADEN_POS_CMD)-1)==0) {
+p = cmd+sizeof(A_BELADEN_SHELL_NAME_STR" "A_BELADEN_POS_CMD);
+if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=A_BELADEN_MAXDIST) {
+	  //setDCSpeed(val);
+	*handled = TRUE;
+} else {
+	  *handled = TRUE;
+  CLS1_SendStr((const unsigned char*)"Wrong "A_BELADEN_POS_CMD" argument, must be in the range 0.."A_BELADEN_MAXDIST_STR"\r\n",io->stdErr);
+  res = ERR_FAILED;
+}
+return ERR_OK;
+}
+return ERR_OK;
+}

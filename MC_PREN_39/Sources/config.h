@@ -39,6 +39,7 @@ volatile bool AD_finished;
 	#define CFG_PWR_MSG 			(1)
 	#define CFG_SERVOPARSE_MSG 		(1)
 	#define CFG_ENCODER_MSG			(1)
+	#define CFG_ABELADEN_MSG 		(1)
 #endif
 
 

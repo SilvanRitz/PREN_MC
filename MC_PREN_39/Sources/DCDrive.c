@@ -48,7 +48,7 @@ enum dcDriveStates_t{
 	INIT,
 	HANDLE_SPEED,
 	EXIT
-}dcDriveStates;
+}dcDriveStates=INIT;
 
 
 void DCDhandleSpeed(void){
