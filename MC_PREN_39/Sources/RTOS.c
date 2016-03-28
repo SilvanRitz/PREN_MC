@@ -26,6 +26,14 @@ static portTASK_FUNCTION(Task_Us, pvParameters) {
   }
 }
 
+static portTASK_FUNCTION(Task_Drive, pvParameters) {
+  (void)pvParameters; /* parameter not used */
+  for(;;) {
+	DCDhandleSpeed();
+    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+  }
+}
+
 static portTASK_FUNCTION(Task_IR, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
@@ -34,13 +42,6 @@ static portTASK_FUNCTION(Task_IR, pvParameters) {
   }
 }
 
-static portTASK_FUNCTION(Task_Drive, pvParameters) {
-  (void)pvParameters; /* parameter not used */
-  for(;;) {
-	DCDhandleSpeed();
-    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
-  }
-}
 
 
 

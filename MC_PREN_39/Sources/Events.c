@@ -38,6 +38,7 @@ extern "C" {
 #include "UltraSonic.h"
 #include "Encoder.h"
 #include "UART_Shell.h"
+#include "DCDrive.h"
 
 /*
 ** ===================================================================

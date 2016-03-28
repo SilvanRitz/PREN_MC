@@ -47,6 +47,7 @@ enum shellStates_t{
 	//SERVO2_ParseCommand,
 	//FRTOS1_ParseCommand,
 	SERVO_Lenkung_ParseCommand,
+	SERVO_Kamera_ParseCommand,
 	PWM3_ParseCommand,
     NULL /* sentinel */
   };

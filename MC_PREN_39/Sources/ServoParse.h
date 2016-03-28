@@ -18,5 +18,5 @@
 
 void debugPrintfServoParse(const char *fmt, ...);
 uint8_t SERVO_Lenkung_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
-
+uint8_t SERVO_Kamera_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
 #endif /* SOURCES_DCDRIVE_H_ */

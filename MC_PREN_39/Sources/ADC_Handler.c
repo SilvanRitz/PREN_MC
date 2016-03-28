@@ -19,7 +19,7 @@ enum adStates_t{
 }adStates;
 
 enum adChannels_t{
-	AD_IR1,
+	AD_AKKU_5V_2,
 	AD_FLEX1,
 	AD_FLEX2,
 	AD_AKKU_5V_1
@@ -43,9 +43,9 @@ void getDistance(void){
 		break;
 	case IR_GET_DISTANCE:
 		if(AD_finished){
-			(void)AD1_GetValue16(&adValue[AD_IR1]); // get the result into value variable
+			(void)AD1_GetValue16(&adValue[AD_AKKU_5V_2]); // get the result into value variable
 			AD_finished=FALSE;
-			debugPrintfInfraRedSensor("IR Distance (ADWert): %d\r\n",adValue[AD_IR1]);
+			debugPrintfInfraRedSensor("IR Distance (ADWert): %d\r\n",adValue[AD_AKKU_5V_2]);
 			adStates=FLEX_GET_DISTANCE;
 		}
 		break;

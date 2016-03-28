@@ -80,6 +80,8 @@
 #include "BitIoLdd7.h"
 #include "C22.h"
 #include "BitIoLdd8.h"
+#include "Bit_5V_1_Enable.h"
+#include "BitIoLdd9.h"
 #include "Bit_DC_Ruck.h"
 #include "BitIoLdd3.h"
 #include "TU1.h"
