@@ -23,6 +23,7 @@ volatile bool AD_finished;
 #define CFG_ULTRASONIC		(1)
 #define CFG_INFRARED		(1)
 #define CFG_DCDRIVE			(1)
+#define CFG_AUTO_BELADEN	(1)
 
 
 

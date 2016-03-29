@@ -9,6 +9,7 @@
 #include "UltraSonic.h"
 #include "ADC_Handler.h"
 #include "DCDrive.h"
+#include "AutonomBeladen.h"
 
 static portTASK_FUNCTION(Task_Shell, pvParameters) {
   (void)pvParameters; /* parameter not used */
@@ -42,6 +43,13 @@ static portTASK_FUNCTION(Task_IR, pvParameters) {
   }
 }
 
+static portTASK_FUNCTION(Task_A_Bel, pvParameters) {
+  (void)pvParameters; /* parameter not used */
+  for(;;) {
+	autoBeladen();
+    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+  }
+}
 
 
 
@@ -89,6 +97,19 @@ bool CreateTasks(void){
 	if (FRTOS1_xTaskCreate(
         Task_Drive,  /* pointer to the task */
         "DCDrive", /* task name for kernel awareness debugging */
+        configMINIMAL_STACK_SIZE, /* task stack size */
+        (void*)NULL, /* optional task startup argument */
+        tskIDLE_PRIORITY,  /* initial priority */
+        (xTaskHandle*)NULL /* optional task handle to create */
+      ) != pdPASS){
+		return FALSE;
+	  }
+#endif
+
+#if CFG_AUTO_BELADEN
+	if (FRTOS1_xTaskCreate(
+        Task_A_Bel,  /* pointer to the task */
+        "A_Bel", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE, /* task stack size */
         (void*)NULL, /* optional task startup argument */
         tskIDLE_PRIORITY,  /* initial priority */

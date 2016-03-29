@@ -18,6 +18,11 @@
 	#define A_BELADEN_MAXDIST_STR	"1000"
 
 
+//--------Variabeln---------
+#define NICHT_BELADEN	0
+#define BELADEN			1
+static volatile bool autoBeladenFlg=NICHT_BELADEN;
+
 
 enum aBeladenStates_t{
 	DO_NOTHING,
@@ -35,22 +40,37 @@ enum aBeladenStates_t{
 void autoBeladen(void){
 	switch (aBeladenStates){
 	case DO_NOTHING:
+		if (autoBeladenFlg){
+			aBeladenStates=INIT;
+		}
 		break;
 	case INIT:
 		debugPrintfABeladen("%s %s: freigegben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
+		//setSpeed()
+		//handle Direction
+		//measure time
+		//time elapsed =>Check Ir
 		aBeladenStates=CHECK_IR;
 		break;
 	case CHECK_IR:
+		//get IR Interrupt
+		//measure "On Time"
+		//in tolerance? => contaier found and stop
 		break;
 	case CONTAINER_FOUND:
+		//init container greifen
 		break;
 	case GET_CONTAINER:
+		//init container heben
 		break;
 	case EMPTY_CONTAINER:
+		//init container zurückstellen (herunterfahren)
 		break;
 	case PLACE_CONTAINER:
+		// Container loslassen
 		break;
 	case SEND_REPORT:
+		//command an Raspberry
 		break;
 	}
 }
@@ -83,7 +103,7 @@ uint8_t A_Beladen_ParseCommand(const unsigned char *cmd, bool *handled, const CL
 else if (strncmp((const char*)cmd, (const char*)A_BELADEN_SHELL_NAME_STR " " A_BELADEN_POS_CMD, sizeof(A_BELADEN_SHELL_NAME_STR " "A_BELADEN_POS_CMD)-1)==0) {
 p = cmd+sizeof(A_BELADEN_SHELL_NAME_STR" "A_BELADEN_POS_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=A_BELADEN_MAXDIST) {
-	  //setDCSpeed(val);
+	autoBeladenFlg=BELADEN;
 	*handled = TRUE;
 } else {
 	  *handled = TRUE;
