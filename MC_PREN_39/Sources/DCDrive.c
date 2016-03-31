@@ -21,7 +21,7 @@
 #define DC_MAXSPEED_STR				"190"
 
 
-#define TIMER_PERIOD_DUR			500		//in us
+#define TIMER_PERIOD_DUR			100		//in us
 #define PWM3_PERIOD_VALUE_PROZENT 	TIMER_PERIOD_DUR/100
 
 
@@ -38,7 +38,7 @@ static uint16 val,integ, devOld,dev;
 static uint8 delay=0;
 static uint8 kp=60;
 static uint8 ki=10;
-static uint8 kd=20;
+static uint8 kd=10;
 
 /*  kiL = kiR = 10; //10 max 20
   kpL = kpR = 60; //60 max 128
@@ -57,9 +57,10 @@ void DCDhandleSpeed(void){
 		debugPrintfDCDrive("%s %s: intialized\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		dcDriveStates=HANDLE_SPEED;
 		Bit_DC_Vor_SetVal();
+		setDutyCycle(0);
 		break;
 	case HANDLE_SPEED:
-		pidDoWork();
+		//pidDoWork();
 		//getCommands();
 		break;
 	case EXIT:

@@ -39,6 +39,7 @@ extern "C" {
 #include "Encoder.h"
 #include "UART_Shell.h"
 #include "DCDrive.h"
+#include "DebugBit.h"
 
 /*
 ** ===================================================================
@@ -366,13 +367,28 @@ void Encoder_A_OnInterrupt(void)
 void TU1_OnChannel5(LDD_TUserData *UserDataPtr)
 {
 	static unsigned int temp;
-	temp=counterA;
-	US_EventEchoCapture(UserDataPtr);
-	//updatePID Regler
-	//debugPrintfEncoder("%s %s: Die Zahl ist %u\r\n\0",DEBUG_MSG_CMD,ENCODER_MSG_CMD,temp);
-	//debugPrintfEncoder("%s  Die Zahl ist %u\r\n\0",DEBUG_MSG_CMD,temp);
-	setNomValue(temp);
-	counterA=0;
+	static unsigned int intCounter=0;
+	static unsigned int debug=0;
+	intCounter++;
+	if(intCounter>1){
+		intCounter=0;
+		temp=counterA;
+		//US_EventEchoCapture(UserDataPtr);
+		//updatePID Regler
+		//debugPrintfEncoder("%s %s: Die Zahl ist %u\r\n\0",DEBUG_MSG_CMD,ENCODER_MSG_CMD,temp);
+		debugPrintfEncoder("%s  Die Zahl ist %u\r\n\0",DEBUG_MSG_CMD,temp);
+		setNomValue(temp);
+		counterA=0;
+		if (debug==1){
+			debug=0;
+			DebugBit_PutVal(0);
+		}
+		else{
+			debug=1;
+			DebugBit_PutVal(1);
+		}
+	}
+
 }
 
 /* END Events */
