@@ -15,7 +15,7 @@ static portTASK_FUNCTION(Task_Shell, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	handleCommunication();
-    FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(10/portTICK_RATE_MS);
   }
 }
 
@@ -31,7 +31,7 @@ static portTASK_FUNCTION(Task_Drive, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	DCDhandleSpeed();
-    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
   }
 }
 

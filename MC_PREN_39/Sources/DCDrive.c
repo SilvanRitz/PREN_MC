@@ -21,24 +21,26 @@
 #define DC_MAXSPEED_STR				"190"
 
 
-#define TIMER_PERIOD_DUR			100		//in us
+#define TIMER_PERIOD_DUR			50		//in us
 #define PWM3_PERIOD_VALUE_PROZENT 	TIMER_PERIOD_DUR/100
 
 
 
-#define TICKS_MAXSPEED				100
+#define TICKS_MAXSPEED				110
 #define DC_SPD_PER_TICK				TICKS_
+#define PWM3_DUTY_MULT				0xFF
 
 static uint16 actSpeedValue=0;
 
-static uint16 nomValue=100;		//OFF
-static uint16 nomValueOld=100;		//istwert
+static uint16 nomValue=0;		//OFF
+static uint16 nomValueOld=0;		//istwert
 static uint16 setValue,setValueOld;		//sollwert
-static uint16 val,integ, devOld,dev;
+static int16 integ, devOld;
+static int16 val,dev;
 static uint8 delay=0;
-static uint8 kp=60;
-static uint8 ki=10;
-static uint8 kd=10;
+static uint8 kp=10;
+static uint8 ki=5;
+static uint8 kd=1;
 
 /*  kiL = kiR = 10; //10 max 20
   kpL = kpR = 60; //60 max 128
@@ -57,10 +59,11 @@ void DCDhandleSpeed(void){
 		debugPrintfDCDrive("%s %s: intialized\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		dcDriveStates=HANDLE_SPEED;
 		Bit_DC_Vor_SetVal();
-		setDutyCycle(0);
+		//setDutyCycle(0);
+		setDCSpeed(5);
 		break;
 	case HANDLE_SPEED:
-		//pidDoWork();
+		pidDoWork();
 		//getCommands();
 		break;
 	case EXIT:
@@ -78,7 +81,8 @@ void debugPrintfDCDrive(const char *fmt, ...) {
 
 void setDutyCycle(unsigned int val){	//get called by Shell
 	debugPrintfDCDrive("%s Der Wert ist: %d\r\n", DEBUG_MSG_CMD,val);
-	PWM3_SetDutyUS((uint16_t)(val*PWM3_PERIOD_VALUE_PROZENT));
+	//PWM3_SetDutyUS((uint16_t)(val*PWM3_PERIOD_VALUE_PROZENT));
+	PWM3_SetRatio16((uint16_t)val*PWM3_DUTY_MULT);
 }
 
 void setDCSpeed(uint16 speed){
@@ -106,7 +110,7 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
 		*handled = TRUE;
 		CLS1_SendHelpStr((unsigned char*)DCDRIVE_SHELL_NAME_STR, (unsigned char*)"Group of "DCDRIVE_SHELL_NAME_STR" commands\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Print help or status information\r\n", io->stdOut);
-		CLS1_SendHelpStr((unsigned char*)"  pos", (unsigned char*)"Values 0..100 ändert den dutycycle (0 = off)\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)"  pos", (unsigned char*)"Values 0..100 ändert den dutycycle (100 = off)\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  vdir", (unsigned char*)"Drehe in Vorwärtsrichtung\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  rdir", (unsigned char*)"Drehe in Rückwärtsrichtung\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  spd", (unsigned char*)"Gibt die Geschwindigkeit in mm pro s an\nWerte zwischen 0 und "DC_MAXSPEED_STR"\r\n", io->stdOut);
@@ -163,37 +167,27 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
 void pidDoWork(void)
 {
 	// readSpeed from Encoder(in value nomValue)
-	nomValueOld = nomValue;
+	nomValueOld = nomValue;			//ist Wert (old)
 	nomValue=updateNomValue();
-  if (delay > 0)
-  {
-    delay--;
-    return;
-  }
-
-  if (setValueOld == 0 && setValue != 0)
-  {
-    delay = 2;
-  }
-  setValueOld = setValue;
 
 
-  nomValue = (nomValueOld+nomValue) >> 1;
+  //nomValue = (nomValueOld+nomValue) >> 1;
 
 
-  // left wheel
+
   if (setValue == 0) val = integ = devOld = 0;
   else
   {
     // deviation (max devL = +1000 - -1000 = 2000)
-    dev = (setValue - nomValue) / 8;
-
+    //dev = (setValue - nomValue) / 8;
+	 dev = (setValue - nomValue);
     // P-Part (max kpL =
     val = (kp * dev) / 32;
 
     // I-Part with anti-windup
     if (ki != 0) integ += dev;
     val += (ki * integ) / 32;
+    //val+=(ki*integ)/32;
 
     // D-Part
     val += (kd*(dev-devOld)/32);
