@@ -8,6 +8,9 @@
 #include "Bit_DC_Vor.h"
 #include "Bit_DC_Ruck.h"
 #include "UART_Shell.h"
+#include "DebugBit.h"
+
+
 
 
 //Shell
@@ -28,7 +31,13 @@
 
 #define TICKS_MAXSPEED				110
 #define DC_SPD_PER_TICK				TICKS_
-#define PWM3_DUTY_MULT				0xFF
+#define PWM3_DUTY_MULT				0x28F
+
+
+enum DCPwr{
+	SOFT,
+	HARD
+};
 
 static uint16 actSpeedValue=0;
 
@@ -38,9 +47,9 @@ static uint16 setValue,setValueOld;		//sollwert
 static int16 integ, devOld;
 static int16 val,dev;
 static uint8 delay=0;
-static uint8 kp=10;
-static uint8 ki=5;
-static uint8 kd=1;
+static uint8 kp=20;		//10
+static uint8 ki=10;			//5
+static uint8 kd=2;			//1
 
 /*  kiL = kiR = 10; //10 max 20
   kpL = kpR = 60; //60 max 128
@@ -60,10 +69,11 @@ void DCDhandleSpeed(void){
 		dcDriveStates=HANDLE_SPEED;
 		Bit_DC_Vor_SetVal();
 		//setDutyCycle(0);
-		setDCSpeed(5);
+		setDCSpeed(20);
 		break;
 	case HANDLE_SPEED:
 		pidDoWork();
+
 		//getCommands();
 		break;
 	case EXIT:
@@ -80,9 +90,18 @@ void debugPrintfDCDrive(const char *fmt, ...) {
 }
 
 void setDutyCycle(unsigned int val){	//get called by Shell
+	static unsigned int debug=0;
 	debugPrintfDCDrive("%s Der Wert ist: %d\r\n", DEBUG_MSG_CMD,val);
 	//PWM3_SetDutyUS((uint16_t)(val*PWM3_PERIOD_VALUE_PROZENT));
 	PWM3_SetRatio16((uint16_t)val*PWM3_DUTY_MULT);
+	if (debug==1){
+		debug=0;
+		DebugBit_PutVal(0);
+	}
+	else{
+		debug=1;
+		DebugBit_PutVal(1);
+	}
 }
 
 void setDCSpeed(uint16 speed){
@@ -171,7 +190,7 @@ void pidDoWork(void)
 	nomValue=updateNomValue();
 
 
-  //nomValue = (nomValueOld+nomValue) >> 1;
+  nomValue = (nomValueOld+nomValue) >> 1;
 
 
 

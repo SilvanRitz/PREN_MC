@@ -13,7 +13,7 @@
 #define A_BELADEN_CMD_HELP			"help"
 
 #define A_BELADEN_SHELL_NAME_STR 	"StA"
-#define A_BELADEN_POS_CMD			"dist"
+#define A_BELADEN_POS_CMD			"d"
 	#define A_BELADEN_MAXDIST		1000
 	#define A_BELADEN_MAXDIST_STR	"1000"
 
@@ -93,7 +93,7 @@ uint8_t A_Beladen_ParseCommand(const unsigned char *cmd, bool *handled, const CL
 		*handled = TRUE;
 		CLS1_SendHelpStr((unsigned char*)A_BELADEN_SHELL_NAME_STR, (unsigned char*)"Group of Statusübergabe commands\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Print help or status information\r\n", io->stdOut);
-		CLS1_SendHelpStr((unsigned char*)" "A_BELADEN_POS_CMD, (unsigned char*)"Leitet den Aufldeprozess ein, mit der ungefähren Position zum Container\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)" "A_BELADEN_POS_CMD, (unsigned char*)"Leitet den Aufldeprozess ein, mit der ungefähren Position zum Container in mm\r\n", io->stdOut);
 		return ERR_OK;
 } else if ((UTIL1_strcmp((char*)cmd, A_BELADEN_POS_CMD)==0) || (UTIL1_strcmp((char*)cmd, A_BELADEN_SHELL_NAME_STR" status")==0)) {
 	*handled = TRUE;

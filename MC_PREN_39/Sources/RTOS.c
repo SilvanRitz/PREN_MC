@@ -15,7 +15,7 @@ static portTASK_FUNCTION(Task_Shell, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	handleCommunication();
-    FRTOS1_vTaskDelay(10/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
   }
 }
 
@@ -31,7 +31,7 @@ static portTASK_FUNCTION(Task_Drive, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	DCDhandleSpeed();
-    FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(1/portTICK_RATE_MS);
   }
 }
 
@@ -60,7 +60,7 @@ bool CreateTasks(void){
         "Shell", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE, /* task stack size */
         (void*)NULL, /* optional task startup argument */
-        1,  /* initial priority */
+		tskIDLE_PRIORITY,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */
       ) != pdPASS){
 		return FALSE;

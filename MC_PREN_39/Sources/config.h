@@ -35,7 +35,7 @@ volatile bool AD_finished;
 	#define CFG_DEBUG_MSG			(1)
 	#define CFG_INFRAREDSENSOR_MSG	(0)
 	#define CFG_FLEXSENSOR_MSG		(0)
-	#define CFG_DCDRIVE_MSG			(1)
+	#define CFG_DCDRIVE_MSG			(0)
 	#define CFG_SHELL_DEBUG_OUT		(1)
 	#define CFG_PWR_MSG 			(1)
 	#define CFG_SERVOPARSE_MSG 		(1)

@@ -15,20 +15,27 @@
 #include "SERVO5.h"
 #include "config.h"
 
+enum CamPos{
+	GERADE,
+	R_VOR,
+	R_KUR,
+	L_KUR
+}camPosEnum;
+
 //-----------Shell------------
 #define SERVO_CMD_HELP   			"help"
 #define SERVO_CMD_STATUS 			"status"
 
 //-----------Lenkservo--------
-#define LENKSERVO_SHELL_NAME_STR 	"LeSer"
+#define LENKSERVO_SHELL_NAME_STR 	"LeS"
 #define LENKSERVO_GRAD_CMD			"deg"
 	#define LENKSERVO_MAXGRAD		190
 	#define LENKSERVO_MAXGRAD_STR	"190"
 #define LENKSERVO_DEFAULT_CMD		"def"
 
 //-----------Kameraservo--------
-#define KAMERASERVO_SHELL_NAME_STR 	"CamSer"
-#define KAMERASERVO_GRAD_CMD		"deg"
+#define KAMERASERVO_SHELL_NAME_STR 	"CamP"
+#define KAMERASERVO_GRAD_CMD		"p"
 	#define KAMERASERVO_MAXGRAD		190
 	#define KAMERASERVO_MAXGRAD_STR	"190"
 #define KAMERASERVO_RECHTS_CMD		"r"
