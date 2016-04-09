@@ -19,9 +19,9 @@ volatile bool AD_finished;
 /*
  * Module
  */
-#define CFG_SHELL			(1)
-#define CFG_ULTRASONIC		(1)
-#define CFG_INFRARED		(1)
+#define CFG_SHELL			(0)
+#define CFG_ULTRASONIC		(0)
+#define CFG_INFRARED		(0)
 #define CFG_DCDRIVE			(1)
 #define CFG_AUTO_BELADEN	(0)
 

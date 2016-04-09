@@ -31,7 +31,7 @@ static portTASK_FUNCTION(Task_Drive, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	DCDhandleSpeed();
-    FRTOS1_vTaskDelay(1/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(5/portTICK_RATE_MS);
   }
 }
 
@@ -99,6 +99,7 @@ bool CreateTasks(void){
         "DCDrive", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE, /* task stack size */
         (void*)NULL, /* optional task startup argument */
+		//1,
         tskIDLE_PRIORITY,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */
       ) != pdPASS){
