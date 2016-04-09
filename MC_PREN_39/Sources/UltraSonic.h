@@ -15,4 +15,5 @@ uint16_t US_usToCentimeters(uint16_t microseconds, uint8_t temperatureCelsius);
 void debugPrintfUltraSonic(const char *fmt, ...);
 void US_EventEchoCapture(LDD_TUserData *UserDataPtr);
 void US_EventEchoOverflow(LDD_TUserData *UserDataPtr);
+void US_Send_Impuls();
 #endif /* SOURCES_ULTRASONIC_H_ */

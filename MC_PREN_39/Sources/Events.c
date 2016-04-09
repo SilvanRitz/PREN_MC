@@ -193,7 +193,7 @@ void TU2_OnCounterRestart(LDD_TUserData *UserDataPtr)
 /* ===================================================================*/
 void TU2_OnChannel0(LDD_TUserData *UserDataPtr)
 {
-
+	US_EventEchoCapture(UserDataPtr);
 }
 
 /*

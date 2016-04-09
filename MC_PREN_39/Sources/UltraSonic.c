@@ -13,9 +13,13 @@
 #include "UltraSonic.h"
 #include "UART_Shell.h"
 #include "config.h"
+#include "FRTOS1.h"
+
+#define UL_RESULT_NOT_READY 0xffff
 
 static enum US_GenaralState_ {
   US_INIT, /* device not used */
+  US_TRIGGERED,
   US_MEASURE, /* started trigger pulse */
   US_CALC_DIST, /* measuring echo pulse */
 } US_GenaralState;
@@ -46,24 +50,37 @@ void startMeasurement(void){
 		switch (US_GenaralState){
 		case US_INIT:
 			debugPrintfUltraSonic("%s %s: Init done.\r\n",DEBUG_MSG_CMD, US_MSG_CMD);
-			US_GenaralState=US_MEASURE;
+			US_GenaralState=US_TRIGGERED;
 			US_Init();
 		break;
+		case US_TRIGGERED:
+			US_Send_Impuls();
+			US_GenaralState=US_MEASURE;
+		break;
+
 		case US_MEASURE:
 			echotime_us=US_Measure_us();
-			if (!echotime_us){
-				debugPrintfUltraSonic("%s %s: Keine Messung! Zu grosse Distanz?\r\n",DEBUG_MSG_CMD, US_MSG_CMD);
-				echotime_us=0;		//nur für den Breakpoint
+			if(echotime_us!=UL_RESULT_NOT_READY){
+				if (!echotime_us){
+					//debugPrintfUltraSonic("%s %s: Keine Messung! Zu grosse Distanz?\r\n",DEBUG_MSG_CMD, US_MSG_CMD);
+					US_GenaralState=US_TRIGGERED;
+					FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS*16));
+				}
+				else{
+					US_GenaralState=US_CALC_DIST;
+				}
 			}
-			US_GenaralState=US_CALC_DIST;
+			else{
+				FRTOS1_vTaskDelay(100/(portTICK_RATE_MS*16));
+			}
 			break;
 		case US_CALC_DIST:
 			distance_cm=US_usToCentimeters(echotime_us,25);
 			debugPrintfUltraSonic("%s: %i\r\n",US_MSG_CMD,distance_cm);
-			US_GenaralState=US_MEASURE;
+			US_GenaralState=US_TRIGGERED;
+		    FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS*16));
 			break;
 		}
-		WAIT_UltaSonic_Waitms(100);
 	}
 }
 
@@ -92,23 +109,26 @@ void US_EventEchoCapture(LDD_TUserData *UserDataPtr){
 	}
 }
 
-uint16_t US_Measure_us(void){
-  uint16_t us;
+void US_Send_Impuls(void){
+	  /* send 10us pulse on TRIG line. */
+	  TRIG_SetVal(usDevice.trigDevice);
+	  WAIT_UltaSonic_Waitus(10);
+	  usDevice.state = ECHO_TRIGGERED;
+	  TRIG_ClrVal(usDevice.trigDevice);
+}
 
-  /* send 10us pulse on TRIG line. */
-  TRIG_SetVal(usDevice.trigDevice);
-  WAIT_UltaSonic_Waitus(10);
-  usDevice.state = ECHO_TRIGGERED;
-  TRIG_ClrVal(usDevice.trigDevice);
-  while(usDevice.state!=ECHO_FINISHED) {
+uint16_t US_Measure_us(void){
+	uint16 us;
+  if(usDevice.state==ECHO_FINISHED) {
     /* measure echo pulse */
-    if (usDevice.state==ECHO_OVERFLOW) { /* measurement took too long? */
+    us = (usDevice.capture*1000UL)/(TU2_CNT_INP_FREQ_U_0/1000);
+    return us;
+  }
+  else if(usDevice.state==ECHO_OVERFLOW) { /* measurement took too long? */
       usDevice.state = ECHO_IDLE;
       return 0; /* no echo, error case */
     }
-  }
-  us = (usDevice.capture*1000UL)/(TU2_CNT_INP_FREQ_U_0/1000);
-  return us;
+  return UL_RESULT_NOT_READY;
 }
 
 

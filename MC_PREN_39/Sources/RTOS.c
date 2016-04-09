@@ -15,7 +15,7 @@ static portTASK_FUNCTION(Task_Shell, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	handleCommunication();
-    FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(25/(portTICK_RATE_MS*16));
   }
 }
 
@@ -23,7 +23,7 @@ static portTASK_FUNCTION(Task_Us, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	startMeasurement();
-    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS*16));
   }
 }
 
@@ -31,7 +31,7 @@ static portTASK_FUNCTION(Task_Drive, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	DCDhandleSpeed();
-    FRTOS1_vTaskDelay(5/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(50/(portTICK_RATE_MS*16));
   }
 }
 
@@ -39,7 +39,7 @@ static portTASK_FUNCTION(Task_IR, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	getDistance();
-    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(100/(portTICK_RATE_MS*16));
   }
 }
 
@@ -47,7 +47,7 @@ static portTASK_FUNCTION(Task_A_Bel, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	autoBeladen();
-    FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+    FRTOS1_vTaskDelay(100/(portTICK_RATE_MS*16));
   }
 }
 
