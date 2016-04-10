@@ -16,13 +16,12 @@
 #define A_BELADEN_POS_CMD			"d"
 	#define A_BELADEN_MAXDIST		1000
 	#define A_BELADEN_MAXDIST_STR	"1000"
-
+#define A_BELADEN_FIN_RESP			"StAf"
 
 //--------Variabeln---------
 #define NICHT_BELADEN	0
 #define BELADEN			1
 static volatile bool autoBeladenFlg=NICHT_BELADEN;
-
 
 enum aBeladenStates_t{
 	DO_NOTHING,
@@ -41,16 +40,25 @@ void autoBeladen(void){
 	switch (aBeladenStates){
 	case DO_NOTHING:
 		if (autoBeladenFlg){
+			autoBeladenFlg=NICHT_BELADEN;
 			aBeladenStates=INIT;
+			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);
 		}
 		break;
 	case INIT:
-		debugPrintfABeladen("%s %s: freigegben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
+
+
+		//debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
 		//setSpeed()
 		//handle Direction
 		//measure time
 		//time elapsed =>Check Ir
 		aBeladenStates=CHECK_IR;
+
+		//---TEMPORÄR-----
+		aBeladenStates=DO_NOTHING;
+		changeToDrive();
+		//-------
 		break;
 	case CHECK_IR:
 		//get IR Interrupt
@@ -105,6 +113,7 @@ p = cmd+sizeof(A_BELADEN_SHELL_NAME_STR" "A_BELADEN_POS_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=A_BELADEN_MAXDIST) {
 	autoBeladenFlg=BELADEN;
 	*handled = TRUE;
+	changeToBeladen();
 } else {
 	  *handled = TRUE;
   CLS1_SendStr((const unsigned char*)"Wrong "A_BELADEN_POS_CMD" argument, must be in the range 0.."A_BELADEN_MAXDIST_STR"\r\n",io->stdErr);

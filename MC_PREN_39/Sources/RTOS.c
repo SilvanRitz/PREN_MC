@@ -43,10 +43,10 @@ static portTASK_FUNCTION(Task_IR, pvParameters) {
   }
 }
 
-static portTASK_FUNCTION(Task_A_Bel, pvParameters) {
+static portTASK_FUNCTION(Task_Handl_Act, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
-	autoBeladen();
+	handleActions();
     FRTOS1_vTaskDelay(100/(portTICK_RATE_MS*16));
   }
 }
@@ -107,13 +107,13 @@ bool CreateTasks(void){
 	  }
 #endif
 
-#if CFG_AUTO_BELADEN
+#if CFG_HANDLE_ACTIONS
 	if (FRTOS1_xTaskCreate(
-        Task_A_Bel,  /* pointer to the task */
-        "A_Bel", /* task name for kernel awareness debugging */
+        Task_Handl_Act,  /* pointer to the task */
+        "Handl_Act", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE, /* task stack size */
         (void*)NULL, /* optional task startup argument */
-        tskIDLE_PRIORITY,  /* initial priority */
+        tskIDLE_PRIORITY+2,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */
       ) != pdPASS){
 		return FALSE;

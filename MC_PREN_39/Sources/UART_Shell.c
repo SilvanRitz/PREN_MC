@@ -28,6 +28,8 @@
 #include "ServoParse.h"
 #include "UART_Shell.h"
 #include "AutonomBeladen.h"
+#include "handleActions.h"
+#include "AutonomEntladen.h"
 
 
 
@@ -51,6 +53,8 @@ enum shellStates_t{
 	SERVO_Kamera_ParseCommand,
 	PWM3_ParseCommand,
 	A_Beladen_ParseCommand,
+	A_Entladen_ParseCommand,
+	start_ParseCommand,
     NULL /* sentinel */
   };
 
@@ -82,7 +86,7 @@ unsigned int MyXprintf(const char *fmt, ...) {
 
 unsigned int debugPrintf(const char *fmt, ...) {
 #if CFG_DEBUG_MSG
-		return MyXprintf(fmt);
+	return MyXprintf(fmt);
 #endif
 }
 
