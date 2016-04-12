@@ -3,7 +3,7 @@
   <Header>
     <Name>MC_PREN_39</Name>
     <SavedBy>Wallpaper</SavedBy>
-    <ModificationStamp>149</ModificationStamp>
+    <ModificationStamp>151</ModificationStamp>
     <Date>2015-10-19</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -15130,7 +15130,7 @@
   <Bean>
     <Repository>file:/${home_ProcessorExpert_loc}/MyComponents</Repository>
     <BeanType>Servo</BeanType>
-    <Name>SERVO1</Name>
+    <Name>CAM_SERVO1</Name>
     <CompNumb>19</CompNumb>
     <CompEnabled>true</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
@@ -15145,7 +15145,7 @@
         <ItemSymbol>DeviceName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>SERVO1</Value>
+        <Value>CAM_SERVO1</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>invertedPWM</ItemSymbol>
@@ -16740,7 +16740,7 @@
   <Bean>
     <Repository>file:/${home_ProcessorExpert_loc}/MyComponents</Repository>
     <BeanType>Servo</BeanType>
-    <Name>SERVO2</Name>
+    <Name>LENK_SERVO2</Name>
     <CompNumb>37</CompNumb>
     <CompEnabled>true</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
@@ -16755,7 +16755,7 @@
         <ItemSymbol>DeviceName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>SERVO2</Value>
+        <Value>LENK_SERVO2</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>invertedPWM</ItemSymbol>
@@ -18350,7 +18350,7 @@
   <Bean>
     <Repository>file:/${home_ProcessorExpert_loc}/MyComponents</Repository>
     <BeanType>Servo</BeanType>
-    <Name>SERVO3</Name>
+    <Name>GREIF_SERVO3</Name>
     <CompNumb>67</CompNumb>
     <CompEnabled>true</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
@@ -18365,7 +18365,7 @@
         <ItemSymbol>DeviceName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>SERVO3</Value>
+        <Value>GREIF_SERVO3</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>invertedPWM</ItemSymbol>
@@ -19960,7 +19960,7 @@
   <Bean>
     <Repository>file:/${home_ProcessorExpert_loc}/MyComponents</Repository>
     <BeanType>Servo</BeanType>
-    <Name>SERVO4</Name>
+    <Name>LADEN_SERVO4</Name>
     <CompNumb>70</CompNumb>
     <CompEnabled>true</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
@@ -19975,7 +19975,7 @@
         <ItemSymbol>DeviceName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>SERVO4</Value>
+        <Value>LADEN_SERVO4</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>invertedPWM</ItemSymbol>
@@ -21570,7 +21570,7 @@
   <Bean>
     <Repository>file:/${home_ProcessorExpert_loc}/MyComponents</Repository>
     <BeanType>Servo</BeanType>
-    <Name>SERVO5</Name>
+    <Name>ENTLADEN_SERVO5</Name>
     <CompNumb>76</CompNumb>
     <CompEnabled>true</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
@@ -21585,7 +21585,7 @@
         <ItemSymbol>DeviceName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>SERVO5</Value>
+        <Value>ENTLADEN_SERVO5</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>invertedPWM</ItemSymbol>

@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include "CLS1.h"
 #include "LED1.h"
-#include "SERVO1.h"
+#include "CAM_SERVO1.h".h"
 #include "XF1.h"
 #include "config.h"
 #include "FRTOS1.h"
@@ -47,9 +47,8 @@ enum shellStates_t{
   {
     CLS1_ParseCommand,
 	LED1_ParseCommand,
-	SERVO1_ParseCommand,
-	//SERVO2_ParseCommand,
-	//FRTOS1_ParseCommand,
+	CAM_SERVO1_ParseCommand,
+	FRTOS1_ParseCommand,
 	SERVO_Lenkung_ParseCommand,
 	SERVO_Kamera_ParseCommand,
 	PWM3_ParseCommand,

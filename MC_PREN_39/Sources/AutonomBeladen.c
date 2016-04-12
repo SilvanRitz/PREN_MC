@@ -8,6 +8,10 @@
 #include "UART_Shell.h"
 #include "config.h"
 #include "handleActions.h"
+#include "FRTOS1.h"
+
+#include "GREIF_SERVO3.h"
+#include "LADEN_SERVO4.h"
 
 
 //-----------Shell Autonom Beladen--------
@@ -48,7 +52,6 @@ void autoBeladen(void){
 		break;
 	case INIT:
 
-
 		//debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
 		//setSpeed()
 		//handle Direction
@@ -68,15 +71,23 @@ void autoBeladen(void){
 		break;
 	case CONTAINER_FOUND:
 		//init container greifen
+		GREIF_SERVO3_SetPos(100);
+	    FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
 		break;
 	case GET_CONTAINER:
 		//init container heben
+		LADEN_SERVO4_SetPos(100);
+		 FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
 		break;
 	case EMPTY_CONTAINER:
 		//init container zurückstellen (herunterfahren)
+		LADEN_SERVO4_SetPos(0);
+		 FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
 		break;
 	case PLACE_CONTAINER:
 		// Container loslassen
+		GREIF_SERVO3_SetPos(100);
+		FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
 		break;
 	case SEND_REPORT:
 		//command an Raspberry

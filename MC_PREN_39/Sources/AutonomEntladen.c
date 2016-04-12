@@ -9,6 +9,8 @@
 #include "config.h"
 #include "handleActions.h"
 
+#include "ENTLADEN_SERVO5.h"
+
 
 //-----------Shell Autonom Beladen--------
 #define A_ENTLADEN_CMD_HELP			"help"

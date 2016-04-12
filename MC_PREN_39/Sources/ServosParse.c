@@ -8,11 +8,11 @@
 
 #include "ServoParse.h"
 #include "UART_Shell.h"
-#include "SERVO1.h"
-#include "SERVO2.h"
-#include "SERVO3.h"
-#include "SERVO4.h"
-#include "SERVO5.h"
+#include "CAM_SERVO1.h"
+#include "LENK_SERVO2.h"
+#include "GREIF_SERVO3.h"
+#include "LADEN_SERVO4.h"
+#include "ENTLADEN_SERVO5.h"
 #include "config.h"
 
 enum CamPos{
