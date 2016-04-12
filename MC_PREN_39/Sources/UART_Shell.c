@@ -30,6 +30,7 @@
 #include "AutonomBeladen.h"
 #include "handleActions.h"
 #include "AutonomEntladen.h"
+#include "RaspCheck.h"
 
 
 
@@ -55,6 +56,7 @@ enum shellStates_t{
 	A_Beladen_ParseCommand,
 	A_Entladen_ParseCommand,
 	start_ParseCommand,
+	Rasp_Check_ParseCommand,
     NULL /* sentinel */
   };
 

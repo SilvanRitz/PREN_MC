@@ -23,6 +23,8 @@
 #define DC_MAXSPEED					190
 #define DC_MAXSPEED_STR				"190"
 
+#define DC_SPD_REACHED_RSP			"DCDr"
+
 
 #define TIMER_PERIOD_DUR			50		//in us
 #define PWM3_PERIOD_VALUE_PROZENT 	TIMER_PERIOD_DUR/100
@@ -61,6 +63,7 @@ enum dcDriveStates_t{
 	EXIT
 }dcDriveStates=INIT;
 
+static uint16 spd_shell=0;
 
 void DCDhandleSpeed(void){
 	switch (dcDriveStates){
@@ -77,14 +80,20 @@ void DCDhandleSpeed(void){
 		//getCommands();
 		break;
 	case EXIT:
-		debugPrintfDCDrive("Exit\r\n");
+		debugPrintfDCDrive("%s %s:Exit\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		break;
 	}
 }
 
 
 void debugPrintfDCDrive(const char *fmt, ...) {
-#if CFG_DCDRIVE_MSG
+#if CFG_DCDRIVE_MSG_DGB
+	debugPrintf(fmt);
+#endif
+}
+
+void cmdPrintfDCDrive(const char *fmt, ...) {
+#if CFG_DCDRIVE_MSG_CMD
 	debugPrintf(fmt);
 #endif
 }
@@ -106,7 +115,8 @@ void setDutyCycle(unsigned int val){	//get called by Shell
 
 void setDCSpeed(uint16 speed){
 	setValue=speed*TICKS_MAXSPEED/DC_MAXSPEED;	//Umrechnung geschwindigkeit in sollspeed
-
+	spd_shell=speed;
+	sendSpdReached();
 	//update PID Regler
 }
 
@@ -117,6 +127,10 @@ void setNomValue(uint16 actSpeed){
 uint16 updateNomValue(){
 	nomValue=actSpeedValue;
 	return nomValue;
+}
+
+void sendSpdReached(void){
+	cmdPrintfDCDrive("%s %i\r\n",DC_SPD_REACHED_RSP,spd_shell);
 }
 
 //--------Shellpart------------
@@ -143,8 +157,6 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
   else if (strncmp((const char*)cmd, (const char*)DCDRIVE_SHELL_NAME_STR " " DCDRIVE_CMD_SPEED, sizeof(DCDRIVE_SHELL_NAME_STR " "DCDRIVE_CMD_SPEED)-1)==0) {
       p = cmd+sizeof(DCDRIVE_SHELL_NAME_STR" "DCDRIVE_CMD_SPEED);
       if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=DC_MAXSPEED) {
-    	  //setDutyCycle(val);
-        //PWM3_SetDutyMS((uint8_t)val);
     	  setDCSpeed(val);
 		*handled = TRUE;
       } else {
@@ -200,6 +212,9 @@ void pidDoWork(void)
     // deviation (max devL = +1000 - -1000 = 2000)
     //dev = (setValue - nomValue) / 8;
 	 dev = (setValue - nomValue);
+	 if(dev<5 && dev>-5){
+		 sendSpdReached();
+	 }
     // P-Part (max kpL =
     val = (kp * dev) / 32;
 

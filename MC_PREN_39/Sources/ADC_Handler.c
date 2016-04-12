@@ -30,7 +30,7 @@ enum adChannels_t{
 uint16_t adValue[AD1_CHANNEL_COUNT];
 
 
-void getDistance(void){
+void handleADC(void){
 	static uint16_t IRvalue;
 	switch (adStates){
 	case INIT:
@@ -62,7 +62,7 @@ void getDistance(void){
 
 
 void debugPrintfInfraRedSensor(const char *fmt, ...) {
-#if CFG_INFRAREDSENSOR_MSG
+#if CFG_ADC_MSG
 	debugPrintf(fmt);
 #endif
 }

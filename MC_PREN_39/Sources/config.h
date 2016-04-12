@@ -21,9 +21,10 @@ volatile bool AD_finished;
  */
 #define CFG_SHELL			(1)
 #define CFG_ULTRASONIC		(1)
-#define CFG_INFRARED		(0)
-#define CFG_DCDRIVE			(0)
+#define CFG_ADC				(1)
+#define CFG_DCDRIVE			(1)
 #define CFG_HANDLE_ACTIONS	(1)
+#define CFG_CHECK_RASP		(1)
 
 
 
@@ -31,17 +32,19 @@ volatile bool AD_finished;
  * Messages
  */
 #if CFG_SHELL
-	#define CFG_ULTRASONIC_MSG		(1)
+	#define CFG_ULTRASONIC_MSG		(0)
 	#define CFG_DEBUG_MSG			(1)
-	#define CFG_INFRAREDSENSOR_MSG	(0)
+	#define CFG_ADC_MSG				(0)
 	#define CFG_FLEXSENSOR_MSG		(0)
-	#define CFG_DCDRIVE_MSG			(1)
+	#define CFG_DCDRIVE_MSG_DGB			(0)
+	#define CFG_DCDRIVE_MSG_CMD			(1)
 	#define CFG_SHELL_DEBUG_OUT		(1)
-	#define CFG_PWR_MSG 			(1)
+	#define CFG_PWR_MSG 			(0)
 	#define CFG_SERVOPARSE_MSG 		(1)
-	#define CFG_ENCODER_MSG			(1)
+	#define CFG_ENCODER_MSG			(0)
 	#define CFG_ABELADEN_MSG 		(1)
 	#define CFG_AENTLADEN_MSG		(1)
+	#define	CFG_RASP_CHECK			(0)
 #endif
 
 

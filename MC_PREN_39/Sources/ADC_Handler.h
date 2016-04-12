@@ -9,7 +9,7 @@
 
 void debugPrintfInfraRedSensor(const char *fmt, ...);
 void debugPrintfFlexSensor(const char *fmt, ...);
-void getDistance(void);
+void handleADC(void);
 
 #endif /* SOURCES_ADC_HANDLER_H_ */
 

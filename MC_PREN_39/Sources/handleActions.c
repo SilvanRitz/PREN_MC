@@ -7,6 +7,8 @@
 #include "handleActions.h"
 #include "UART_Shell.h"
 #include "config.h"
+#include "AutonomBeladen.h"
+#include "AutonomEntladen.h"
 
 
 //-----------Shell Autonom Beladen--------
