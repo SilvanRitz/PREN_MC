@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include "CLS1.h"
 #include "LED1.h"
-#include "CAM_SERVO1.h".h"
+#include "CAM_SERVO1.h"
 #include "XF1.h"
 #include "config.h"
 #include "FRTOS1.h"
