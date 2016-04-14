@@ -49,8 +49,8 @@ static uint16 setValue,setValueOld;		//sollwert
 static int16 integ, devOld;
 static int16 val,dev;
 static uint8 delay=0;
-static uint8 kp=20;		//10
-static uint8 ki=10;			//5
+static uint8 kp=20;		//0
+static uint8 ki=5;			//5
 static uint8 kd=2;			//1
 
 /*  kiL = kiR = 10; //10 max 20
@@ -72,7 +72,7 @@ void DCDhandleSpeed(void){
 		dcDriveStates=HANDLE_SPEED;
 		Bit_DC_Vor_SetVal();
 		//setDutyCycle(0);
-		setDCSpeed(20);
+		setDCSpeed(50);
 		break;
 	case HANDLE_SPEED:
 		pidDoWork();
@@ -100,7 +100,7 @@ void cmdPrintfDCDrive(const char *fmt, ...) {
 
 void setDutyCycle(unsigned int val){	//get called by Shell
 	static unsigned int debug=0;
-	debugPrintfDCDrive("%s Der Wert ist: %d\r\n", DEBUG_MSG_CMD,val);
+	debugPrintfDCDrive("%s Der Stellwert ist: %d\r\n", DEBUG_MSG_CMD,val);
 	//PWM3_SetDutyUS((uint16_t)(val*PWM3_PERIOD_VALUE_PROZENT));
 	PWM3_SetRatio16((uint16_t)val*PWM3_DUTY_MULT);
 	if (debug==1){

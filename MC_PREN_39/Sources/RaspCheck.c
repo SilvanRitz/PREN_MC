@@ -22,7 +22,7 @@ static enum RaspCheck_GenaralState_ {
 #define RASP_CHECK_CMD_HELP			"help"
 
 #define RASP_CHECK_SHELL_NAME_STR 	"Ja"
-#define RASP_CHECK_RESPONSE			"y"
+#define RASP_CHECK_RESPONSE			"a"
 
 
 //------------Frd Response

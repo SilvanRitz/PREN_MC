@@ -309,6 +309,7 @@ void AD1_OnCalibrationEnd(void)
 void IR_In_Interrupt_OnInterrupt(void)
 {
   /* Write your code here ... */
+	static int test=5;
 }
 
 /*
@@ -375,7 +376,7 @@ void TU1_OnChannel5(LDD_TUserData *UserDataPtr)
 		//US_EventEchoCapture(UserDataPtr);
 		//updatePID Regler
 		//debugPrintfEncoder("%s %s: Die Zahl ist %u\r\n\0",DEBUG_MSG_CMD,ENCODER_MSG_CMD,temp);
-		//debugPrintfEncoder("%s  Die Zahl ist %u\r\n\0",DEBUG_MSG_CMD,temp);
+		debugPrintfEncoder("%s  Die Encoderzahl ist %u\r\n\0",DEBUG_MSG_CMD,temp);
 		setNomValue(temp);
 		counterA=0;
 	}
