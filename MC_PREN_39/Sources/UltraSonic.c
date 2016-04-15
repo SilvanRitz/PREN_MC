@@ -62,7 +62,7 @@ void startMeasurement(void){
 			echotime_us=US_Measure_us();
 			if(echotime_us!=UL_RESULT_NOT_READY){
 				if (!echotime_us){
-					//debugPrintfUltraSonic("%s %s: Keine Messung! Zu grosse Distanz?\r\n",DEBUG_MSG_CMD, US_MSG_CMD);
+					debugPrintfUltraSonic("%s %s: Keine Messung! Zu grosse Distanz?\r\n",DEBUG_MSG_CMD, US_MSG_CMD);
 					US_GenaralState=US_TRIGGERED;
 					FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS*16));
 				}

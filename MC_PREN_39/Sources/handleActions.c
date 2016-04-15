@@ -9,6 +9,7 @@
 #include "config.h"
 #include "AutonomBeladen.h"
 #include "AutonomEntladen.h"
+#include "DCDrive.h"
 
 #include "ServoParse.h"
 #include "UART_Shell.h"
@@ -50,6 +51,8 @@ enum handle_actions_t{
 void handleActions(void){
 	switch (hadleActionsState){
 	case INIT_ALL:
+		//setDCSpeed(0);
+
 		//if (autoEntladenFlg){
 			//hadleActionsState=INIT_DONE;
 

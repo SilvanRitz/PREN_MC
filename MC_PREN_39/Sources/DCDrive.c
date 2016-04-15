@@ -31,7 +31,7 @@
 
 
 
-#define TICKS_MAXSPEED				110
+#define TICKS_MAXSPEED				140		//gemessen mit vollem akku und 100duty(138)
 #define DC_SPD_PER_TICK				TICKS_
 #define PWM3_DUTY_MULT				0x28F
 
@@ -49,9 +49,9 @@ static uint16 setValue,setValueOld;		//sollwert
 static int16 integ, devOld;
 static int16 val,dev;
 static uint8 delay=0;
-static uint8 kp=20;		//0
-static uint8 ki=5;			//5
-static uint8 kd=2;			//1
+static uint8 kp=71;		//10		//20
+static uint8 ki=28;			//5		//5
+static uint8 kd=5;			//1		//2
 
 /*  kiL = kiR = 10; //10 max 20
   kpL = kpR = 60; //60 max 128
@@ -70,7 +70,9 @@ void DCDhandleSpeed(void){
 	case INIT:
 		debugPrintfDCDrive("%s %s: intialized\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		dcDriveStates=HANDLE_SPEED;
-		Bit_DC_Vor_SetVal();
+		Bit_DC_Vor_ClrVal();
+		Bit_DC_Ruck_SetVal();
+
 		//setDutyCycle(0);
 		setDCSpeed(50);
 		break;
@@ -221,12 +223,11 @@ void pidDoWork(void)
     // I-Part with anti-windup
     if (ki != 0) integ += dev;
     val += (ki * integ) / 32;
-    //val+=(ki*integ)/32;
 
     // D-Part
     val += (kd*(dev-devOld)/32);
     devOld = dev;
-
+    val=val/8;
     // limit control point
     if (val > 100)
     {

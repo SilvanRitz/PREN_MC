@@ -3,7 +3,7 @@
   <Header>
     <Name>MC_PREN_39</Name>
     <SavedBy>Wallpaper</SavedBy>
-    <ModificationStamp>153</ModificationStamp>
+    <ModificationStamp>159</ModificationStamp>
     <Date>2015-10-19</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -9423,7 +9423,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntVector0</ItemSymbol>
-        <Value />
+        <Value>INT_TPM0</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntPriority0</ItemSymbol>
@@ -9642,7 +9642,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntVector1</ItemSymbol>
-        <Value />
+        <Value>INT_TPM0</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntPriority1</ItemSymbol>
@@ -9861,7 +9861,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntVector2</ItemSymbol>
-        <Value />
+        <Value>INT_TPM0</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntPriority2</ItemSymbol>
@@ -10080,7 +10080,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntVector3</ItemSymbol>
-        <Value />
+        <Value>INT_TPM0</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntPriority3</ItemSymbol>
@@ -10299,7 +10299,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntVector4</ItemSymbol>
-        <Value />
+        <Value>INT_TPM0</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntPriority4</ItemSymbol>
@@ -16762,7 +16762,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>1500</Value>
+        <Value>1520</Value>
         <Base>DEC</Base>
       </ItemState>
       <ItemState>
@@ -39189,7 +39189,7 @@
               <Value>false</Value>
               <Expanded>false</Expanded>
               <LastSelection>true</LastSelection>
-              <LastUserSel>yes</LastUserSel>
+              <LastUserSel>never</LastUserSel>
             </ItemState>
             <ItemState>
               <ItemSymbol>OnCaptureName</ItemSymbol>
@@ -39367,7 +39367,7 @@
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
         <Index>1</Index>
         <Value>false</Value>
-        <LastSelection>true</LastSelection>
+        <LastSelection>false</LastSelection>
         <LastUserSel>no</LastUserSel>
         <UsrMethodName>GetStatus</UsrMethodName>
       </ItemState>

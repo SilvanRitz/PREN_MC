@@ -29,8 +29,8 @@ enum CamPos{
 //-----------Lenkservo--------
 #define LENKSERVO_SHELL_NAME_STR 	"LeS"
 #define LENKSERVO_GRAD_CMD			"deg"
-	#define LENKSERVO_MAXGRAD		190
-	#define LENKSERVO_MAXGRAD_STR	"190"
+	#define LENKSERVO_MAXGRAD		255
+	#define LENKSERVO_MAXGRAD_STR	"255"
 #define LENKSERVO_DEFAULT_CMD		"def"
 
 //-----------Kameraservo--------
@@ -86,6 +86,7 @@ else if (strncmp((const char*)cmd, (const char*)LENKSERVO_SHELL_NAME_STR " " LEN
 p = cmd+sizeof(LENKSERVO_SHELL_NAME_STR" "LENKSERVO_GRAD_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=LENKSERVO_MAXGRAD) {
 	  //setDCSpeed(val);
+	LENK_SERVO2_SetPos(val);
 	*handled = TRUE;
 } else {
 	  *handled = TRUE;

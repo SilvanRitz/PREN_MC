@@ -69,7 +69,7 @@ void handleADC(void){
 		break;
 	case FLEX_GET_DISTANCE:
 		istWert=adValue[AD_FLEX1]-IST_WERT_OFFSET;
-		//debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,istWert);
+		debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,istWert);
 		Lenk_pidDoWork();
 		adStates=START_MEASUREMENT;
 		break;
