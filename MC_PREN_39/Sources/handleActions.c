@@ -10,9 +10,17 @@
 #include "AutonomBeladen.h"
 #include "AutonomEntladen.h"
 #include "DCDrive.h"
+#include "Bit_5V_2_Enable.h"
+
+#include "CAM_SERVO1.h"
+#include "LENK_SERVO2.h"
+#include "GREIF_SERVO3.h"
+#include "LADEN_SERVO4.h"
+#include "ENTLADEN_SERVO5.h"
 
 #include "ServoParse.h"
 #include "UART_Shell.h"
+
 
 
 
@@ -52,13 +60,12 @@ void handleActions(void){
 	switch (hadleActionsState){
 	case INIT_ALL:
 		//setDCSpeed(0);
-
-		//if (autoEntladenFlg){
-			//hadleActionsState=INIT_DONE;
-
-		//}
+		setDCVorwaerts();
+		CAM_SERVO1_PWMusToPos8(126);
+		LENK_SERVO2_PWMusToPos8(126);
 		break;
 	case INIT_DONE:
+		Bit_5V_2_Enable_SetVal();		//Enable second Akku
 		debugPrintfHandleActions("%s\r\n",START_FIN_RESP);
 		changeToDrive();
 		break;

@@ -23,7 +23,8 @@ enum adChannels_t{
 	AD_AKKU_5V_2,
 	AD_FLEX1,
 	AD_FLEX2,
-	AD_AKKU_5V_1
+	AD_AKKU_5V_1,
+	AD_FLEX_REF
 };
 
 #define FLEX1_MSG_CMD		"Fldist1"
@@ -68,7 +69,7 @@ void handleADC(void){
 		}
 		break;
 	case FLEX_GET_DISTANCE:
-		istWert=adValue[AD_FLEX1]-IST_WERT_OFFSET;
+		istWert=adValue[AD_FLEX1]-adValue[AD_FLEX_REF];
 		debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,istWert);
 		Lenk_pidDoWork();
 		adStates=START_MEASUREMENT;

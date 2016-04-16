@@ -38,6 +38,7 @@
 #include "WAIT2.h"
 #include "Cap1.h"
 #include "CaptureLdd1.h"
+#include "Stell_Val.h"
 #include "KSDK1.h"
 #include "WAIT1.h"
 #include "CLS1.h"

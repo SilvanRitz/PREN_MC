@@ -9,6 +9,7 @@
 #include "Bit_DC_Ruck.h"
 #include "UART_Shell.h"
 #include "DebugBit.h"
+#include "Stell_Val.h"
 
 
 
@@ -45,14 +46,14 @@ static uint16 actSpeedValue=0;
 
 static uint16 nomValue=0;		//OFF
 static uint16 nomValueOld=0;		//istwert
-static uint16 setValue,setValueOld;		//sollwert
-static int16 integ, devOld;
-static int16 val,dev;
-static uint8 delay=0;
-static uint8 kp=71;		//10		//20
-static uint8 ki=28;			//5		//5
-static uint8 kd=5;			//1		//2
-
+static uint16 setValue=0;
+static uint16 setValueOld=0;		//sollwert
+static int32 integ=0;
+static int32 devOld=0;
+static int32 val,dev;
+static uint8 kp=72;		//71
+static uint8 ki=28;			//28
+static uint8 kd=5;			//5
 /*  kiL = kiR = 10; //10 max 20
   kpL = kpR = 60; //60 max 128
   kdL = kdR = 0; //10  max 40*/
@@ -64,17 +65,25 @@ enum dcDriveStates_t{
 }dcDriveStates=INIT;
 
 static uint16 spd_shell=0;
+void setDCVorwaerts(){
+	Bit_DC_Vor_ClrVal();
+	Bit_DC_Ruck_SetVal();
+}
 
+void setDCRueckwaerts(){
+	Bit_DC_Vor_SetVal();
+	Bit_DC_Ruck_ClrVal();
+}
 void DCDhandleSpeed(void){
 	switch (dcDriveStates){
 	case INIT:
 		debugPrintfDCDrive("%s %s: intialized\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		dcDriveStates=HANDLE_SPEED;
-		Bit_DC_Vor_ClrVal();
-		Bit_DC_Ruck_SetVal();
+		setDCVorwaerts();
+
 
 		//setDutyCycle(0);
-		setDCSpeed(50);
+		setDCSpeed(150);
 		break;
 	case HANDLE_SPEED:
 		pidDoWork();
@@ -102,7 +111,7 @@ void cmdPrintfDCDrive(const char *fmt, ...) {
 
 void setDutyCycle(unsigned int val){	//get called by Shell
 	static unsigned int debug=0;
-	debugPrintfDCDrive("%s Der Stellwert ist: %d\r\n", DEBUG_MSG_CMD,val);
+	//debugPrintfDCDrive("%s Der Stellwert ist: %d\r\n", DEBUG_MSG_CMD,val);
 	//PWM3_SetDutyUS((uint16_t)(val*PWM3_PERIOD_VALUE_PROZENT));
 	PWM3_SetRatio16((uint16_t)val*PWM3_DUTY_MULT);
 	if (debug==1){
@@ -222,12 +231,12 @@ void pidDoWork(void)
 
     // I-Part with anti-windup
     if (ki != 0) integ += dev;
-    val += (ki * integ) / 32;
+    val += ((int32)(ki * integ)) / 32;
 
     // D-Part
-    val += (kd*(dev-devOld)/32);
+    val += ((int32)(kd*(dev-devOld))/32);
     devOld = dev;
-    val=val/8;
+    val=val/4;
     // limit control point
     if (val > 100)
     {
@@ -240,5 +249,11 @@ void pidDoWork(void)
       integ -= dev;
     }
   }
+  if(Stell_Val_NofFreeElements()<2){
+	  uint8 p;
+	  Stell_Val_Get(&p);
+  }
+  Stell_Val_Put(val);
+  //debugPrintfDCDrive("%i\r\n\0",val);
   setDutyCycle(100-val);
 }

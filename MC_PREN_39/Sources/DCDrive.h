@@ -26,5 +26,7 @@ void pidDoWork(void);
 void setDCSpeed(uint16 speed);
 void setDutyCycle(unsigned int val);
 void sendSpdReached(void);
+void setDCRueckwaerts();
+void setDCVorwaerts();
 
 #endif /* SOURCES_DCDRIVE_H_ */
