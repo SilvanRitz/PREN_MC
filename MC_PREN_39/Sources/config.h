@@ -16,6 +16,14 @@ enum runStates_{
 };
 
 volatile bool AD_finished;
+volatile uint16 IR_counter;
+volatile uint16 IR_changed;
+volatile uint16 IR_LastCounter;
+volatile bool IR_flanke;
+#define WAS_RISING	0
+#define OBJEKT_WEG	1
+
+
 /*
  * Module
  */
@@ -42,7 +50,7 @@ volatile bool AD_finished;
 	#define CFG_SHELL_DEBUG_OUT		(1)
 	#define CFG_PWR_MSG 			(0)
 	#define CFG_SERVOPARSE_MSG 		(1)
-	#define CFG_ENCODER_MSG			(1)					//SPAM
+	#define CFG_ENCODER_MSG			(0)			//SPAM => Für Debug DC Motor
 	#define CFG_ABELADEN_MSG 		(1)
 	#define CFG_AENTLADEN_MSG		(1)
 	#define	CFG_RASP_CHECK			(0)

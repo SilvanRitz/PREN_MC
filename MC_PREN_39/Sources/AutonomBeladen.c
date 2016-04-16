@@ -9,6 +9,7 @@
 #include "config.h"
 #include "handleActions.h"
 #include "FRTOS1.h"
+#include "DCDrive.h"
 
 #include "GREIF_SERVO3.h"
 #include "LADEN_SERVO4.h"
@@ -23,14 +24,19 @@
 	#define A_BELADEN_MAXDIST_STR	"1000"
 #define A_BELADEN_FIN_RESP			"StAf"
 
+#define BELADEN_SPD					100
+#define BELADEN_SICHERHEIT_DIST		30
+#define CONTAINER_LENGTH			25		//in mm
+
 //--------Variabeln---------
-#define NICHT_BELADEN	0
-#define BELADEN			1
-static volatile bool autoBeladenFlg=NICHT_BELADEN;
+//#define NICHT_BELADEN	0
+//#define BELADEN			1
+//static volatile bool autoBeladenFlg=NICHT_BELADEN;
 
 enum aBeladenStates_t{
 	DO_NOTHING,
 	INIT,
+	ENABLE_IR,
 	CHECK_IR,
 	CONTAINER_FOUND,
 	GET_CONTAINER,
@@ -41,33 +47,55 @@ enum aBeladenStates_t{
 }aBeladenStates=DO_NOTHING;
 
 
+static uint16 distance=0;
+uint16 IR_Counter=0;
+
 void autoBeladen(void){
+	static uint16 wait_time=0;
 	switch (aBeladenStates){
 	case DO_NOTHING:
-		if (autoBeladenFlg){
-			autoBeladenFlg=NICHT_BELADEN;
-			aBeladenStates=INIT;
-			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);
-		}
-		break;
+		aBeladenStates=INIT;
+		debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);
+	break;
 	case INIT:
-
 		//debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
 		//setSpeed()
 		//handle Direction
 		//measure time
 		//time elapsed =>Check Ir
-		aBeladenStates=CHECK_IR;
+		setDCSpeed(BELADEN_SPD);	//fahre mit 10cm pro sekunde
+		if(distance>BELADEN_SICHERHEIT_DIST){
+			wait_time=((uint32)(distance*1000)/BELADEN_SPD);
+			debugPrintfABeladen("%s %s: Warte ms: %i",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR,wait_time);
+			FRTOS1_vTaskDelay(wait_time/(portTICK_RATE_MS));
+		}
+		else{
+			debugPrintfABeladen("%s %s: Distanz zum Container zu klein!",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
+		}
+		aBeladenStates=ENABLE_IR;
 
 		//---TEMPORÄR-----
-		aBeladenStates=DO_NOTHING;
-		changeToDrive();
+		//aBeladenStates=DO_NOTHING;
+		//changeToDrive();
 		//-------
 		break;
+	case ENABLE_IR:
+		IR_changed=0;
+		aBeladenStates=CHECK_IR;
 	case CHECK_IR:
 		//get IR Interrupt
+
 		//measure "On Time"
-		//in tolerance? => contaier found and stop
+		//in tolerance? => container found and stop
+		if(IR_changed){
+			IR_changed=0;
+			if(((uint16)(CONTAINER_LENGTH)<((uint32)(IR_LastCounter*20*BELADEN_SPD)/1000)) && IR_flanke==OBJEKT_WEG){
+				debugPrintfABeladen("%s %s: Der Container wurde gefunden!",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
+				IR_LastCounter=0;
+				//cotainer found
+				setDCSpeed(0);
+			}
+		}
 		break;
 	case CONTAINER_FOUND:
 		//init container greifen
@@ -123,8 +151,8 @@ uint8_t A_Beladen_ParseCommand(const unsigned char *cmd, bool *handled, const CL
 else if (strncmp((const char*)cmd, (const char*)A_BELADEN_SHELL_NAME_STR " " A_BELADEN_POS_CMD, sizeof(A_BELADEN_SHELL_NAME_STR " "A_BELADEN_POS_CMD)-1)==0) {
 p = cmd+sizeof(A_BELADEN_SHELL_NAME_STR" "A_BELADEN_POS_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=A_BELADEN_MAXDIST) {
-	autoBeladenFlg=BELADEN;
 	*handled = TRUE;
+	distance=val;
 	changeToBeladen();
 } else {
 	  *handled = TRUE;

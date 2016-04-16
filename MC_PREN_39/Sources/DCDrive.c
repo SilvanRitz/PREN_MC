@@ -83,7 +83,7 @@ void DCDhandleSpeed(void){
 
 
 		//setDutyCycle(0);
-		setDCSpeed(150);
+		//setDCSpeed(150);
 		break;
 	case HANDLE_SPEED:
 		pidDoWork();

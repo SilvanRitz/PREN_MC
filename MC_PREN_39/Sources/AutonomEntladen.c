@@ -21,11 +21,13 @@
 	#define A_ENTLADEN_MAXDIST_STR	"1000"
 #define A_ENTLADEN_FIN_RESP			"StEf"
 
+
+
 //--------Variabeln---------
 
-#define NICHT_ENTLADEN	0
-#define ENTLADEN			1
-static volatile bool autoEntladenFlg=NICHT_ENTLADEN;
+//#define NICHT_ENTLADEN	0
+//#define ENTLADEN			1
+//static volatile bool autoEntladenFlg=NICHT_ENTLADEN;
 
 
 enum aBeladenStates_t{
@@ -44,18 +46,19 @@ enum aBeladenStates_t{
 void autoEntladen(void){
 	switch (aEntladenStates){
 	case DO_NOTHING:
-		if (autoEntladenFlg){
-			autoEntladenFlg=NICHT_ENTLADEN;
-			aEntladenStates=INIT;
-			debugPrintfAEntladen("%s\r\n",A_ENTLADEN_FIN_RESP);
-		}
+		aEntladenStates=INIT;
+		debugPrintfAEntladen("%s\r\n",A_ENTLADEN_FIN_RESP);
 		break;
 	case INIT:
+
 		//debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
 		//setSpeed()
 		//handle Direction
 		//measure time
 		//time elapsed =>Check Ir
+
+
+
 		aEntladenStates=CHECK_IR;
 		//---TEMPORÄR-----
 		aEntladenStates=DO_NOTHING;
@@ -114,7 +117,6 @@ uint8_t A_Entladen_ParseCommand(const unsigned char *cmd, bool *handled, const C
 else if (strncmp((const char*)cmd, (const char*)A_ENTLADEN_SHELL_NAME_STR " " A_ENTLADEN_POS_CMD, sizeof(A_ENTLADEN_SHELL_NAME_STR " "A_ENTLADEN_POS_CMD)-1)==0) {
 p = cmd+sizeof(A_ENTLADEN_SHELL_NAME_STR" "A_ENTLADEN_POS_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=A_ENTLADEN_MAXDIST) {
-	autoEntladenFlg=ENTLADEN;
 	*handled = TRUE;
 	changeToEntladen();
 } else {

@@ -309,7 +309,18 @@ void AD1_OnCalibrationEnd(void)
 void IR_In_Interrupt_OnInterrupt(void)
 {
   /* Write your code here ... */
-	static int test=5;
+	static int oldCounter=0;
+	IR_flanke=IR_In_Interrupt_GetVal();		//1 bei negativer Flanke (etwas da zu nichts da)
+	if(IR_counter>5){
+		oldCounter=IR_counter;
+		IR_counter=0;
+		IR_LastCounter=oldCounter;
+		IR_changed=1;
+	}
+	else{
+		IR_counter=oldCounter;
+		IR_LastCounter=0;
+	}
 }
 
 /*
@@ -370,6 +381,7 @@ void TU1_OnChannel5(LDD_TUserData *UserDataPtr)
 	static unsigned int temp;
 	static unsigned int intCounter=0;
 	intCounter++;
+	IR_counter++;
 	if(intCounter>1){
 		intCounter=0;
 		temp=counterA;
