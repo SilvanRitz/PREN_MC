@@ -59,7 +59,7 @@ enum handle_actions_t{
 void handleActions(void){
 	switch (hadleActionsState){
 	case INIT_ALL:
-		setDCSpeed(0);
+		//setDCSpeed(0);
 		setDCVorwaerts();
 		CAM_SERVO1_PWMusToPos8(126);
 		LENK_SERVO2_PWMusToPos8(126);
