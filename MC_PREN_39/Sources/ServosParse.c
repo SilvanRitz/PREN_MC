@@ -36,8 +36,8 @@ enum CamPos{
 //-----------Kameraservo--------
 #define KAMERASERVO_SHELL_NAME_STR 	"CamP"
 #define KAMERASERVO_GRAD_CMD		"p"
-	#define KAMERASERVO_MAXGRAD		190
-	#define KAMERASERVO_MAXGRAD_STR	"190"
+	#define KAMERASERVO_MAXGRAD		255
+	#define KAMERASERVO_MAXGRAD_STR	"255"
 #define KAMERASERVO_RECHTS_CMD		"r"
 #define KAMERASERVO_GERADE_CMD		"g"
 
@@ -124,6 +124,7 @@ else if (strncmp((const char*)cmd, (const char*)KAMERASERVO_SHELL_NAME_STR " " K
 p = cmd+sizeof(KAMERASERVO_SHELL_NAME_STR" "KAMERASERVO_GRAD_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=KAMERASERVO_MAXGRAD) {
 	  //setDCSpeed(val);
+	CAM_SERVO1_SetPos(val);
 	*handled = TRUE;
 } else {
 	  *handled = TRUE;

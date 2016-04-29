@@ -13,6 +13,7 @@
 
 #include "GREIF_SERVO3.h"
 #include "LADEN_SERVO4.h"
+#include "LED_BLUE.h"
 
 
 //-----------Shell Autonom Beladen--------
@@ -81,6 +82,7 @@ void autoBeladen(void){
 		break;
 	case ENABLE_IR:
 		IR_changed=0;
+		LED_BLUE_On();
 		aBeladenStates=CHECK_IR;
 	case CHECK_IR:
 		//get IR Interrupt

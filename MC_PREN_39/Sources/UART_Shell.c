@@ -21,6 +21,9 @@
 #include "CLS1.h"
 #include "LED1.h"
 #include "CAM_SERVO1.h"
+#include "GREIF_SERVO3.h"
+#include "LADEN_SERVO4.h"
+#include "ENTLADEN_SERVO5.h"
 #include "XF1.h"
 #include "config.h"
 #include "FRTOS1.h"
@@ -48,6 +51,9 @@ enum shellStates_t{
     CLS1_ParseCommand,
 	LED1_ParseCommand,
 	CAM_SERVO1_ParseCommand,
+	GREIF_SERVO3_ParseCommand,
+	LADEN_SERVO4_ParseCommand,
+	ENTLADEN_SERVO5_ParseCommand,
 	FRTOS1_ParseCommand,
 	SERVO_Lenkung_ParseCommand,
 	SERVO_Kamera_ParseCommand,

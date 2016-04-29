@@ -9,11 +9,7 @@
 #include "Bit_DC_Ruck.h"
 #include "UART_Shell.h"
 #include "DebugBit.h"
-#include "Stell_Val.h"
-#include "P_val.h"
-#include "D_val.h"
-#include "I_val.h"
-#include "Ist_val.h"
+
 
 
 
@@ -84,10 +80,6 @@ void DCDhandleSpeed(void){
 		debugPrintfDCDrive("%s %s: intialized\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		dcDriveStates=HANDLE_SPEED;
 		setDCVorwaerts();
-
-
-		//setDutyCycle(0);
-		//setDCSpeed(150);
 		break;
 	case HANDLE_SPEED:
 		pidDoWork();
@@ -224,14 +216,6 @@ void pidDoWork(void)
   if (setValue == 0) val = integ = devOld = 0;
   else
   {
-	    //---------------
-	    if(Ist_val_NofFreeElements()<2){
-	  	  uint16 p;
-	  	  Ist_val_Get(&p);
-	    }
-	    Ist_val_Put(nomValue);
-	    //------------
-
     // deviation (max devL = +1000 - -1000 = 2000)
     //dev = (setValue - nomValue) / 8;
 	 dev = (setValue - nomValue);
@@ -239,34 +223,13 @@ void pidDoWork(void)
 		 sendSpdReached();
 	 }
     // P-Part (max kpL =
-	    //---------------
-	    if(P_val_NofFreeElements()<2){
-	  	  uint16 p;
-	  	  P_val_Get(&p);
-	    }
-	    P_val_Put((kp * dev) / 32);
-	    //------------
     val = (kp * dev) / 32;
 
     // I-Part with anti-windup
     if (ki != 0) integ += dev;
-    //---------------
-    if(I_val_NofFreeElements()<2){
-  	  uint16 p;
-  	  I_val_Get(&p);
-    }
-    I_val_Put(((int32)(ki * integ)) / 32);
-    //------------
     val += ((int32)(ki * integ)) / 32;
 
     // D-Part
-    //---------------
-    if(D_val_NofFreeElements()<2){
-  	  uint16 p;
-  	  D_val_Get(&p);
-    }
-    D_val_Put(((int32)(kd*(dev-devOld))/32));
-    //------------
     val += ((int32)(kd*(dev-devOld))/32);
     devOld = dev;
     val=val/4;
@@ -282,11 +245,6 @@ void pidDoWork(void)
       integ -= dev;
     }
   }
-  if(Stell_Val_NofFreeElements()<2){
-	  uint8 p;
-	  Stell_Val_Get(&p);
-  }
-  Stell_Val_Put(val);
   //debugPrintfDCDrive("%i\r\n\0",val);
   setDutyCycle(100-val);
 }

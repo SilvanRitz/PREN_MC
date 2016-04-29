@@ -63,9 +63,11 @@ void handleActions(void){
 		setDCVorwaerts();
 		CAM_SERVO1_PWMusToPos8(126);
 		LENK_SERVO2_PWMusToPos8(126);
+		//DEBUG
+		Bit_5V_2_Enable_SetVal();
 		break;
 	case INIT_DONE:
-		Bit_5V_2_Enable_SetVal();		//Enable second Akku
+		//Bit_5V_2_Enable_SetVal();		//Enable second Akku
 		debugPrintfHandleActions("%s\r\n",START_FIN_RESP);
 		changeToDrive();
 		break;
