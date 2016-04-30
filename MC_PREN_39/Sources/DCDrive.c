@@ -79,7 +79,7 @@ void DCDhandleSpeed(void){
 	case INIT:
 		debugPrintfDCDrive("%s %s: intialized\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		dcDriveStates=HANDLE_SPEED;
-		setDCVorwaerts();
+		//setDCVorwaerts();
 		break;
 	case HANDLE_SPEED:
 		pidDoWork();

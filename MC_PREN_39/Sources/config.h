@@ -56,6 +56,9 @@ volatile bool IR_flanke;
 	#define	CFG_RASP_CHECK			(0)
 #endif
 
+//TEST's	Im normalfall !
+#define TEST_AUFLADEN				(1)
+
 
 
 

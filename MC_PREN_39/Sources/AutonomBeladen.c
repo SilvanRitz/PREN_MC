@@ -25,9 +25,28 @@
 	#define A_BELADEN_MAXDIST_STR	"1000"
 #define A_BELADEN_FIN_RESP			"StAf"
 
+//-----DC SPD---------
+
 #define BELADEN_SPD					100
+
+//------Aufladen distanzen-------
 #define BELADEN_SICHERHEIT_DIST		30
 #define CONTAINER_LENGTH			25		//in mm
+
+//-----SERVO Positionen-------
+#define GREIF_SERVO_ZU				10				//45 =>Greifklemme offen
+#define GREIF_SERVO_OFFEN			70
+
+#define LADE_SERVO_OBEN				155				//Hebel 45°
+#define LADE_SERVO_MITTEL			135				//Hebel 45°
+#define LADE_SERVO_UNTEN			20				//Hebel 0°
+
+#define SERVO_DELAY_ALG				400
+
+
+
+
+
 
 //--------Variabeln---------
 //#define NICHT_BELADEN	0
@@ -35,17 +54,25 @@
 //static volatile bool autoBeladenFlg=NICHT_BELADEN;
 
 enum aBeladenStates_t{
-	DO_NOTHING,
 	INIT,
 	ENABLE_IR,
 	CHECK_IR,
 	CONTAINER_FOUND,
+	GREIF_ZU_1,
+	HEBEL_RUNTER_2,
+	GREIF_AUF_3,
+	HEBEL_RUNTER_4,
 	GET_CONTAINER,
 	EMPTY_CONTAINER,
+	HEBEL_RUNTER_7,
 	PLACE_CONTAINER,
+	HEBEL_HOCH_9,
+	GREIF_ZU_10,
+	HEBEL_HOCH_11,
+	GREIF_OFFEN_12,
 	SEND_REPORT,
 	EXIT
-}aBeladenStates=DO_NOTHING;
+}aBeladenStates=INIT;
 
 
 static uint16 distance=0;
@@ -54,75 +81,113 @@ uint16 IR_Counter=0;
 void autoBeladen(void){
 	static uint16 wait_time=0;
 	switch (aBeladenStates){
-	case DO_NOTHING:
-		aBeladenStates=INIT;
-		debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);
-	break;
-	case INIT:
-		//debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
-		//setSpeed()
-		//handle Direction
-		//measure time
-		//time elapsed =>Check Ir
-		setDCSpeed(BELADEN_SPD);	//fahre mit 10cm pro sekunde
-		if(distance>BELADEN_SICHERHEIT_DIST){
-			wait_time=((uint32)(distance*1000)/BELADEN_SPD);
-			debugPrintfABeladen("%s %s: Warte ms: %i",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR,wait_time);
-			FRTOS1_vTaskDelay(wait_time/(portTICK_RATE_MS));
-		}
-		else{
-			debugPrintfABeladen("%s %s: Distanz zum Container zu klein!",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
-		}
-		aBeladenStates=ENABLE_IR;
-
-		//---TEMPORÄR-----
-		//aBeladenStates=DO_NOTHING;
-		//changeToDrive();
-		//-------
-		break;
-	case ENABLE_IR:
-		IR_changed=0;
-		LED_BLUE_On();
-		aBeladenStates=CHECK_IR;
-	case CHECK_IR:
-		//get IR Interrupt
-
-		//measure "On Time"
-		//in tolerance? => container found and stop
-		if(IR_changed){
-			IR_changed=0;
-			if(((uint16)(CONTAINER_LENGTH)<((uint32)(IR_LastCounter*20*BELADEN_SPD)/1000)) && IR_flanke==OBJEKT_WEG){
-				debugPrintfABeladen("%s %s: Der Container wurde gefunden!",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
-				IR_LastCounter=0;
-				//cotainer found
-				setDCSpeed(0);
+		case INIT:
+			debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);	//Debug Msg
+		#if TEST_AUFLADEN
+			aBeladenStates=GREIF_ZU_1;
+			break;
+		#endif
+			//------Setze Spd und warte gewisse Zeit------
+			setDCSpeed(BELADEN_SPD);	//fahre mit 10cm pro sekunde
+			if(distance>BELADEN_SICHERHEIT_DIST){
+				wait_time=((uint32)(distance*1000)/BELADEN_SPD);
+				debugPrintfABeladen("%s %s: Warte ms: %i",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR,wait_time);
+				FRTOS1_vTaskDelay(wait_time/(portTICK_RATE_MS));
 			}
+			else{
+				debugPrintfABeladen("%s %s: Distanz zum Container zu klein!",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
+			}
+			aBeladenStates=ENABLE_IR;
+			break;
+		case ENABLE_IR:
+			IR_changed=0;
+			//ev delete zeit
+			LED_BLUE_On();
+			aBeladenStates=CHECK_IR;
+		case CHECK_IR:
+			//get IR Interrupt
+
+			//measure "On Time"
+			//in tolerance? => container found and stop
+			if(IR_changed){
+				IR_changed=0;
+				if(((uint16)(CONTAINER_LENGTH)<((uint32)(IR_LastCounter*20*BELADEN_SPD)/1000)) && IR_flanke==OBJEKT_WEG){
+					debugPrintfABeladen("%s %s: Der Container wurde gefunden!",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
+					IR_LastCounter=0;
+					//cotainer found
+					setDCSpeed(0);
+					//Container Found
+					aBeladenStates=GREIF_ZU_1;
+				}
+			}
+			break;
+		case GREIF_ZU_1:
+			//init container greifen
+			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=HEBEL_RUNTER_2;
+			break;
+		case HEBEL_RUNTER_2:
+			LADEN_SERVO4_SetPos(LADE_SERVO_MITTEL);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=GREIF_AUF_3;
+			break;
+		case GREIF_AUF_3:
+			GREIF_SERVO3_SetPos(GREIF_SERVO_OFFEN);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=HEBEL_RUNTER_4;
+			break;
+		case HEBEL_RUNTER_4:
+			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=GET_CONTAINER;
+			break;
+		case GET_CONTAINER:
+			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=EMPTY_CONTAINER;
+		case EMPTY_CONTAINER:
+			LADEN_SERVO4_SetPos(LADE_SERVO_OBEN);
+			FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
+			aBeladenStates=HEBEL_RUNTER_7;
+			break;
+		case HEBEL_RUNTER_7:
+			//init container zurückstellen (herunterfahren)
+			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=PLACE_CONTAINER;
+			break;
+		case PLACE_CONTAINER:
+			GREIF_SERVO3_SetPos(GREIF_SERVO_OFFEN);		// Container loslassen
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=HEBEL_HOCH_9;
+			break;
+		case HEBEL_HOCH_9:
+			LADEN_SERVO4_SetPos(LADE_SERVO_MITTEL);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=GREIF_ZU_10;
+			break;
+		case GREIF_ZU_10:
+			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);		// Container loslassen
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=HEBEL_HOCH_11;
+			break;
+		case HEBEL_HOCH_11:
+			LADEN_SERVO4_SetPos(LADE_SERVO_HOCH);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=GREIF_OFFEN_12;
+			break;
+		case GREIF_OFFEN_12:
+			GREIF_SERVO3_SetPos(GREIF_SERVO_OFFEN);		// Container loslassen
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=SEND_REPORT;
+			break;
+		case SEND_REPORT:
+			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
+			FRTOS1_vTaskDelay(2000/(portTICK_RATE_MS));
+			aBeladenStates=INIT;
+			break;
 		}
-		break;
-	case CONTAINER_FOUND:
-		//init container greifen
-		GREIF_SERVO3_SetPos(100);
-	    FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
-		break;
-	case GET_CONTAINER:
-		//init container heben
-		LADEN_SERVO4_SetPos(100);
-		 FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
-		break;
-	case EMPTY_CONTAINER:
-		//init container zurückstellen (herunterfahren)
-		LADEN_SERVO4_SetPos(0);
-		 FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
-		break;
-	case PLACE_CONTAINER:
-		// Container loslassen
-		GREIF_SERVO3_SetPos(100);
-		FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
-		break;
-	case SEND_REPORT:
-		//command an Raspberry
-		break;
-	}
 }
 
 

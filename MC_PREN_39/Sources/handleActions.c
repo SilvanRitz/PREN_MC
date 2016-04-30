@@ -42,6 +42,16 @@
 
 #define START_FIN_RESP				"Ready"
 
+//---------SERVO Konstanten---------
+
+#define CAM_SERVO_INIT		125
+#define LENK_SERVO_INIT		125
+#define GREIF_SERVO_INIT	45				//45 =>Greifklemme offen
+#define LADE_SERVO_INIT		155				//Hebel 0°
+#define	ENTLADE_SERVO_INIT	255				//Entladeklappe geschlossen
+
+
+
 //--------Variabeln---------
 static uint8 beladenCount=0;
 
@@ -59,15 +69,20 @@ enum handle_actions_t{
 void handleActions(void){
 	switch (hadleActionsState){
 	case INIT_ALL:
-		//setDCSpeed(0);
+		//Init DC DCDrive
+		setDCSpeed(0);
 		setDCVorwaerts();
-		CAM_SERVO1_PWMusToPos8(126);
-		LENK_SERVO2_PWMusToPos8(126);
-		//DEBUG
-		Bit_5V_2_Enable_SetVal();
+
+		//Init Servos
+		CAM_SERVO1_PWMusToPos8(CAM_SERVO_INIT);
+		LENK_SERVO2_PWMusToPos8(LENK_SERVO_INIT);
+		GREIF_SERVO3_PWMusToPos8(GREIF_SERVO_INIT);
+		LADEN_SERVO4_PWMusToPos8(LADE_SERVO_INIT);
+		ENTLADEN_SERVO5_PWMusToPos8(ENTLADE_SERVO_INIT)
+
 		break;
 	case INIT_DONE:
-		//Bit_5V_2_Enable_SetVal();		//Enable second Akku
+		Bit_5V_2_Enable_SetVal();		//Enable second Akku
 		debugPrintfHandleActions("%s\r\n",START_FIN_RESP);
 		changeToDrive();
 		break;
