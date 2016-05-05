@@ -25,6 +25,6 @@ void changeToEntladen(void);
 void changeToBeladen(void);
 void handleActions(void);
 uint8_t start_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
-
+uint8_t stopp_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
 
 #endif /* SOURCES_HANDLE_ACTIONS_H_ */

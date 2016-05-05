@@ -37,9 +37,11 @@
 #define GREIF_SERVO_ZU				10				//45 =>Greifklemme offen
 #define GREIF_SERVO_OFFEN			70
 
-#define LADE_SERVO_OBEN				155				//Hebel 45°
-#define LADE_SERVO_MITTEL			135				//Hebel 45°
-#define LADE_SERVO_UNTEN			20				//Hebel 0°
+#define LADE_SERVO_OBEN				165				//Hebel 45°
+#define LADE_SERVO_OBEN_MITTEL		130				//Hebel 45°
+#define LADE_SERVO_UNTEN_MITTEL		75				//Hebel 0°
+#define LADE_SERVO_UNTEN			25				//Hebel 0°
+
 
 #define SERVO_DELAY_ALG				400
 
@@ -128,7 +130,7 @@ void autoBeladen(void){
 			aBeladenStates=HEBEL_RUNTER_2;
 			break;
 		case HEBEL_RUNTER_2:
-			LADEN_SERVO4_SetPos(LADE_SERVO_MITTEL);
+			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN_MITTEL);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=GREIF_AUF_3;
 			break;
@@ -163,7 +165,7 @@ void autoBeladen(void){
 			aBeladenStates=HEBEL_HOCH_9;
 			break;
 		case HEBEL_HOCH_9:
-			LADEN_SERVO4_SetPos(LADE_SERVO_MITTEL);
+			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN_MITTEL);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=GREIF_ZU_10;
 			break;
@@ -186,6 +188,7 @@ void autoBeladen(void){
 			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
 			FRTOS1_vTaskDelay(2000/(portTICK_RATE_MS));
 			aBeladenStates=INIT;
+			changeToDrive();
 			break;
 		}
 }
