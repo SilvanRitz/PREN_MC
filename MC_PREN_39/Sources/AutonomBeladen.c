@@ -173,7 +173,7 @@ void autoBeladen(void){
 			aBeladenStates=HEBEL_HOCH_11;
 			break;
 		case HEBEL_HOCH_11:
-			LADEN_SERVO4_SetPos(LADE_SERVO_HOCH);
+			LADEN_SERVO4_SetPos(LADE_SERVO_OBEN);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=GREIF_OFFEN_12;
 			break;
