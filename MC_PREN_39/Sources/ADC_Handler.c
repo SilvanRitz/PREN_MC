@@ -14,8 +14,7 @@
 enum adStates_t{
 	INIT,
 	START_MEASUREMENT,
-	IR_GET_DISTANCE,
-	FLEX_GET_DISTANCE,
+	VERARBEITE,
 	EXIT
 }adStates;
 
@@ -28,6 +27,9 @@ enum adChannels_t{
 };
 
 #define FLEX1_MSG_CMD		"Fldist1"
+
+#define AKKU1_MSG_CMD		"Akku1"
+#define AKKU2_MSG_CMD		"Akku2"
 
 #define LENK_OFFSET		126
 #define IST_WERT_OFFSET	46000
@@ -58,21 +60,29 @@ void handleADC(void){
 		break;
 	case START_MEASUREMENT:
 		(void)AD1_Measure(FALSE);
-		adStates=IR_GET_DISTANCE;
+		adStates=VERARBEITE;
+		(void)AD1_GetValue16(&adValue[AD_AKKU_5V_2]); // get the result into value variable
 		break;
-	case IR_GET_DISTANCE:
+	case VERARBEITE:
 		if(AD_finished){
-			(void)AD1_GetValue16(&adValue[AD_AKKU_5V_2]); // get the result into value variable
 			AD_finished=FALSE;
-			debugPrintfInfraRedSensor("IR Distance (ADWert): %d\r\n",adValue[AD_AKKU_5V_2]);
-			adStates=FLEX_GET_DISTANCE;
+
+			//Akku 1 (7.1V)
+			debugPrintfFlexSensor("%s: %d\r\n",AKKU1_MSG_CMD,adValue[AD_AKKU_5V_1]);
+
+
+			//Akku 2 (11V)
+			debugPrintfFlexSensor("%s: %d\r\n",AKKU2_MSG_CMD,adValue[AD_AKKU_5V_2]);
+			//FLEX Sensor
+
+			//istWert=adValue[AD_FLEX1]-adValue[AD_FLEX_REF];
+			debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,adValue[AD_FLEX1]);
+		#if FLEX_LENK_ENABLE
+					Lenk_pidDoWork();
+		#endif
+			adStates=START_MEASUREMENT;
 		}
-		break;
-	case FLEX_GET_DISTANCE:
-		istWert=adValue[AD_FLEX1]-adValue[AD_FLEX_REF];
-		debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,istWert);
-		Lenk_pidDoWork();
-		adStates=START_MEASUREMENT;
+
 		break;
 	case EXIT:
 		debugPrintfInfraRedSensor("Exit\r\n");

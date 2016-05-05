@@ -29,7 +29,7 @@ volatile bool IR_flanke;
  */
 #define CFG_SHELL			(1)
 #define CFG_ULTRASONIC		(1)
-#define CFG_ADC				(0)
+#define CFG_ADC				(1)
 #define CFG_DCDRIVE			(1)
 #define CFG_HANDLE_ACTIONS	(1)
 #define CFG_CHECK_RASP		(1)
@@ -43,7 +43,7 @@ volatile bool IR_flanke;
 	#define CFG_ULTRASONIC_MSG		(0)
 	#define CFG_DEBUG_MSG			(1)
 	#define CFG_ADC_MSG				(0)
-	#define CFG_FLEXSENSOR_DBG			(0)				//SPAM
+	#define CFG_FLEXSENSOR_DBG			(1)				//SPAM
 	#define CFG_FLEXSENSOR_CMD			(0)
 	#define CFG_DCDRIVE_MSG_DGB			(0)
 	#define CFG_DCDRIVE_MSG_CMD			(0)				//SPAM
@@ -56,8 +56,13 @@ volatile bool IR_flanke;
 	#define	CFG_RASP_CHECK			(0)
 #endif
 
+
+#define FLEX_LENK_ENABLE			(0)			//Schaltet die Flexlenkung aus
+
+
 //TEST's	Im normalfall !
 #define TEST_AUFLADEN				(1)
+
 
 
 
