@@ -61,6 +61,7 @@ enum shellStates_t{
 	A_Beladen_ParseCommand,
 	A_Entladen_ParseCommand,
 	start_ParseCommand,
+	stopp_ParseCommand,
 	Rasp_Check_ParseCommand,
     NULL /* sentinel */
   };

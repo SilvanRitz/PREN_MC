@@ -42,6 +42,11 @@
 
 #define START_FIN_RESP				"Ready"
 
+
+#define STOP_SHELL_NAME_STR			"Stop"
+#define STOP_CMD					"a"
+
+
 //---------SERVO Konstanten---------
 
 #define CAM_SERVO_INIT		125
@@ -80,6 +85,7 @@ void handleActions(void){
 		LADEN_SERVO4_SetPos(LADE_SERVO_INIT);
 		ENTLADEN_SERVO5_SetPos(ENTLADE_SERVO_INIT);
 		break;
+
 	case INIT_DONE:
 		Bit_5V_2_Enable_SetVal();		//Enable second Akku
 		debugPrintfHandleActions("%s\r\n",START_FIN_RESP);
@@ -93,6 +99,7 @@ void handleActions(void){
 	case ENTLADEN:
 		autoEntladen();
 		break;
+
 	case FERTIG:
 		setDCSpeed(0);
 		CAM_SERVO1_PWMusToPos8(126);
@@ -160,6 +167,27 @@ uint8_t start_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_S
 } else if (strncmp((const char*)cmd, (const char*)START_SHELL_NAME_STR " " START_CMD, sizeof(START_SHELL_NAME_STR " "START_CMD)-1)==0) {
 	*handled = TRUE;
 	changeToInitDone();
+	return ERR_OK;
+}
+return ERR_OK;
+}
+
+
+//----------Shellpart------------
+uint8_t stopp_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io)
+{
+	  int32_t val;
+	  const unsigned char *p;
+	  uint8_t res=ERR_OK;
+  if (UTIL1_strcmp((char*)cmd, START_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, A_ENTLADEN_SHELL_NAME_STR" help")==0) {
+		*handled = TRUE;
+		CLS1_SendHelpStr((unsigned char*)STOP_SHELL_NAME_STR, (unsigned char*)"Stoppt das Programm\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Print help or status information\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)" "STOP_CMD, (unsigned char*)"Stoppt das Programm\r\n", io->stdOut);
+		return ERR_OK;
+} else if (strncmp((const char*)cmd, (const char*)STOP_SHELL_NAME_STR " " STOP_CMD, sizeof(STOP_SHELL_NAME_STR " "STOP_CMD)-1)==0) {
+	*handled = TRUE;
+	changeToFertig();
 	return ERR_OK;
 }
 return ERR_OK;
