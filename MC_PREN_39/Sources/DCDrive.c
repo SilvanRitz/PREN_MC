@@ -33,8 +33,8 @@
 
 
 #define TICKS_MAXSPEED				140		//gemessen mit vollem akku und 100duty(138)
-#define DC_SPD_PER_TICK				TICKS_
 #define PWM3_DUTY_MULT				0x28F
+#define MAX_TRICKS_FLG_VAL			150
 
 
 enum DCPwr{
@@ -121,6 +121,9 @@ void setDutyCycle(unsigned int val){	//get called by Shell
 }
 
 void setDCSpeed(uint16 speed){
+	if(speed==DC_MAXSPEED){
+		setValue=MAX_TRICKS_FLG_VAL;
+	}
 	setValue=speed*TICKS_MAXSPEED/DC_MAXSPEED;	//Umrechnung geschwindigkeit in sollspeed
 	spd_shell=speed;
 	sendSpdReached();
@@ -244,6 +247,9 @@ void pidDoWork(void)
       val = 0;
       integ -= dev;
     }
+  }
+  if (setValue==MAX_TRICKS_FLG_VAL){
+	  val=100;		//Full speed
   }
   //debugPrintfDCDrive("%i\r\n\0",val);
   setDutyCycle(100-val);

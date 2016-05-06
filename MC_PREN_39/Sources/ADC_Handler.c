@@ -60,16 +60,15 @@ void handleADC(void){
 		break;
 	case START_MEASUREMENT:
 		(void)AD1_Measure(FALSE);
+
 		adStates=VERARBEITE;
-		(void)AD1_GetValue16(&adValue[AD_AKKU_5V_2]); // get the result into value variable
 		break;
 	case VERARBEITE:
 		if(AD_finished){
 			AD_finished=FALSE;
-
+			(void)AD1_GetValue16(adValue); // get the result into value variable
 			//Akku 1 (7.1V)
 			debugPrintfFlexSensor("%s: %d\r\n",AKKU1_MSG_CMD,adValue[AD_AKKU_5V_1]);
-
 
 			//Akku 2 (11V)
 			debugPrintfFlexSensor("%s: %d\r\n",AKKU2_MSG_CMD,adValue[AD_AKKU_5V_2]);
