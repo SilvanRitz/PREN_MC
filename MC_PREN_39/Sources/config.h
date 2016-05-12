@@ -43,7 +43,7 @@ volatile bool IR_flanke;
 	#define CFG_ULTRASONIC_MSG		(0)
 	#define CFG_DEBUG_MSG			(1)
 	#define CFG_ADC_MSG				(0)
-	#define CFG_FLEXSENSOR_DBG			(1)				//SPAM
+	#define CFG_FLEXSENSOR_DBG			(0)				//SPAM
 	#define CFG_FLEXSENSOR_CMD			(0)
 	#define CFG_DCDRIVE_MSG_DGB			(0)
 	#define CFG_DCDRIVE_MSG_CMD			(0)				//SPAM
