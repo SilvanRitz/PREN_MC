@@ -37,10 +37,10 @@
 #define GREIF_SERVO_ZU				10				//45 =>Greifklemme offen
 #define GREIF_SERVO_OFFEN			70
 
-#define LADE_SERVO_OBEN				170				//Hebel 45°
+#define LADE_SERVO_OBEN				178				//Hebel 45°
 #define LADE_SERVO_OBEN_MITTEL		130				//Hebel 45°
 #define LADE_SERVO_UNTEN_MITTEL		75				//Hebel 0°
-#define LADE_SERVO_UNTEN			20				//Hebel 0°
+#define LADE_SERVO_UNTEN			30				//Hebel 0°
 
 
 #define SERVO_DELAY_ALG				400
