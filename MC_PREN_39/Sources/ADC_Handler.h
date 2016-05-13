@@ -18,6 +18,9 @@ void cmdPrintfFlexSensor(const char *fmt, ...);
 void handleADC(void);
 void Lenk_pidDoWork(void);
 uint16 lenkUpdateNomValue(void);
+void checkAkku1();
+void checkAkku2();
+void flexAuswertung();
 
 #endif /* SOURCES_ADC_HANDLER_H_ */
 

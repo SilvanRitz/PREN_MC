@@ -23,8 +23,11 @@ void changeToFertig(void);
 void changeToDrive(void);
 void changeToEntladen(void);
 void changeToBeladen(void);
+void changeToAkkuLeer(void);
 void handleActions(void);
 uint8_t start_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
 uint8_t stopp_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
+void LED_Blink(void);
+
 
 #endif /* SOURCES_HANDLE_ACTIONS_H_ */

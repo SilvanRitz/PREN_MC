@@ -17,6 +17,7 @@
 #include "GREIF_SERVO3.h"
 #include "LADEN_SERVO4.h"
 #include "ENTLADEN_SERVO5.h"
+#include "LED1.h"
 
 #include "ServoParse.h"
 #include "UART_Shell.h"
@@ -67,7 +68,8 @@ enum handle_actions_t{
 	DRIVE,
 	BELADEN,
 	ENTLADEN,
-	FERTIG
+	FERTIG,
+	AKKU_LEER
 }hadleActionsState=INIT_ALL;
 
 
@@ -102,9 +104,20 @@ void handleActions(void){
 
 	case FERTIG:
 		setDCSpeed(0);
-		CAM_SERVO1_PWMusToPos8(126);
-		LENK_SERVO2_PWMusToPos8(126);
+		CAM_SERVO1_SetPos(126);
+		LENK_SERVO2_SetPos(126);
 		Bit_5V_2_Enable_ClrVal();
+		debugPrintfHandleActions("%s\r\n",START_FIN_RESP);
+		debugPrintfHandleActions("%s",STOP_SHELL_NAME_STR);
+		break;
+	case AKKU_LEER:
+		setDCSpeed(0);
+		CAM_SERVO1_SetPos(126);
+		LENK_SERVO2_SetPos(126);
+		Bit_5V_2_Enable_ClrVal();
+		debugPrintfHandleActions("%s: Akku leer!!!\r\n",DEBUG_MSG_CMD);
+		debugPrintfHandleActions("%s",STOP_SHELL_NAME_STR);
+		LED_Blink();
 		break;
 	}
 }
@@ -143,6 +156,11 @@ void changeToFertig(void){
 void changeToInitDone(void){
 	debugPrintfHandleActions("%s %s State Init Done aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
 	hadleActionsState=INIT_DONE;
+}
+
+void changeToAkkuLeer(void){
+	debugPrintfHandleActions("%s %s State Akku Leer aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
+	hadleActionsState=AKKU_LEER;
 }
 
 void debugPrintfHandleActions(const char *fmt, ...) {
@@ -191,4 +209,19 @@ uint8_t stopp_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_S
 	return ERR_OK;
 }
 return ERR_OK;
+}
+
+
+void LED_Blink(void){
+	static uint8 ledCounter=0;
+	ledCounter++;
+	if (ledCounter<20){
+		LED1_ClrVal();
+	}
+	else if(ledCounter<40){
+		LED1_SetVal();
+	}
+	else{
+		ledCounter=0;
+	}
 }

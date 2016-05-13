@@ -10,6 +10,7 @@
 #include "config.h"
 #include "UART_Shell.h"
 #include "LENK_SERVO2.h"
+#include "handleActions.h"
 
 enum adStates_t{
 	INIT,
@@ -35,6 +36,9 @@ enum adChannels_t{
 #define IST_WERT_OFFSET	46000
 #define SOLLWERT		8000				//Sollwert bereits abgezogen
 
+#define AKKU1_SCHWELLWERT	56201
+#define AKKU2_SCHWELLWERT	50800
+
 uint16 adValue[AD1_CHANNEL_COUNT];
 uint16 istWert=0;
 
@@ -50,6 +54,8 @@ static uint8 kp=120;		//10
 static uint8 ki=20;			//5
 static uint8 kd=60;			//1
 
+static uint8 lowAkku2Counter=0;
+static uint8 lowAkku1Counter=0;
 
 void handleADC(void){
 	static uint16_t IRvalue;
@@ -67,18 +73,13 @@ void handleADC(void){
 		if(AD_finished){
 			AD_finished=FALSE;
 			(void)AD1_GetValue16(adValue); // get the result into value variable
-			//Akku 1 (7.1V)
-			debugPrintfFlexSensor("%s: %d\r\n",AKKU1_MSG_CMD,adValue[AD_AKKU_5V_1]);
 
-			//Akku 2 (11V)
-			debugPrintfFlexSensor("%s: %d\r\n",AKKU2_MSG_CMD,adValue[AD_AKKU_5V_2]);
+			checkAkku1();
+
+			checkAkku2();
+
 			//FLEX Sensor
-
-			//istWert=adValue[AD_FLEX1]-adValue[AD_FLEX_REF];
-			debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,adValue[AD_FLEX1]);
-		#if FLEX_LENK_ENABLE
-					Lenk_pidDoWork();
-		#endif
+			flexAuswertung();
 			adStates=START_MEASUREMENT;
 		}
 
@@ -109,6 +110,44 @@ void cmdPrintfFlexSensor(const char *fmt, ...) {
 	#if CFG_FLEXSENSOR_CMD
 		debugPrintf(fmt);
 	#endif
+}
+
+void checkAkku1(){
+	//Akku 1 (7.1V)
+	debugPrintfFlexSensor("%s: %d\r\n",AKKU1_MSG_CMD,adValue[AD_AKKU_5V_1]);
+	if(adValue[AD_AKKU_5V_1]>AKKU1_SCHWELLWERT){
+		lowAkku1Counter++;
+		if (lowAkku1Counter>50){
+#if CFG_LOW_AKKU_MELDEN
+			debugPrintfFlexSensor("%s: Akku1 leer %d\r\n",AKKU1_MSG_CMD,adValue[AD_AKKU_5V_1]);
+#endif
+#if AKKU_ABSCHALTEN
+			changeToAkkuLeer();
+#endif
+		}
+		else{
+			lowAkku1Counter=0;
+		}
+	}
+}
+
+void checkAkku2(){
+	//Akku 2 (11V)
+	debugPrintfFlexSensor("%s: %d\r\n",AKKU2_MSG_CMD,adValue[AD_AKKU_5V_2]);
+	if(adValue[AD_AKKU_5V_2]>AKKU2_SCHWELLWERT){
+		lowAkku2Counter++;
+		if (lowAkku2Counter>50){
+#if CFG_LOW_AKKU_MELDEN
+			debugPrintfFlexSensor("%s: Akku2 leer %d\r\n",AKKU2_MSG_CMD,adValue[AD_AKKU_5V_2]);
+#endif
+#if AKKU_ABSCHALTEN
+			changeToAkkuLeer();
+#endif
+		}
+		else{
+			lowAkku2Counter=0;
+		}
+	}
 }
 
 void Lenk_pidDoWork(void)
@@ -155,4 +194,14 @@ void Lenk_pidDoWork(void)
   LENK_SERVO2_SetPos(LENK_OFFSET+val);
   debugPrintfFlexSensor("%s :Gradwert %i\r\n",DEBUG_MSG_CMD,LENK_OFFSET+val);
   //setDutyCycle(100-val);
+}
+
+void flexAuswertung(){
+
+	//istWert=adValue[AD_FLEX1]-adValue[AD_FLEX_REF];
+	debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,adValue[AD_FLEX1]);
+#if FLEX_LENK_ENABLE
+			Lenk_pidDoWork();
+#endif
+
 }
