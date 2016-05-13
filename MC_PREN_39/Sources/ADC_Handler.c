@@ -36,7 +36,7 @@ enum adChannels_t{
 #define IST_WERT_OFFSET	46000
 #define SOLLWERT		8000				//Sollwert bereits abgezogen
 
-#define AKKU1_SCHWELLWERT	30222
+#define AKKU1_SCHWELLWERT	38673	//30222 alt
 #define AKKU2_SCHWELLWERT	41592
 
 uint16 adValue[AD1_CHANNEL_COUNT];
@@ -131,9 +131,9 @@ void checkAkku1(){
 			changeToAkkuLeer();
 #endif
 		}
-		else{
-			lowAkku1Counter=0;
-		}
+	}
+	else{
+		lowAkku1Counter=0;
 	}
 }
 
@@ -150,9 +150,9 @@ void checkAkku2(){
 			changeToAkkuLeer();
 #endif
 		}
-		else{
-			lowAkku2Counter=0;
-		}
+	}
+	else{
+		lowAkku2Counter=0;
 	}
 }
 
