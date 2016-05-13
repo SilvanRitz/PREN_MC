@@ -15,12 +15,14 @@
 void debugPrintfInfraRedSensor(const char *fmt, ...);
 void debugPrintfFlexSensor(const char *fmt, ...);
 void cmdPrintfFlexSensor(const char *fmt, ...);
+void cmdPrintfAkku(const char *fmt, ...);
 void handleADC(void);
 void Lenk_pidDoWork(void);
 uint16 lenkUpdateNomValue(void);
 void checkAkku1();
 void checkAkku2();
 void flexAuswertung();
+void cmdPrintfAkku(const char *fmt, ...);
 
 #endif /* SOURCES_ADC_HANDLER_H_ */
 

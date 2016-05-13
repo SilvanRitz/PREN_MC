@@ -46,7 +46,7 @@
 #define SERVO_DELAY_ALG				400
 
 
-
+#define DISTANCE_HALT				10
 
 
 
@@ -60,6 +60,7 @@ enum aBeladenStates_t{
 	ENABLE_IR,
 	CHECK_IR,
 	CONTAINER_FOUND,
+	HALT,
 	GREIF_ZU_1,
 	HEBEL_RUNTER_2,
 	GREIF_AUF_3,
@@ -82,6 +83,7 @@ uint16 IR_Counter=0;
 
 void autoBeladen(void){
 	static uint16 wait_time=0;
+	static uint16 wait_time_halt=0;
 	switch (aBeladenStates){
 		case INIT:
 			debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);	//Debug Msg
@@ -116,12 +118,21 @@ void autoBeladen(void){
 				if(((uint16)(CONTAINER_LENGTH)<((uint32)(IR_LastCounter*20*BELADEN_SPD)/1000)) && IR_flanke==OBJEKT_WEG){
 					debugPrintfABeladen("%s %s: Der Container wurde gefunden!",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
 					IR_LastCounter=0;
-					//cotainer found
-					setDCSpeed(0);
-					//Container Found
-					aBeladenStates=GREIF_ZU_1;
+					//cotainer found!
+					wait_time_halt=((uint32)(DISTANCE_HALT*1000)/BELADEN_SPD);
+					FRTOS1_vTaskDelay(wait_time_halt/(portTICK_RATE_MS));
+					aBeladenStates=HALT;
 				}
 			}
+			break;
+		case HALT:
+			setDCSpeed(0);
+			//Container Found
+			aBeladenStates=GREIF_ZU_1;
+#if TEST_CONTAINER_ANHALTEN
+			aBeladenStates=INIT;
+			changeToDrive();
+#endif
 			break;
 		case GREIF_ZU_1:
 			//init container greifen
