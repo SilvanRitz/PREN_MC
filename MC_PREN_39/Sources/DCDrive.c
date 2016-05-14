@@ -122,7 +122,6 @@ void setDutyCycle(unsigned int val){	//get called by Shell
 }
 
 void setDCSpeed(uint16 speed){
-	//if()
 	if(speed==DC_MAXSPEED){
 		setValue=MAX_TRICKS_FLG_VAL;
 	}
@@ -169,7 +168,10 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
   else if (strncmp((const char*)cmd, (const char*)DCDRIVE_SHELL_NAME_STR " " DCDRIVE_CMD_SPEED, sizeof(DCDRIVE_SHELL_NAME_STR " "DCDRIVE_CMD_SPEED)-1)==0) {
       p = cmd+sizeof(DCDRIVE_SHELL_NAME_STR" "DCDRIVE_CMD_SPEED);
       if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=DC_MAXSPEED) {
+    	handle_actions_t actionsState=getHandleActionsState();
+    	if(actionsState==DRIVE ||actionsState==INIT_ALL){
     	  setDCSpeed(val);
+    	}
 		*handled = TRUE;
       } else {
     	  *handled = TRUE;

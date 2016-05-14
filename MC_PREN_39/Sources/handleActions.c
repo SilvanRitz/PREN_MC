@@ -23,15 +23,8 @@
 #include "UART_Shell.h"
 
 
-enum handle_actions_t{
-	INIT_ALL,
-	INIT_DONE,
-	DRIVE,
-	BELADEN,
-	ENTLADEN,
-	FERTIG,
-	AKKU_LEER
-}hadleActionsState=INIT_ALL;
+
+static handle_actions_t hadleActionsState=INIT_ALL;
 //static handle_actions_t hadleActionsState=INIT_ALL;
 
 //-----------Shell Autonom Beladen--------
@@ -172,6 +165,9 @@ void debugPrintfHandleActions(const char *fmt, ...) {
 #endif
 }
 
+handle_actions_t getHandleActionsState(){
+	return hadleActionsState;
+}
 
 //----------Shellpart------------
 uint8_t start_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io)
