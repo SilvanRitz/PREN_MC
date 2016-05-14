@@ -23,7 +23,16 @@
 #include "UART_Shell.h"
 
 
-
+enum handle_actions_t{
+	INIT_ALL,
+	INIT_DONE,
+	DRIVE,
+	BELADEN,
+	ENTLADEN,
+	FERTIG,
+	AKKU_LEER
+}hadleActionsState=INIT_ALL;
+//static handle_actions_t hadleActionsState=INIT_ALL;
 
 //-----------Shell Autonom Beladen--------
 #define HANDLE_ACTION_MSG_CMD			"HA"
@@ -62,15 +71,7 @@
 static uint8 beladenCount=0;
 
 
-enum handle_actions_t{
-	INIT_ALL,
-	INIT_DONE,
-	DRIVE,
-	BELADEN,
-	ENTLADEN,
-	FERTIG,
-	AKKU_LEER
-}hadleActionsState=INIT_ALL;
+
 
 
 void handleActions(void){
@@ -162,6 +163,8 @@ void changeToAkkuLeer(void){
 	debugPrintfHandleActions("%s %s State Akku Leer aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
 	hadleActionsState=AKKU_LEER;
 }
+
+
 
 void debugPrintfHandleActions(const char *fmt, ...) {
 #if CFG_AENTLADEN_MSG

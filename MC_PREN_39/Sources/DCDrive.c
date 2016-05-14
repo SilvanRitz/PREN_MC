@@ -9,6 +9,7 @@
 #include "Bit_DC_Ruck.h"
 #include "UART_Shell.h"
 #include "DebugBit.h"
+#include "handleActions.h"
 
 
 
@@ -20,7 +21,7 @@
 #define DCDRIVE_SHELL_NAME_STR		"DCDr"
 #define DCDR_CMD_HELP   			"help"
 #define DCDR_CMD_STATUS 			"status"
-#define DCDRIVE_CMD_SPEED			"spd"
+#define DCDRIVE_CMD_SPEED			"d"
 #define DC_MAXSPEED					190
 #define DC_MAXSPEED_STR				"190"
 
@@ -121,6 +122,7 @@ void setDutyCycle(unsigned int val){	//get called by Shell
 }
 
 void setDCSpeed(uint16 speed){
+	//if()
 	if(speed==DC_MAXSPEED){
 		setValue=MAX_TRICKS_FLG_VAL;
 	}

@@ -28,7 +28,7 @@ enum CamPos{
 
 //-----------Lenkservo--------
 #define LENKSERVO_SHELL_NAME_STR 	"LeS"
-#define LENKSERVO_GRAD_CMD			"deg"
+#define LENKSERVO_GRAD_CMD			"p"
 	#define LENKSERVO_MAXGRAD		255
 	#define LENKSERVO_MAXGRAD_STR	"255"
 #define LENKSERVO_DEFAULT_CMD		"def"
