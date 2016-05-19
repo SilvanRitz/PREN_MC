@@ -52,7 +52,7 @@ static handle_actions_t hadleActionsState=INIT_ALL;
 
 //---------SERVO Konstanten---------
 
-#define CAM_SERVO_INIT		125
+//#define CAM_SERVO_INIT		125
 #define LENK_SERVO_INIT		125
 #define GREIF_SERVO_INIT	45				//45 =>Greifklemme offen
 #define LADE_SERVO_INIT		155				//Hebel 0°
@@ -72,10 +72,9 @@ void handleActions(void){
 	case INIT_ALL:
 		//Init DC DCDrive
 		setDCSpeed(0);
-		setDCVorwaerts();
 
 		//Init Servos
-		CAM_SERVO1_SetPos(CAM_SERVO_INIT);
+		CAM_SERVO1_SetPos(CAM_SERVO_GERADE);
 		LENK_SERVO2_SetPos(LENK_SERVO_INIT);
 		GREIF_SERVO3_SetPos(GREIF_SERVO_INIT);
 		LADEN_SERVO4_SetPos(LADE_SERVO_INIT);
@@ -83,6 +82,7 @@ void handleActions(void){
 		break;
 
 	case INIT_DONE:
+		setDCVorwaerts();
 		Bit_5V_2_Enable_SetVal();		//Enable second Akku
 		debugPrintfHandleActions("%s\r\n",START_FIN_RESP);
 		changeToDrive();
@@ -98,19 +98,17 @@ void handleActions(void){
 
 	case FERTIG:
 		setDCSpeed(0);
-		CAM_SERVO1_SetPos(126);
+		CAM_SERVO1_SetPos(CAM_SERVO_GERADE);
 		LENK_SERVO2_SetPos(126);
 		Bit_5V_2_Enable_ClrVal();
-		debugPrintfHandleActions("%s\r\n",START_FIN_RESP);
-		debugPrintfHandleActions("%s",STOP_SHELL_NAME_STR);
 		break;
 	case AKKU_LEER:
 		setDCSpeed(0);
-		CAM_SERVO1_SetPos(126);
+		CAM_SERVO1_SetPos(CAM_SERVO_GERADE);
 		LENK_SERVO2_SetPos(126);
 		Bit_5V_2_Enable_ClrVal();
 		debugPrintfHandleActions("%s: Akku leer!!!\r\n",DEBUG_MSG_CMD);
-		debugPrintfHandleActions("%s",STOP_SHELL_NAME_STR);
+		debugPrintfHandleActions("%s\r\n",STOP_SHELL_NAME_STR);
 		LED_Blink();
 		break;
 	}
@@ -144,6 +142,7 @@ void changeToDrive(void){
 
 void changeToFertig(void){
 	debugPrintfHandleActions("%s %s State Fertig aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
+	debugPrintfHandleActions("%s\r\n",STOP_SHELL_NAME_STR);
 	hadleActionsState=FERTIG;
 }
 

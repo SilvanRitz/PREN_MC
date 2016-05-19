@@ -154,7 +154,7 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
 		*handled = TRUE;
 		CLS1_SendHelpStr((unsigned char*)DCDRIVE_SHELL_NAME_STR, (unsigned char*)"Group of "DCDRIVE_SHELL_NAME_STR" commands\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Print help or status information\r\n", io->stdOut);
-		CLS1_SendHelpStr((unsigned char*)"  pos", (unsigned char*)"Values 0..100 ändert den dutycycle (100 = off)\r\n", io->stdOut);
+		CLS1_SendHelpStr((unsigned char*)" "DCDRIVE_CMD_SPEED, (unsigned char*)"Values 0..100 ändert den dutycycle (100 = off)\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  vdir", (unsigned char*)"Drehe in Vorwärtsrichtung\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  rdir", (unsigned char*)"Drehe in Rückwärtsrichtung\r\n", io->stdOut);
 		CLS1_SendHelpStr((unsigned char*)"  spd", (unsigned char*)"Gibt die Geschwindigkeit in mm pro s an\nWerte zwischen 0 und "DC_MAXSPEED_STR"\r\n", io->stdOut);

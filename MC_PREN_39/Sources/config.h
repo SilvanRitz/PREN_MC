@@ -55,7 +55,7 @@ volatile bool IR_flanke;
 	#define CFG_AENTLADEN_MSG		(1)
 	#define	CFG_RASP_CHECK			(0)
 	#define CFG_LOW_AKKU_MELDEN		(1)
-	#define CFG_AKKU					(0)				//COMMAND
+	#define CFG_AKKU					(1)				//COMMAND
 #endif
 
 
@@ -63,7 +63,7 @@ volatile bool IR_flanke;
  * Aktionen
  */
 #define FLEX_LENK_ENABLE			(0)			//Schaltet die Flexlenkung aus
-#define AKKU_ABSCHALTEN				(0)			//Schaltet die Flexlenkung aus
+#define AKKU_ABSCHALTEN				(1)			//Schaltet die Flexlenkung aus
 
 
 //TEST's	Im normalfall 0 !
