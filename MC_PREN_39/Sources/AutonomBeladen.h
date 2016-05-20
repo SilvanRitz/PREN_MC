@@ -1,5 +1,5 @@
 /*
- * InfraredSensor.h
+ * AutonomBeladen.h
  *
  *  Created on: 20.11.2015
  *      Author: Wallpaper

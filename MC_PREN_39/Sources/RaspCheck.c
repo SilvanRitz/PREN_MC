@@ -10,6 +10,8 @@
 #include "config.h"
 #include "UART_Shell.h"
 #include "RaspCheck.h"
+#include "handleActions.h"
+
 
 
 
@@ -29,6 +31,7 @@ static enum RaspCheck_GenaralState_ {
 #define RASP_CHECK_MSG_CMD	"There"
 
 static bool strReceived=false;
+static int raspCounter=0;
 
 void checkRasp(void){
 		switch (RaspCheck_GenaralState){
@@ -38,16 +41,24 @@ void checkRasp(void){
 				debugPrintfRaspCheck("%s",RASP_CHECK_MSG_CMD);
 			break;
 			case CHECK:
-
-				if(strReceived){
-					//no error
-					strReceived=false;
+				if(getHandleActionsState()!=INIT_ALL){
+					if(strReceived){
+						//no error
+						strReceived=false;
+						raspCounter=0;
+					}
+					else{
+						//error
+						raspCounter++;
+						if(raspCounter>=5){
+							raspCounter=0;
+							changeToFertig();
+							debugPrintfRaspCheck("%s %s: NO RASP Response in time (ignored).\r\n",DEBUG_MSG_CMD,RASP_CHECK_DBG_ID);
+						}
+						debugPrintfRaspCheck("%s %s: NO RASP Response in time (ignored).\r\n",DEBUG_MSG_CMD,RASP_CHECK_DBG_ID);
+					}
+					debugPrintfRaspCheck("%s",RASP_CHECK_MSG_CMD);
 				}
-				else{
-					//error
-					debugPrintfRaspCheck("%s %s: NO RASP Response in time (ignored).\r\n",DEBUG_MSG_CMD,RASP_CHECK_DBG_ID);
-				}
-				debugPrintfRaspCheck("%s",RASP_CHECK_MSG_CMD);
 				break;
 		}
 }

@@ -23,6 +23,7 @@ void checkAkku1();
 void checkAkku2();
 void flexAuswertung();
 void cmdPrintfAkku(const char *fmt, ...);
+void calcDistanceFlex(void);
 
 #endif /* SOURCES_ADC_HANDLER_H_ */
 

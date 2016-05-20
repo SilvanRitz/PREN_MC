@@ -23,7 +23,7 @@
 #define A_BELADEN_POS_CMD			"d"
 	#define A_BELADEN_MAXDIST		1000
 	#define A_BELADEN_MAXDIST_STR	"1000"
-#define A_BELADEN_FIN_RESP			"StAf"
+#define A_BELADEN_FIN_RESP			"StAf"		//auch im handleActions
 
 //-----DC SPD---------
 
@@ -130,6 +130,7 @@ void autoBeladen(void){
 			//Container Found
 			aBeladenStates=GREIF_ZU_1;
 #if TEST_CONTAINER_ANHALTEN
+			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
 			aBeladenStates=INIT;
 			changeToDrive();
 #endif

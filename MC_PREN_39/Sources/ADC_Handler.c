@@ -27,7 +27,8 @@ enum adChannels_t{
 	AD_FLEX_REF
 };
 
-#define FLEX1_MSG_CMD		"Fldist1"
+#define FLEX1_MSG_CMD		"Fld1"
+#define FLEX2_MSG_CMD		"Fl_Ref"
 
 #define AKKU1_MSG_CMD		"Akku1"
 #define AKKU2_MSG_CMD		"Akku2"
@@ -39,8 +40,14 @@ enum adChannels_t{
 #define AKKU1_SCHWELLWERT	31513//31513//38673	//30222 alt
 #define AKKU2_SCHWELLWERT	41592
 
-uint16 adValue[AD1_CHANNEL_COUNT];
-uint16 istWert=0;
+
+//FLEXSENSOR Werte
+#define MAXDIST			50		//distance in mm¨
+#define	MINVAL_FLEX		1000
+#define MAXVAL_FLEX		5000
+
+int16 adValue[AD1_CHANNEL_COUNT];
+uint16 volatile istWert=0;
 
 //PID
 static uint16 nomValue=0;		//OFF
@@ -80,6 +87,7 @@ void handleADC(void){
 
 			//FLEX Sensor
 			flexAuswertung();
+
 			adStates=START_MEASUREMENT;
 		}
 
@@ -203,11 +211,36 @@ void Lenk_pidDoWork(void)
 }
 
 void flexAuswertung(){
-
+	int16 temp=0;
 	//istWert=adValue[AD_FLEX1]-adValue[AD_FLEX_REF];
 	debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,adValue[AD_FLEX1]);
+	debugPrintfFlexSensor("%s: %d\r\n",FLEX2_MSG_CMD,adValue[AD_FLEX2]);
+	temp=adValue[AD_FLEX2]-adValue[AD_FLEX1]+2000;
+	if(temp>0){
+		istWert=temp;
+	}
+	else{
+		istWert=0;
+	}
+	calcDistanceFlex();
+	debugPrintfFlexSensor("FLEX_DIFF: %d\r\n",istWert);
 #if FLEX_LENK_ENABLE
 			Lenk_pidDoWork();
 #endif
 
+}
+
+void calcDistanceFlex(void){
+	uint8 distance=0;
+	if (istWert<MINVAL_FLEX){
+		distance=MAXDIST;
+	}
+	else if(istWert>MAXVAL_FLEX){
+		distance=0;
+	}
+	else{
+		distance=MAXDIST-(MAXDIST*(istWert-MINVAL_FLEX))/(MAXVAL_FLEX-MINVAL_FLEX);
+	}
+	cmdPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,distance);
+	debugPrintfFlexSensor("Distance mm: %d\r\n",distance);
 }

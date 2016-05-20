@@ -21,6 +21,7 @@
 
 #include "ServoParse.h"
 #include "UART_Shell.h"
+#include "AutonomBeladen.h"
 
 
 
@@ -49,6 +50,7 @@ static handle_actions_t hadleActionsState=INIT_ALL;
 #define STOP_SHELL_NAME_STR			"Stop"
 #define STOP_CMD					"a"
 
+#define A_BELADEN_FIN_RESP			"StAf"		//auch im autonom beladen
 
 //---------SERVO Konstanten---------
 
@@ -116,11 +118,17 @@ void handleActions(void){
 
 void changeToBeladen(void){
 	debugPrintfHandleActions("%s %s State Beladen aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
+#if TEST_LADEN_NO_ACTION==0
 	if(hadleActionsState!=DRIVE){
 		debugPrintfHandleActions("%s %s Ungültiger state wechsel zu beladen!! Vorher %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,hadleActionsState);
 	}
 	hadleActionsState=BELADEN;
 	beladenCount++;
+#endif
+#if TEST_LADEN_NO_ACTION
+	debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
+#endif
+
 }
 
 void changeToEntladen(void){
