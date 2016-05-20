@@ -63,7 +63,7 @@ volatile bool IR_flanke;
  * Aktionen
  */
 #define FLEX_LENK_ENABLE			(0)			//Schaltet die Flexlenkung aus
-#define AKKU_ABSCHALTEN				(0)			//Akku überwachung
+#define AKKU_ABSCHALTEN				(1)			//Akku überwachung
 
 
 //TEST's	Im normalfall 0 !
