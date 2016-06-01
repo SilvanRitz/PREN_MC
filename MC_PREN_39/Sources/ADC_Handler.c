@@ -47,6 +47,7 @@ enum adChannels_t{
 #define MAXVAL_FLEX		5000
 
 int16 adValue[AD1_CHANNEL_COUNT];
+uint16 uAdValue[AD1_CHANNEL_COUNT];
 uint16 volatile istWert=0;
 
 //PID
@@ -80,7 +81,8 @@ void handleADC(void){
 		if(AD_finished){
 			AD_finished=FALSE;
 			(void)AD1_GetValue16(adValue); // get the result into value variable
-
+			uAdValue[AD_AKKU_5V_1]=(unsigned)adValue[AD_AKKU_5V_1];
+			uAdValue[AD_AKKU_5V_2]=(unsigned)adValue[AD_AKKU_5V_2];
 			checkAkku1();
 
 			checkAkku2();
@@ -128,12 +130,12 @@ void cmdPrintfFlexSensor(const char *fmt, ...) {
 
 void checkAkku1(){
 	//Akku 1 (7.1V)
-	debugPrintfFlexSensor("%s: %d\r\n",AKKU1_MSG_CMD,adValue[AD_AKKU_5V_1]);
-	if(adValue[AD_AKKU_5V_1]<AKKU1_SCHWELLWERT){
+	debugPrintfFlexSensor("%s: %d\r\n",AKKU1_MSG_CMD,uAdValue[AD_AKKU_5V_1]);
+	if(uAdValue[AD_AKKU_5V_1]<AKKU1_SCHWELLWERT){
 		lowAkku1Counter++;
 		if (lowAkku1Counter>50){
 #if CFG_LOW_AKKU_MELDEN
-			cmdPrintfAkku("%s: Akku1 leer %d\r\n",AKKU1_MSG_CMD,adValue[AD_AKKU_5V_1]);
+			cmdPrintfAkku("%s: Akku1 leer %d\r\n",AKKU1_MSG_CMD,uAdValue[AD_AKKU_5V_1]);
 #endif
 #if AKKU_ABSCHALTEN
 			changeToAkkuLeer();
@@ -147,12 +149,12 @@ void checkAkku1(){
 
 void checkAkku2(){
 	//Akku 2 (11V)
-	debugPrintfFlexSensor("%s: %d\r\n",AKKU2_MSG_CMD,adValue[AD_AKKU_5V_2]);
-	if(adValue[AD_AKKU_5V_2]<AKKU2_SCHWELLWERT){
+	debugPrintfFlexSensor("%s: %d\r\n",AKKU2_MSG_CMD,uAdValue[AD_AKKU_5V_2]);
+	if(uAdValue[AD_AKKU_5V_2]<AKKU2_SCHWELLWERT){
 		lowAkku2Counter++;
 		if (lowAkku2Counter>50){
 #if CFG_LOW_AKKU_MELDEN
-			cmdPrintfAkku("%s: Akku2 leer %d\r\n",AKKU2_MSG_CMD,adValue[AD_AKKU_5V_2]);
+			cmdPrintfAkku("%s: Akku2 leer %d\r\n",AKKU2_MSG_CMD,uAdValue[AD_AKKU_5V_2]);
 #endif
 #if AKKU_ABSCHALTEN
 			changeToAkkuLeer();

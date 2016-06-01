@@ -25,25 +25,24 @@
 	#define A_BELADEN_MAXDIST_STR	"1000"
 #define A_BELADEN_FIN_RESP			"StAf"		//auch im handleActions
 
-//-----DC SPD---------
 
-#define BELADEN_SPD					100
 
 //------Aufladen distanzen-------
 #define BELADEN_SICHERHEIT_DIST		30
 #define CONTAINER_LENGTH			25		//in mm
 
 //-----SERVO Positionen-------
-#define GREIF_SERVO_ZU				10				//45 =>Greifklemme offen
-#define GREIF_SERVO_OFFEN			70
+#define GREIF_SERVO_ZU				200				//45 =>Greifklemme offen
+#define GREIF_SERVO_ZU_GREIFEN		50				//45 =>Greifklemme offen
+#define GREIF_SERVO_OFFEN			255
 
-#define LADE_SERVO_OBEN				178				//Hebel 45°
+#define LADE_SERVO_OBEN				200				//Hebel 45°
 #define LADE_SERVO_OBEN_MITTEL		130				//Hebel 45°
-#define LADE_SERVO_UNTEN_MITTEL		75				//Hebel 0°
+#define LADE_SERVO_UNTEN_MITTEL		100				//Hebel 0°
 #define LADE_SERVO_UNTEN			30				//Hebel 0°
 
 
-#define SERVO_DELAY_ALG				400
+#define SERVO_DELAY_ALG				800
 
 
 #define DISTANCE_HALT				10
@@ -87,7 +86,7 @@ void autoBeladen(void){
 	switch (aBeladenStates){
 		case INIT:
 			debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);	//Debug Msg
-		#if TEST_AUFLADEN
+			#if TEST_AUFLADEN
 			aBeladenStates=GREIF_ZU_1;
 			break;
 		#endif
@@ -127,12 +126,14 @@ void autoBeladen(void){
 			break;
 		case HALT:
 			setDCSpeed(0);
+			beladen_Active=AUFLADEN;
 			//Container Found
 			aBeladenStates=GREIF_ZU_1;
 #if TEST_CONTAINER_ANHALTEN
 			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
 			aBeladenStates=INIT;
-			changeToDrive();
+			changeToFertig();
+			//changeToDrive();
 #endif
 			break;
 		case GREIF_ZU_1:
@@ -156,8 +157,9 @@ void autoBeladen(void){
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=GET_CONTAINER;
 			break;
+		//case GREIF_HALB_ZU:
 		case GET_CONTAINER:
-			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);
+			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU_GREIFEN);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=EMPTY_CONTAINER;
 		case EMPTY_CONTAINER:
@@ -234,8 +236,7 @@ else if (strncmp((const char*)cmd, (const char*)A_BELADEN_SHELL_NAME_STR " " A_B
 p = cmd+sizeof(A_BELADEN_SHELL_NAME_STR" "A_BELADEN_POS_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=A_BELADEN_MAXDIST) {
 	*handled = TRUE;
-	distance=val;
-	changeToBeladen();
+	beladen_Aufgerufen(val);
 } else {
 	  *handled = TRUE;
   CLS1_SendStr((const unsigned char*)"Wrong "A_BELADEN_POS_CMD" argument, must be in the range 0.."A_BELADEN_MAXDIST_STR"\r\n",io->stdErr);
@@ -244,4 +245,20 @@ if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=A_BELADEN_MAXDIST) {
 return ERR_OK;
 }
 return ERR_OK;
+}
+
+void beladen_Aufgerufen(uint16 dist){
+	if(getHandleActionsState()==BELADEN){
+		beladen_Active=ANFAHREN_BELADEN;			//Startet die Zeitmessung
+		beladen_Counter=0;
+		zweiteDistanz=dist;
+	}
+	else{
+		changeToBeladen();
+		distance=dist;
+	}
+}
+
+void setDistance(uint16 dist){
+	distance=dist;
 }

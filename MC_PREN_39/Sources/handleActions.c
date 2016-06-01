@@ -22,6 +22,7 @@
 #include "ServoParse.h"
 #include "UART_Shell.h"
 #include "AutonomBeladen.h"
+#include "config.h"
 
 
 
@@ -56,8 +57,8 @@ static handle_actions_t hadleActionsState=INIT_ALL;
 
 //#define CAM_SERVO_INIT		125
 #define LENK_SERVO_INIT		125
-#define GREIF_SERVO_INIT	45				//45 =>Greifklemme offen
-#define LADE_SERVO_INIT		155				//Hebel 0°
+#define GREIF_SERVO_INIT	200				//45 =>Greifklemme offen
+#define LADE_SERVO_INIT		200				//Hebel 0°
 #define	ENTLADE_SERVO_INIT	255				//Entladeklappe geschlossen
 
 
@@ -81,6 +82,9 @@ void handleActions(void){
 		GREIF_SERVO3_SetPos(GREIF_SERVO_INIT);
 		LADEN_SERVO4_SetPos(LADE_SERVO_INIT);
 		ENTLADEN_SERVO5_SetPos(ENTLADE_SERVO_INIT);
+
+		beladen_Counter=0;
+		beladen_Active=NICHT_BELADEN;
 		break;
 
 	case INIT_DONE:
@@ -118,7 +122,7 @@ void handleActions(void){
 
 void changeToBeladen(void){
 	debugPrintfHandleActions("%s %s State Beladen aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-#if TEST_LADEN_NO_ACTION==0
+	#if TEST_LADEN_NO_ACTION==0
 	if(hadleActionsState!=DRIVE){
 		debugPrintfHandleActions("%s %s Ungültiger state wechsel zu beladen!! Vorher %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,hadleActionsState);
 	}
@@ -145,6 +149,14 @@ void changeToEntladen(void){
 void changeToDrive(void){
 	debugPrintfHandleActions("%s %s State Drive aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
 	hadleActionsState=DRIVE;
+	if(beladen_Active!=NICHT_BELADEN){
+		int16 result= zweiteDistanz-beladen_Counter*BELADEN_SPD/1000;
+		if (result<0){
+			result=0;
+		}
+		setDistance(result);
+		changeToBeladen();
+	}
 }
 
 

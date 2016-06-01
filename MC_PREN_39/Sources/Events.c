@@ -40,6 +40,7 @@ extern "C" {
 #include "UART_Shell.h"
 #include "DCDrive.h"
 #include "DebugBit.h"
+#include "config.h"
 
 /*
 ** ===================================================================
@@ -392,6 +393,9 @@ void TU1_OnChannel5(LDD_TUserData *UserDataPtr)
 		debugPrintfEncoder("%i\r\n\0",temp);
 		setNomValue(temp);
 		counterA=0;
+	}
+	if(beladen_Active==ANFAHREN_BELADEN){
+		beladen_Counter++;
 	}
 }
 

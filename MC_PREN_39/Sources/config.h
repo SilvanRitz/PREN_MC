@@ -23,6 +23,12 @@ volatile bool IR_flanke;
 #define WAS_RISING	0
 #define OBJEKT_WEG	1
 
+volatile uint16 beladen_Counter;
+volatile uint8 beladen_Active;
+volatile uint16 zweiteDistanz;
+#define NICHT_BELADEN		0
+#define ANFAHREN_BELADEN	1
+#define AUFLADEN			2
 
 /*
  * Module
@@ -44,7 +50,7 @@ volatile bool IR_flanke;
 	#define CFG_DEBUG_MSG			(1)
 	#define CFG_ADC_MSG				(0)
 	#define CFG_FLEXSENSOR_DBG			(0)				//SPAM
-	#define CFG_FLEXSENSOR_CMD			(1)
+	#define CFG_FLEXSENSOR_CMD			(0)
 	#define CFG_DCDRIVE_MSG_DGB			(0)
 	#define CFG_DCDRIVE_MSG_CMD			(0)				//SPAM
 	#define CFG_SHELL_DEBUG_OUT		(1)
@@ -54,8 +60,8 @@ volatile bool IR_flanke;
 	#define CFG_ABELADEN_MSG 		(1)
 	#define CFG_AENTLADEN_MSG		(1)
 	#define	CFG_RASP_CHECK			(1)			//auf 1 lassen, rasp check über task ausschalten
-	#define CFG_LOW_AKKU_MELDEN		(0)
-	#define CFG_AKKU					(1)				//COMMAND
+	#define CFG_LOW_AKKU_MELDEN		(1)
+	#define CFG_AKKU				(1)				//COMMAND
 #endif
 
 
@@ -68,8 +74,8 @@ volatile bool IR_flanke;
 
 //TEST's	Im normalfall 0 !
 #define TEST_AUFLADEN				(0)			//initiirt nur den Aufladeprozess (kein Anfahren)
-#define TEST_CONTAINER_ANHALTEN		(1)
-#define TEST_LADEN_NO_ACTION		(1)			//ist stärker als TEST_CONTAINER_ANHALTEN
+#define TEST_CONTAINER_ANHALTEN		(0)
+#define TEST_LADEN_NO_ACTION		(0)			//ist stärker als TEST_CONTAINER_ANHALTEN
 												//Wenn 1 fährt am container vorbei
 
 
