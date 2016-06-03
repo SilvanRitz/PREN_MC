@@ -163,6 +163,8 @@ void changeToDrive(void){
 void changeToFertig(void){
 	debugPrintfHandleActions("%s %s State Fertig aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
 	debugPrintfHandleActions("%s\r\n",STOP_SHELL_NAME_STR);
+	beladen_Active=NICHT_BELADEN;
+	beladenCount=0;
 	hadleActionsState=FERTIG;
 }
 

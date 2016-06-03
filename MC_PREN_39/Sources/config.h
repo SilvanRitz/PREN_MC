@@ -46,11 +46,11 @@ volatile uint16 zweiteDistanz;
  * Messages
  */
 #if CFG_SHELL
-	#define CFG_ULTRASONIC_MSG		(0)
+	#define CFG_ULTRASONIC_MSG		(1)
 	#define CFG_DEBUG_MSG			(1)
 	#define CFG_ADC_MSG				(0)
 	#define CFG_FLEXSENSOR_DBG			(0)				//SPAM
-	#define CFG_FLEXSENSOR_CMD			(0)
+	#define CFG_FLEXSENSOR_CMD			(1)
 	#define CFG_DCDRIVE_MSG_DGB			(0)
 	#define CFG_DCDRIVE_MSG_CMD			(0)				//SPAM
 	#define CFG_SHELL_DEBUG_OUT		(1)
@@ -61,7 +61,7 @@ volatile uint16 zweiteDistanz;
 	#define CFG_AENTLADEN_MSG		(1)
 	#define	CFG_RASP_CHECK			(1)			//auf 1 lassen, rasp check über task ausschalten
 	#define CFG_LOW_AKKU_MELDEN		(1)
-	#define CFG_AKKU				(1)				//COMMAND
+	#define CFG_AKKU				(0)				//COMMAND
 #endif
 
 
@@ -73,7 +73,7 @@ volatile uint16 zweiteDistanz;
 
 
 //TEST's	Im normalfall 0 !
-#define TEST_AUFLADEN				(0)			//initiirt nur den Aufladeprozess (kein Anfahren)
+#define TEST_AUFLADEN				(1)			//initiirt nur den Aufladeprozess (kein Anfahren)
 #define TEST_CONTAINER_ANHALTEN		(0)
 #define TEST_LADEN_NO_ACTION		(0)			//ist stärker als TEST_CONTAINER_ANHALTEN
 												//Wenn 1 fährt am container vorbei

@@ -32,17 +32,19 @@
 #define CONTAINER_LENGTH			25		//in mm
 
 //-----SERVO Positionen-------
-#define GREIF_SERVO_ZU				200				//45 =>Greifklemme offen
-#define GREIF_SERVO_ZU_GREIFEN		50				//45 =>Greifklemme offen
-#define GREIF_SERVO_OFFEN			255
+#define GREIF_SERVO_ZU				190				//45 =>Greifklemme offen
+#define GREIF_SERVO_ZU_GREIFEN		145				//45 =>Greifklemme offen
+#define GREIF_SERVO_OFFEN			230
 
 #define LADE_SERVO_OBEN				200				//Hebel 45°
 #define LADE_SERVO_OBEN_MITTEL		130				//Hebel 45°
 #define LADE_SERVO_UNTEN_MITTEL		100				//Hebel 0°
-#define LADE_SERVO_UNTEN			30				//Hebel 0°
+#define LADE_SERVO_UNTEN			60				//Hebel 0° //60
+#define LADE_SERVO_UNTEN_ABDRUECKEN	LADE_SERVO_UNTEN-30
 
 
 #define SERVO_DELAY_ALG				800
+#define SERVO_DELAY_LONG			1500
 
 
 #define DISTANCE_HALT				10
@@ -64,10 +66,12 @@ enum aBeladenStates_t{
 	HEBEL_RUNTER_2,
 	GREIF_AUF_3,
 	HEBEL_RUNTER_4,
+	GET_CONTAINER_HALB,
 	GET_CONTAINER,
 	EMPTY_CONTAINER,
 	HEBEL_RUNTER_7,
 	PLACE_CONTAINER,
+	CONTAINER_ABDRUECKEN,
 	HEBEL_HOCH_9,
 	GREIF_ZU_10,
 	HEBEL_HOCH_11,
@@ -155,26 +159,34 @@ void autoBeladen(void){
 		case HEBEL_RUNTER_4:
 			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
-			aBeladenStates=GET_CONTAINER;
+			aBeladenStates=GET_CONTAINER_HALB;
 			break;
-		//case GREIF_HALB_ZU:
+		case GET_CONTAINER_HALB:
+			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=GET_CONTAINER;
 		case GET_CONTAINER:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU_GREIFEN);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=EMPTY_CONTAINER;
 		case EMPTY_CONTAINER:
 			LADEN_SERVO4_SetPos(LADE_SERVO_OBEN);
-			FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG*2/(portTICK_RATE_MS));
 			aBeladenStates=HEBEL_RUNTER_7;
 			break;
 		case HEBEL_RUNTER_7:
 			//init container zurückstellen (herunterfahren)
 			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_LONG/(portTICK_RATE_MS));
 			aBeladenStates=PLACE_CONTAINER;
 			break;
 		case PLACE_CONTAINER:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_OFFEN);		// Container loslassen
+			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			aBeladenStates=CONTAINER_ABDRUECKEN;
+			break;
+		case CONTAINER_ABDRUECKEN:
+			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN_ABDRUECKEN);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=HEBEL_HOCH_9;
 			break;

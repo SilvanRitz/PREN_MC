@@ -25,7 +25,7 @@ static portTASK_FUNCTION(Task_Us, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	startMeasurement();
-    FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS));
+    FRTOS1_vTaskDelay(500/(portTICK_RATE_MS));
   }
 }
 

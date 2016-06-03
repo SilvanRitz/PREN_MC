@@ -35,14 +35,14 @@ enum adChannels_t{
 
 #define LENK_OFFSET		126
 #define IST_WERT_OFFSET	46000
-#define SOLLWERT		8000				//Sollwert bereits abgezogen
+#define SOLLWERT		50				//Sollwert bereits abgezogen
 
 #define AKKU1_SCHWELLWERT	31513//31513//38673	//30222 alt
 #define AKKU2_SCHWELLWERT	41592
 
 
 //FLEXSENSOR Werte
-#define MAXDIST			50		//distance in mm¨
+#define MAXDIST			80		//distance in mm¨
 #define	MINVAL_FLEX		1000
 #define MAXVAL_FLEX		5000
 
@@ -58,9 +58,9 @@ static uint16 setValueOld;		//sollwert
 static int16 integ, devOld;
 static int16 val,dev;
 static uint8 delay=0;
-static uint8 kp=120;		//10
-static uint8 ki=20;			//5
-static uint8 kd=60;			//1
+static uint8 kp=16;		//10
+static uint8 ki=5;			//5
+static uint8 kd=1;			//1
 
 static uint8 lowAkku2Counter=0;
 static uint8 lowAkku1Counter=0;
@@ -133,7 +133,7 @@ void checkAkku1(){
 	debugPrintfFlexSensor("%s: %d\r\n",AKKU1_MSG_CMD,uAdValue[AD_AKKU_5V_1]);
 	if(uAdValue[AD_AKKU_5V_1]<AKKU1_SCHWELLWERT){
 		lowAkku1Counter++;
-		if (lowAkku1Counter>50){
+		if (lowAkku1Counter>100){
 #if CFG_LOW_AKKU_MELDEN
 			cmdPrintfAkku("%s: Akku1 leer %d\r\n",AKKU1_MSG_CMD,uAdValue[AD_AKKU_5V_1]);
 #endif
@@ -152,7 +152,7 @@ void checkAkku2(){
 	debugPrintfFlexSensor("%s: %d\r\n",AKKU2_MSG_CMD,uAdValue[AD_AKKU_5V_2]);
 	if(uAdValue[AD_AKKU_5V_2]<AKKU2_SCHWELLWERT){
 		lowAkku2Counter++;
-		if (lowAkku2Counter>50){
+		if (lowAkku2Counter>100){
 #if CFG_LOW_AKKU_MELDEN
 			cmdPrintfAkku("%s: Akku2 leer %d\r\n",AKKU2_MSG_CMD,uAdValue[AD_AKKU_5V_2]);
 #endif
@@ -171,52 +171,47 @@ void Lenk_pidDoWork(void)
 	// readSpeed from Encoder(in value nomValue)
 	nomValueOld = nomValue;			//ist Wert (old)
 	nomValue=lenkUpdateNomValue();
-
-
-  nomValue = (nomValueOld+nomValue) >> 1;
-
-
-
+  //nomValue = (nomValueOld+nomValue);
   if (setValue == 0) val = integ = devOld = 0;
   else
   {
     // deviation (max devL = +1000 - -1000 = 2000)
     //dev = (setValue - nomValue) / 8;
-	 dev = (setValue - nomValue)/32;
+	 dev = (setValue - nomValue);
     // P-Part (max kpL =
-    val = (kp * dev) / 32;
+    val = (kp * dev)/16;
 
     // I-Part with anti-windup
     if (ki != 0) integ += dev;
-    val += (ki * integ) / 32;
+    val += (ki * integ)/16;
     //val+=(ki*integ)/32;
 
     // D-Part
-    val += (kd*(dev-devOld)/32);
+    val += (kd*(dev-devOld))/16;
     devOld = dev;
-    val=val/64;
+    val=val;
     // limit control point
-    if (val > 125)
+    if (val > 80)
     {
-      val = 100;
+      val = 80;
       integ -= dev;
     }
-    else if (val < -125)
+    else if (val < -80)
     {
-      val = -125;
+      val = -80;
       integ -= dev;
     }
   }
-  LENK_SERVO2_SetPos(LENK_OFFSET+val);
-  debugPrintfFlexSensor("%s :Gradwert %i\r\n",DEBUG_MSG_CMD,LENK_OFFSET+val);
+  LENK_SERVO2_SetPos(LENK_OFFSET-val);
+  debugPrintfFlexSensor("%s :Gradwert %i\r\n",DEBUG_MSG_CMD,LENK_OFFSET-val);
   //setDutyCycle(100-val);
 }
 
 void flexAuswertung(){
 	int16 temp=0;
 	//istWert=adValue[AD_FLEX1]-adValue[AD_FLEX_REF];
-	debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,adValue[AD_FLEX1]);
-	debugPrintfFlexSensor("%s: %d\r\n",FLEX2_MSG_CMD,adValue[AD_FLEX2]);
+	//debugPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,adValue[AD_FLEX1]);
+	//debugPrintfFlexSensor("%s: %d\r\n",FLEX2_MSG_CMD,adValue[AD_FLEX2]);
 	temp=adValue[AD_FLEX2]-adValue[AD_FLEX1]+2000;
 	if(temp>0){
 		istWert=temp;
@@ -225,7 +220,7 @@ void flexAuswertung(){
 		istWert=0;
 	}
 	calcDistanceFlex();
-	debugPrintfFlexSensor("FLEX_DIFF: %d\r\n",istWert);
+	//debugPrintfFlexSensor("FLEX_DIFF: %d\r\n",istWert);
 #if FLEX_LENK_ENABLE
 			Lenk_pidDoWork();
 #endif
@@ -243,6 +238,7 @@ void calcDistanceFlex(void){
 	else{
 		distance=MAXDIST-(MAXDIST*(istWert-MINVAL_FLEX))/(MAXVAL_FLEX-MINVAL_FLEX);
 	}
+	istWert=distance;
 	cmdPrintfFlexSensor("%s: %d\r\n",FLEX1_MSG_CMD,distance);
 	debugPrintfFlexSensor("Distance mm: %d\r\n",distance);
 }
