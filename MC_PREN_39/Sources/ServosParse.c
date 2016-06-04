@@ -85,7 +85,6 @@ uint8_t SERVO_Lenkung_ParseCommand(const unsigned char *cmd, bool *handled, cons
 else if (strncmp((const char*)cmd, (const char*)LENKSERVO_SHELL_NAME_STR " " LENKSERVO_GRAD_CMD, sizeof(LENKSERVO_SHELL_NAME_STR " "LENKSERVO_GRAD_CMD)-1)==0) {
 p = cmd+sizeof(LENKSERVO_SHELL_NAME_STR" "LENKSERVO_GRAD_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=LENKSERVO_MAXGRAD) {
-	  //setDCSpeed(val);
 	LENK_SERVO2_SetPos(val);
 	*handled = TRUE;
 } else {

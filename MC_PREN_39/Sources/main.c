@@ -41,7 +41,6 @@
 #include "LED_BLUE.h"
 #include "LEDpin2.h"
 #include "BitIoLdd6.h"
-#include "CS2.h"
 #include "KSDK1.h"
 #include "WAIT1.h"
 #include "CLS1.h"

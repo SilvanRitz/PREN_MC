@@ -59,7 +59,7 @@ static handle_actions_t hadleActionsState=INIT_ALL;
 #define LENK_SERVO_INIT		125
 #define GREIF_SERVO_INIT	200				//45 =>Greifklemme offen
 #define LADE_SERVO_INIT		200				//Hebel 0°
-#define	ENTLADE_SERVO_INIT	255				//Entladeklappe geschlossen
+#define	ENTLADE_SERVO_INIT	245				//Entladeklappe geschlossen
 
 
 
@@ -107,6 +107,7 @@ void handleActions(void){
 		CAM_SERVO1_SetPos(CAM_SERVO_GERADE);
 		LENK_SERVO2_SetPos(126);
 		Bit_5V_2_Enable_ClrVal();
+		changeToInitAll();
 		break;
 	case AKKU_LEER:
 		setDCSpeed(0);
@@ -132,7 +133,11 @@ void changeToBeladen(void){
 #if TEST_LADEN_NO_ACTION
 	debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
 #endif
+}
 
+void changeToInitAll(void){
+	debugPrintfHandleActions("%s %s State Init All\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
+	hadleActionsState=INIT_ALL;
 }
 
 void changeToEntladen(void){
@@ -181,9 +186,7 @@ void changeToAkkuLeer(void){
 
 
 void debugPrintfHandleActions(const char *fmt, ...) {
-#if CFG_AENTLADEN_MSG
 	debugPrintf(fmt);
-#endif
 }
 
 handle_actions_t getHandleActionsState(){

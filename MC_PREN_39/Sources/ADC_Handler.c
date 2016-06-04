@@ -134,9 +134,7 @@ void checkAkku1(){
 	if(uAdValue[AD_AKKU_5V_1]<AKKU1_SCHWELLWERT){
 		lowAkku1Counter++;
 		if (lowAkku1Counter>100){
-#if CFG_LOW_AKKU_MELDEN
 			cmdPrintfAkku("%s: Akku1 leer %d\r\n",AKKU1_MSG_CMD,uAdValue[AD_AKKU_5V_1]);
-#endif
 #if AKKU_ABSCHALTEN
 			changeToAkkuLeer();
 #endif
@@ -153,9 +151,7 @@ void checkAkku2(){
 	if(uAdValue[AD_AKKU_5V_2]<AKKU2_SCHWELLWERT){
 		lowAkku2Counter++;
 		if (lowAkku2Counter>100){
-#if CFG_LOW_AKKU_MELDEN
 			cmdPrintfAkku("%s: Akku2 leer %d\r\n",AKKU2_MSG_CMD,uAdValue[AD_AKKU_5V_2]);
-#endif
 #if AKKU_ABSCHALTEN
 			changeToAkkuLeer();
 #endif

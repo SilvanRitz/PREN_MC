@@ -34,6 +34,7 @@ void changeToDrive(void);
 void changeToEntladen(void);
 void changeToBeladen(void);
 void changeToAkkuLeer(void);
+void changeToInitAll(void);
 handle_actions_t getHandleActionsState();
 void handleActions(void);
 uint8_t start_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);

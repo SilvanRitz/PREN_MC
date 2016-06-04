@@ -35,7 +35,7 @@
 #define GREIF_SERVO_ZU				190				//45 =>Greifklemme offen
 #define GREIF_SERVO_ZU_GREIFEN		80				//45 =>Greifklemme offen
 #define GREIF_SERVO_OFFEN			230
-#define GREIF_SERVO_HALB_OFFEN		210
+#define GREIF_SERVO_HALB_OFFEN		220
 
 #define LADE_SERVO_OBEN				200				//Hebel 45°
 #define LADE_SERVO_OBEN_MITTEL		130				//Hebel 45°

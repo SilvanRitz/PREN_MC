@@ -41,12 +41,11 @@ volatile uint16 zweiteDistanz;
 #define CFG_CHECK_RASP		(0)				//1 enabled den check ob rasp da ist (Kann zu fehler führen)
 
 
-
 /*
  * Messages
  */
 #if CFG_SHELL
-	#define CFG_ULTRASONIC_MSG		(1)
+
 	#define CFG_DEBUG_MSG			(1)
 	#define CFG_ADC_MSG				(0)
 	#define CFG_FLEXSENSOR_DBG			(0)				//SPAM
@@ -58,10 +57,15 @@ volatile uint16 zweiteDistanz;
 	#define CFG_SERVOPARSE_MSG 		(1)
 	#define CFG_ENCODER_MSG			(0)			//SPAM => Für Debug DC Motor
 	#define CFG_ABELADEN_MSG 		(1)
-	#define CFG_AENTLADEN_MSG		(1)
-	#define	CFG_RASP_CHECK			(1)			//auf 1 lassen, rasp check über task ausschalten
-	#define CFG_LOW_AKKU_MELDEN		(1)
-	#define CFG_AKKU				(0)				//COMMAND
+
+	//#define CFG_LOW_AKKU_MELDEN		(0)
+
+
+//COMMANDS and INFOS for Rasp
+#define CFG_ULTRASONIC_MSG		(1)
+#define CFG_AKKU				(0)				//COMMAND
+#define	CFG_RASP_CHECK			(1)			//auf 1 lassen, rasp check über task ausschalten
+#define CFG_AENTLADEN_MSG		(1)
 #endif
 
 
@@ -69,11 +73,11 @@ volatile uint16 zweiteDistanz;
  * Aktionen
  */
 #define FLEX_LENK_ENABLE			(0)			//Schaltet die Flexlenkung aus
-#define AKKU_ABSCHALTEN				(1)			//Akku überwachung
+#define AKKU_ABSCHALTEN				(0)			//Akku überwachung
 
 
 //TEST's	Im normalfall 0 !
-#define TEST_AUFLADEN				(1)			//initiirt nur den Aufladeprozess (kein Anfahren)
+#define TEST_AUFLADEN				(0)			//initiirt nur den Aufladeprozess (kein Anfahren)
 #define TEST_CONTAINER_ANHALTEN		(0)
 #define TEST_LADEN_NO_ACTION		(0)			//ist stärker als TEST_CONTAINER_ANHALTEN
 												//Wenn 1 fährt am container vorbei
