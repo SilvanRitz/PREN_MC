@@ -85,6 +85,7 @@ void handleActions(void){
 
 		beladen_Counter=0;
 		beladen_Active=NICHT_BELADEN;
+		secondBeladenWait=FALSE;
 		break;
 
 	case INIT_DONE:
@@ -101,7 +102,6 @@ void handleActions(void){
 	case ENTLADEN:
 		autoEntladen();
 		break;
-
 	case FERTIG:
 		setDCSpeed(0);
 		CAM_SERVO1_SetPos(CAM_SERVO_GERADE);
@@ -154,7 +154,8 @@ void changeToEntladen(void){
 void changeToDrive(void){
 	debugPrintfHandleActions("%s %s State Drive aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
 	hadleActionsState=DRIVE;
-	if(beladen_Active!=NICHT_BELADEN){
+#if MULTIPLE_STOP_ENABLE
+	if(secondBeladenWait==TRUE){
 		int16 result= zweiteDistanz-beladen_Counter*BELADEN_SPD/1000;
 		if (result<0){
 			result=0;
@@ -162,6 +163,7 @@ void changeToDrive(void){
 		setDistance(result);
 		changeToBeladen();
 	}
+#endif
 }
 
 

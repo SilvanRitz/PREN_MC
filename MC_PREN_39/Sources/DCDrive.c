@@ -55,9 +55,6 @@ static int32 val,dev;
 static uint8 kp=72;		//71
 static uint8 ki=28;			//28
 static uint8 kd=5;			//5
-/*  kiL = kiR = 10; //10 max 20
-  kpL = kpR = 60; //60 max 128
-  kdL = kdR = 0; //10  max 40*/
 
 enum dcDriveStates_t{
 	INIT,

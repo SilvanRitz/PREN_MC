@@ -25,10 +25,12 @@ volatile bool IR_flanke;
 
 volatile uint16 beladen_Counter;
 volatile uint8 beladen_Active;
+volatile bool secondBeladenWait;
 volatile uint16 zweiteDistanz;
-#define NICHT_BELADEN		0
-#define ANFAHREN_BELADEN	1
-#define AUFLADEN			2
+#define NICHT_BELADEN			0
+#define ANFAHREN_BELADEN		1
+#define ANFAHREN_BELADEN_CNT	2
+#define AUFLADEN				3
 
 /*
  * Module
@@ -45,27 +47,25 @@ volatile uint16 zweiteDistanz;
  * Messages
  */
 #if CFG_SHELL
+#define CFG_DEBUG_MSG			(1)			//immer 1 lassen!
 
-	#define CFG_DEBUG_MSG			(1)
-	#define CFG_ADC_MSG				(0)
-	#define CFG_FLEXSENSOR_DBG			(0)				//SPAM
-	#define CFG_FLEXSENSOR_CMD			(1)
-	#define CFG_DCDRIVE_MSG_DGB			(0)
-	#define CFG_DCDRIVE_MSG_CMD			(0)				//SPAM
-	#define CFG_SHELL_DEBUG_OUT		(1)
-	#define CFG_PWR_MSG 			(0)
-	#define CFG_SERVOPARSE_MSG 		(1)
+	//DEBUG
+	#define CFG_FLEXSENSOR_DBG		(0)			//SPAM
+	#define CFG_DCDRIVE_MSG_DGB		(0)			//fast ungebraucht
+	#define CFG_SHELL_DEBUG_OUT		(1)			//ungebraucht
+	#define CFG_SERVOPARSE_MSG 		(1)			//ungebraucht
 	#define CFG_ENCODER_MSG			(0)			//SPAM => Für Debug DC Motor
+
+
+	//COMMANDS and INFOS for Rasp
+	#define CFG_ULTRASONIC_MSG		(1)
+	#define CFG_FLEXSENSOR_CMD		(1)
+	#define CFG_IR_CMD				(0)
+	#define CFG_AKKU				(0)			//Meldet Low akku (schaltet nicht ab)
+	#define	CFG_RASP_CHECK			(1)			//auf 1 lassen, rasp check über task ausschalten
+	#define CFG_AENTLADEN_MSG		(1)
 	#define CFG_ABELADEN_MSG 		(1)
-
-	//#define CFG_LOW_AKKU_MELDEN		(0)
-
-
-//COMMANDS and INFOS for Rasp
-#define CFG_ULTRASONIC_MSG		(1)
-#define CFG_AKKU				(0)				//COMMAND
-#define	CFG_RASP_CHECK			(1)			//auf 1 lassen, rasp check über task ausschalten
-#define CFG_AENTLADEN_MSG		(1)
+	#define CFG_DCDRIVE_MSG_CMD		(0)			//SPAM
 #endif
 
 
@@ -74,15 +74,13 @@ volatile uint16 zweiteDistanz;
  */
 #define FLEX_LENK_ENABLE			(0)			//Schaltet die Flexlenkung aus
 #define AKKU_ABSCHALTEN				(0)			//Akku überwachung
+#define MULTIPLE_STOP_ENABLE		(0)			//normally 1
 
 
 //TEST's	Im normalfall 0 !
 #define TEST_AUFLADEN				(0)			//initiirt nur den Aufladeprozess (kein Anfahren)
 #define TEST_CONTAINER_ANHALTEN		(0)
 #define TEST_LADEN_NO_ACTION		(0)			//ist stärker als TEST_CONTAINER_ANHALTEN
-												//Wenn 1 fährt am container vorbei
-
-
-
+												//Wenn 1 fährt am Container vorbei
 
 #endif /* SOURCES_CONFIG_H_ */

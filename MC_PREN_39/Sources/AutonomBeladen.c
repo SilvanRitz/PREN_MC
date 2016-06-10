@@ -92,6 +92,7 @@ void autoBeladen(void){
 	switch (aBeladenStates){
 		case INIT:
 			debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);	//Debug Msg
+			beladen_Active=ANFAHREN_BELADEN;
 			#if TEST_AUFLADEN
 			aBeladenStates=GREIF_ZU_1;
 			break;
@@ -132,7 +133,8 @@ void autoBeladen(void){
 			break;
 		case HALT:
 			setDCSpeed(0);
-			beladen_Active=AUFLADEN;
+			//if(beladen_Active==)
+			beladen_Active=AUFLADEN;//ERROR
 			//Container Found
 			aBeladenStates=GREIF_ZU_1;
 #if TEST_CONTAINER_ANHALTEN
@@ -269,7 +271,9 @@ return ERR_OK;
 
 void beladen_Aufgerufen(uint16 dist){
 	if(getHandleActionsState()==BELADEN){
-		beladen_Active=ANFAHREN_BELADEN;			//Startet die Zeitmessung
+		if(beladen_Active==ANFAHREN_BELADEN)
+		beladen_Active=ANFAHREN_BELADEN_CNT;			//Startet die Zeitmessung
+		secondBeladenWait=TRUE;
 		beladen_Counter=0;
 		zweiteDistanz=dist;
 	}

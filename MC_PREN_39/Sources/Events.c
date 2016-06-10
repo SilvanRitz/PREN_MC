@@ -394,7 +394,7 @@ void TU1_OnChannel5(LDD_TUserData *UserDataPtr)
 		setNomValue(temp);
 		counterA=0;
 	}
-	if(beladen_Active==ANFAHREN_BELADEN){
+	if(beladen_Active==ANFAHREN_BELADEN_CNT){
 		beladen_Counter++;
 	}
 }

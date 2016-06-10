@@ -105,7 +105,7 @@ uint16 lenkUpdateNomValue(void){
 }
 
 void debugPrintfInfraRedSensor(const char *fmt, ...) {
-#if CFG_ADC_MSG
+#if CFG_IR_CMD
 	debugPrintf(fmt);
 #endif
 }
