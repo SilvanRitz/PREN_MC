@@ -14,7 +14,7 @@
 #include "GREIF_SERVO3.h"
 #include "LADEN_SERVO4.h"
 #include "LED_BLUE.h"
-
+#include "CS1.h"
 
 //-----------Shell Autonom Beladen--------
 #define A_BELADEN_CMD_HELP			"help"
@@ -234,7 +234,10 @@ void autoBeladen(void){
 
 void debugPrintfABeladen(const char *fmt, ...) {
 #if CFG_ABELADEN_MSG
-	debugPrintf(fmt);
+	 // CS1_EnterCritical();
+	  debugPrintf(fmt);
+	 // CS1_ExitCritical();
+
 #endif
 }
 

@@ -13,10 +13,13 @@
 #include "RaspCheck.h"
 #include "handleActions.h"
 
+
 static portTASK_FUNCTION(Task_Shell, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
-	handleCommunication();
+	  //CS1_EnterCritical();
+	  handleCommunication();
+	  //CS1_ExitCritical();
     FRTOS1_vTaskDelay(5/(portTICK_RATE_MS));
   }
 }

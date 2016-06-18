@@ -10,7 +10,7 @@
 #include "UART_Shell.h"
 #include "DebugBit.h"
 #include "handleActions.h"
-
+#include "CS1.h"
 
 
 
@@ -101,7 +101,9 @@ void cmdPrintfDCDrive(const char *fmt, ...) {
 #if CFG_DCDRIVE_MSG_CMD
 	handle_actions_t actionsState=getHandleActionsState();
 	if(actionsState!=INIT_ALL && actionsState!=FERTIG && actionsState!=AKKU_LEER){	// ||actionsState==INIT_ALL
-		debugPrintf(fmt);
+		  //CS1_EnterCritical();
+		  debugPrintf(fmt);
+		 // CS1_ExitCritical();
 	}
 #endif
 }
@@ -128,7 +130,7 @@ void setDCSpeed(uint16 speed){
 	setValue=speed*TICKS_MAXSPEED/DC_MAXSPEED;	//Umrechnung geschwindigkeit in sollspeed
 	spd_shell=speed;
 	sendSpdReached();
-	cmdPrintfDCDrive("%s Geschwindigkeit %i\r\n",DEBUG_MSG_CMD,setValue);
+	cmdPrintfDCDrive("%s Spd set %i\r\n",DEBUG_MSG_CMD,setValue);
 	//update PID Regler
 }
 
@@ -142,7 +144,7 @@ uint16 updateNomValue(){
 }
 
 void sendSpdReached(void){
-	cmdPrintfDCDrive("%s %i\r\n",DC_SPD_REACHED_RSP,spd_shell);
+	//cmdPrintfDCDrive("%s %i\r\n",DC_SPD_REACHED_RSP,spd_shell);
 }
 
 //--------Shellpart------------

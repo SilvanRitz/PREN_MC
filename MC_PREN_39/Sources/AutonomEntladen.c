@@ -12,6 +12,7 @@
 #include "ENTLADEN_SERVO5.h"
 #include "FRTOS1.h"
 #include "DCDrive.h"
+#include "CS1.h"
 
 
 //-----------Shell Autonom Beladen--------
@@ -75,7 +76,9 @@ void autoEntladen(void){
 
 void debugPrintfAEntladen(const char *fmt, ...) {
 #if CFG_AENTLADEN_MSG
-	debugPrintf(fmt);
+	  //CS1_EnterCritical();
+	  debugPrintf(fmt);
+	  //CS1_ExitCritical();
 #endif
 }
 

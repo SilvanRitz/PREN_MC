@@ -15,6 +15,7 @@
 #include "config.h"
 #include "FRTOS1.h"
 #include "handleActions.h"
+#include "CS1.h"
 
 #define UL_RESULT_NOT_READY 0xffff
 
@@ -150,7 +151,9 @@ void debugPrintfUltraSonic(const char *fmt, ...) {
 #if CFG_ULTRASONIC_MSG
 	handle_actions_t actionsState=getHandleActionsState();
 	if(actionsState!=INIT_ALL && actionsState!=FERTIG && actionsState!=AKKU_LEER){	// ||actionsState==INIT_ALL
-		debugPrintf(fmt);
+		 // CS1_EnterCritical();
+		  debugPrintf(fmt);
+		 // CS1_ExitCritical();
 	}
 #endif
 }

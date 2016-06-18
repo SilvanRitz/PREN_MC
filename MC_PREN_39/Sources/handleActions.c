@@ -23,6 +23,7 @@
 #include "UART_Shell.h"
 #include "AutonomBeladen.h"
 #include "config.h"
+#include "CS1.h"
 
 
 
@@ -195,7 +196,9 @@ void changeToAkkuLeer(void){
 
 
 void debugPrintfHandleActions(const char *fmt, ...) {
-	debugPrintf(fmt);
+	  //CS1_EnterCritical();
+	  debugPrintf(fmt);
+	  //CS1_ExitCritical();
 }
 
 handle_actions_t getHandleActionsState(){
