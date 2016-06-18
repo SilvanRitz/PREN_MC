@@ -10,6 +10,8 @@
 #include "handleActions.h"
 
 #include "ENTLADEN_SERVO5.h"
+#include "FRTOS1.h"
+#include "DCDrive.h"
 
 
 //-----------Shell Autonom Beladen--------
@@ -21,7 +23,11 @@
 	#define A_ENTLADEN_MAXDIST_STR	"1000"
 #define A_ENTLADEN_FIN_RESP			"StEf"
 
+#define ENTLADEN_SERVO_OFFEN		30
+#define ENTLADEN_SERVO_ZU			245
 
+#define SERVO_DELAY_ALG_E				500
+#define SERVO_DELAY_LONG_E			2000
 
 //--------Variabeln---------
 
@@ -32,13 +38,9 @@
 
 enum aBeladenStates_t{
 	DO_NOTHING,
-	INIT,
-	CHECK_IR,
-	CONTAINER_FOUND,
-	GET_CONTAINER,
-	EMPTY_CONTAINER,
-	PLACE_CONTAINER,
-	SEND_REPORT,
+	HALT,
+	OPEN,
+	CLOSE,
 	EXIT
 }aEntladenStates=DO_NOTHING;
 
@@ -46,44 +48,26 @@ enum aBeladenStates_t{
 void autoEntladen(void){
 	switch (aEntladenStates){
 	case DO_NOTHING:
-		aEntladenStates=INIT;
+		aEntladenStates=HALT;
 		debugPrintfAEntladen("%s\r\n",A_ENTLADEN_FIN_RESP);
 		break;
-	case INIT:
-
-		//debugPrintfABeladen("%s %s: freigegeben\r\n",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
-		//setSpeed()
-		//handle Direction
-		//measure time
-		//time elapsed =>Check Ir
-
-
-
-		aEntladenStates=CHECK_IR;
-		//---TEMPORÄR-----
-		aEntladenStates=DO_NOTHING;
-		changeToDrive();
-		//-------
+	case HALT:
+		setDCSpeed(0);
+		aEntladenStates=OPEN;
+		FRTOS1_vTaskDelay(SERVO_DELAY_ALG_E/(portTICK_RATE_MS));
 		break;
-	case CHECK_IR:
-		//get IR Interrupt
-		//measure "On Time"
-		//in tolerance? => contaier found and stop
+	case OPEN:
+		ENTLADEN_SERVO5_SetPos(ENTLADEN_SERVO_OFFEN);
+		aEntladenStates=CLOSE;
+		FRTOS1_vTaskDelay(SERVO_DELAY_LONG_E/(portTICK_RATE_MS));
 		break;
-	case CONTAINER_FOUND:
-		//init container greifen
+	case CLOSE:
+		ENTLADEN_SERVO5_SetPos(ENTLADEN_SERVO_ZU);
+		aEntladenStates=EXIT;
+		FRTOS1_vTaskDelay(SERVO_DELAY_ALG_E/(portTICK_RATE_MS));
 		break;
-	case GET_CONTAINER:
-		//init container heben
-		break;
-	case EMPTY_CONTAINER:
-		//init container zurückstellen (herunterfahren)
-		break;
-	case PLACE_CONTAINER:
-		// Container loslassen
-		break;
-	case SEND_REPORT:
-		//command an Raspberry
+	case EXIT:
+		changeToFertig();
 		break;
 	}
 }

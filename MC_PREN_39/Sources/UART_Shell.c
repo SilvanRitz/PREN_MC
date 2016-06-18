@@ -56,7 +56,7 @@ enum shellStates_t{
 	//LADEN_SERVO4_ParseCommand,
 	//ENTLADEN_SERVO5_ParseCommand,
 	FRTOS1_ParseCommand,
-	//PWM3_ParseCommand,
+	PWM3_ParseCommand,
 	A_Beladen_ParseCommand,
 	A_Entladen_ParseCommand,
 	start_ParseCommand,
@@ -88,6 +88,7 @@ unsigned int MyXprintf(const char *fmt, ...) {
   va_start(args,fmt);
   count = XF1_xvformat(MyPutChar, CLS1_GetStdio()->stdOut, fmt, args);
   va_end(args);
+ // count = XF1_xvformat(MyPutChar, CLS1_GetStdio()->stdOut, "\0", args);
   return count;
 }
 
@@ -107,7 +108,7 @@ unsigned int debugPrintf(const char *fmt, ...) {
 void handleCommunication(void){
 	switch (shellStates){
 	case INIT:
-		debugPrintf("\nWelcome\r\n\0");
+		debugPrintf("\nWelcome\r\n");
 		shellStates=GET_COMMANDS;
 		break;
 	case GET_COMMANDS:

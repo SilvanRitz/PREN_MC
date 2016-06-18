@@ -170,7 +170,7 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
       p = cmd+sizeof(DCDRIVE_SHELL_NAME_STR" "DCDRIVE_CMD_SPEED);
       if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=DC_MAXSPEED) {
     	handle_actions_t actionsState=getHandleActionsState();
-    	if(actionsState==DRIVE){	// ||actionsState==INIT_ALL
+    	if(actionsState==DRIVE ||actionsState==INIT_DONE){	// ||actionsState==INIT_ALL
     	  setDCSpeed(val);
     	}
 		*handled = TRUE;
