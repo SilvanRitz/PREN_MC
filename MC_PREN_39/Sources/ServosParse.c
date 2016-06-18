@@ -85,7 +85,7 @@ uint8_t SERVO_Lenkung_ParseCommand(const unsigned char *cmd, bool *handled, cons
 else if (strncmp((const char*)cmd, (const char*)LENKSERVO_SHELL_NAME_STR " " LENKSERVO_GRAD_CMD, sizeof(LENKSERVO_SHELL_NAME_STR " "LENKSERVO_GRAD_CMD)-1)==0) {
 p = cmd+sizeof(LENKSERVO_SHELL_NAME_STR" "LENKSERVO_GRAD_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=LENKSERVO_MAXGRAD) {
-	debugPrintfServoParse("%s LeS neuer Wert: %i\r\n",DEBUG_MSG_CMD,val);
+	debugPrintfServoParse("%s LeS %i\r\n",DEBUG_MSG_CMD,val);
 	LENK_SERVO2_SetPos(val);
 	*handled = TRUE;
 } else {
@@ -123,7 +123,7 @@ uint8_t SERVO_Kamera_ParseCommand(const unsigned char *cmd, bool *handled, const
 else if (strncmp((const char*)cmd, (const char*)KAMERASERVO_SHELL_NAME_STR " " KAMERASERVO_GRAD_CMD, sizeof(KAMERASERVO_SHELL_NAME_STR " "KAMERASERVO_GRAD_CMD)-1)==0) {
 p = cmd+sizeof(KAMERASERVO_SHELL_NAME_STR" "KAMERASERVO_GRAD_CMD);
 if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=KAMERASERVO_MAXGRAD) {
-	debugPrintfServoParse("%s Cam neuer Wert: %i\r\n",DEBUG_MSG_CMD,val);
+	debugPrintfServoParse("%s Cam %i\r\n",DEBUG_MSG_CMD,val);
 	CAM_SERVO1_SetPos(val);
 	*handled = TRUE;
 } else {
