@@ -69,7 +69,7 @@ bool CreateTasks(void){
 	if (FRTOS1_xTaskCreate(
         Task_Shell,  /* pointer to the task */
         "Shell", /* task name for kernel awareness debugging */
-        configMINIMAL_STACK_SIZE, /* task stack size */
+        configMINIMAL_STACK_SIZE+100, /* task stack size */
         (void*)NULL, /* optional task startup argument */
 		tskIDLE_PRIORITY+6,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */
@@ -82,7 +82,7 @@ bool CreateTasks(void){
 	if (FRTOS1_xTaskCreate(
         Task_Us,  /* pointer to the task */
         "UltraSonic", /* task name for kernel awareness debugging */
-        configMINIMAL_STACK_SIZE, /* task stack size */
+        configMINIMAL_STACK_SIZE+50, /* task stack size */
         (void*)NULL, /* optional task startup argument */
         tskIDLE_PRIORITY+2,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */
@@ -95,7 +95,7 @@ bool CreateTasks(void){
 	if (FRTOS1_xTaskCreate(
         Task_ADC,  /* pointer to the task */
         "HandleADC", /* task name for kernel awareness debugging */
-        configMINIMAL_STACK_SIZE, /* task stack size */
+        configMINIMAL_STACK_SIZE+50, /* task stack size */
         (void*)NULL, /* optional task startup argument */
         tskIDLE_PRIORITY+1,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */
@@ -108,7 +108,7 @@ bool CreateTasks(void){
 	if (FRTOS1_xTaskCreate(
         Task_Drive,  /* pointer to the task */
         "DCDrive", /* task name for kernel awareness debugging */
-        configMINIMAL_STACK_SIZE, /* task stack size */
+        configMINIMAL_STACK_SIZE+50, /* task stack size */
         (void*)NULL, /* optional task startup argument */
 		//1,
         tskIDLE_PRIORITY+3,  /* initial priority */
@@ -122,7 +122,7 @@ bool CreateTasks(void){
 	if (FRTOS1_xTaskCreate(
         Task_Handl_Act,  /* pointer to the task */
         "Handl_Act", /* task name for kernel awareness debugging */
-        configMINIMAL_STACK_SIZE, /* task stack size */
+        configMINIMAL_STACK_SIZE+100, /* task stack size */
         (void*)NULL, /* optional task startup argument */
         tskIDLE_PRIORITY+4,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */

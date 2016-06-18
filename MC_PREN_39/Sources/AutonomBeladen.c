@@ -106,6 +106,8 @@ void autoBeladen(void){
 			}
 			else{
 				debugPrintfABeladen("%s %s: Distanz zum Container zu klein!",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR);
+				wait_time=((uint32)(BELADEN_SICHERHEIT_DIST*1000)/BELADEN_SPD);
+				FRTOS1_vTaskDelay(wait_time/(portTICK_RATE_MS));
 			}
 			aBeladenStates=ENABLE_IR;
 			break;
@@ -222,9 +224,9 @@ void autoBeladen(void){
 			break;
 		case SEND_REPORT:
 			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
-			FRTOS1_vTaskDelay(2000/(portTICK_RATE_MS));
-			aBeladenStates=INIT;
 			changeToDrive();
+			aBeladenStates=INIT;
+			FRTOS1_vTaskDelay(2000/(portTICK_RATE_MS));
 			break;
 		}
 }

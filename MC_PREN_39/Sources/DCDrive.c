@@ -99,7 +99,10 @@ void debugPrintfDCDrive(const char *fmt, ...) {
 
 void cmdPrintfDCDrive(const char *fmt, ...) {
 #if CFG_DCDRIVE_MSG_CMD
-	debugPrintf(fmt);
+	handle_actions_t actionsState=getHandleActionsState();
+	if(actionsState!=INIT_ALL && actionsState!=FERTIG && actionsState!=AKKU_LEER){	// ||actionsState==INIT_ALL
+		debugPrintf(fmt);
+	}
 #endif
 }
 
@@ -125,6 +128,7 @@ void setDCSpeed(uint16 speed){
 	setValue=speed*TICKS_MAXSPEED/DC_MAXSPEED;	//Umrechnung geschwindigkeit in sollspeed
 	spd_shell=speed;
 	sendSpdReached();
+	cmdPrintfDCDrive("%s Geschwindigkeit %i\r\n",DEBUG_MSG_CMD,setValue);
 	//update PID Regler
 }
 
@@ -166,25 +170,13 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
       p = cmd+sizeof(DCDRIVE_SHELL_NAME_STR" "DCDRIVE_CMD_SPEED);
       if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=DC_MAXSPEED) {
     	handle_actions_t actionsState=getHandleActionsState();
-    	if(actionsState==DRIVE ||actionsState==INIT_ALL){
+    	if(actionsState==DRIVE){	// ||actionsState==INIT_ALL
     	  setDCSpeed(val);
     	}
 		*handled = TRUE;
       } else {
     	  *handled = TRUE;
         CLS1_SendStr((const unsigned char*)"Wrong pos argument, must be in the range 0.."DC_MAXSPEED_STR"\r\n",io->stdErr);
-        res = ERR_FAILED;
-      }
-  return ERR_OK;
-  }
-  else if (strncmp((const char*)cmd, (const char*)DCDRIVE_SHELL_NAME_STR " pos", sizeof(DCDRIVE_SHELL_NAME_STR " pos")-1)==0) {
-      p = cmd+sizeof(DCDRIVE_SHELL_NAME_STR " pos");
-      if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=100) {
-    	  setDutyCycle(val);
-        //PWM3_SetDutyMS((uint8_t)val);
-		*handled = TRUE;
-      } else {
-        CLS1_SendStr((const unsigned char*)"Wrong pos argument, must be in the range 0..100\r\n", io->stdErr);
         res = ERR_FAILED;
       }
   return ERR_OK;

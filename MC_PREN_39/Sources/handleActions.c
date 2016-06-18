@@ -26,7 +26,7 @@
 
 
 
-static handle_actions_t hadleActionsState=INIT_ALL;
+static handle_actions_t handleActionsState=INIT_ALL;
 //static handle_actions_t hadleActionsState=INIT_ALL;
 
 //-----------Shell Autonom Beladen--------
@@ -71,7 +71,7 @@ static uint8 beladenCount=0;
 
 
 void handleActions(void){
-	switch (hadleActionsState){
+	switch (handleActionsState){
 	case INIT_ALL:
 		//Init DC DCDrive
 		setDCSpeed(0);
@@ -124,10 +124,10 @@ void handleActions(void){
 void changeToBeladen(void){
 	debugPrintfHandleActions("%s %s State Beladen aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
 	#if TEST_LADEN_NO_ACTION==0
-	if(hadleActionsState!=DRIVE){
-		debugPrintfHandleActions("%s %s Ungültiger state wechsel zu beladen!! Vorher %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,hadleActionsState);
+	if(handleActionsState!=DRIVE){
+		debugPrintfHandleActions("%s %s Ungültiger state wechsel zu beladen!! Vorher %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,handleActionsState);
 	}
-	hadleActionsState=BELADEN;
+	handleActionsState=BELADEN;
 	beladenCount++;
 #endif
 #if TEST_LADEN_NO_ACTION
@@ -137,30 +137,32 @@ void changeToBeladen(void){
 
 void changeToInitAll(void){
 	debugPrintfHandleActions("%s %s State Init All\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-	hadleActionsState=INIT_ALL;
+	handleActionsState=INIT_ALL;
 }
 
 void changeToEntladen(void){
 	debugPrintfHandleActions("%s %s State Entladen aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-	if(hadleActionsState!=DRIVE){
-		debugPrintfHandleActions("%s %s Ungültiger state wechsel zu entladen!! Vorher %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,hadleActionsState);
+	if(handleActionsState!=DRIVE){
+		debugPrintfHandleActions("%s %s Ungültiger state wechsel zu entladen!! Vorher %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,handleActionsState);
 	}
 	if(beladenCount!=2){
 		debugPrintfHandleActions("%s %s Beladen nicht zwei mal ausgeführt. Anz: %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,beladenCount);
 	}
-	hadleActionsState=ENTLADEN;
+	handleActionsState=ENTLADEN;
 }
 
 void changeToDrive(void){
 	debugPrintfHandleActions("%s %s State Drive aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-	hadleActionsState=DRIVE;
+	handleActionsState=DRIVE;
 #if MULTIPLE_STOP_ENABLE
 	if(secondBeladenWait==TRUE){
+		secondBeladenWait=FALSE;
 		int16 result= zweiteDistanz-beladen_Counter*BELADEN_SPD/1000;
 		if (result<0){
 			result=0;
 		}
 		setDistance(result);
+		setDCSpeed(0);
 		changeToBeladen();
 	}
 #endif
@@ -168,21 +170,26 @@ void changeToDrive(void){
 
 
 void changeToFertig(void){
-	debugPrintfHandleActions("%s %s State Fertig aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-	debugPrintfHandleActions("%s\r\n",STOP_SHELL_NAME_STR);
-	beladen_Active=NICHT_BELADEN;
-	beladenCount=0;
-	hadleActionsState=FERTIG;
+	if (handleActionsState!=BELADEN){
+		debugPrintfHandleActions("%s %s State Fertig aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
+		debugPrintfHandleActions("%s\r\n",STOP_SHELL_NAME_STR);
+		beladen_Active=NICHT_BELADEN;
+		beladenCount=0;
+		handleActionsState=FERTIG;
+	}
+	else{
+		debugPrintfHandleActions("%s %s Beladen aktiv, darf nicht wechseln\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
+	}
 }
 
 void changeToInitDone(void){
 	debugPrintfHandleActions("%s %s State Init Done aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-	hadleActionsState=INIT_DONE;
+	handleActionsState=INIT_DONE;
 }
 
 void changeToAkkuLeer(void){
 	debugPrintfHandleActions("%s %s State Akku Leer aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-	hadleActionsState=AKKU_LEER;
+	handleActionsState=AKKU_LEER;
 }
 
 
@@ -192,7 +199,7 @@ void debugPrintfHandleActions(const char *fmt, ...) {
 }
 
 handle_actions_t getHandleActionsState(){
-	return hadleActionsState;
+	return handleActionsState;
 }
 
 //----------Shellpart------------

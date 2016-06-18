@@ -48,21 +48,21 @@ enum shellStates_t{
   /* table with shell parser/handler */
   static const CLS1_ParseCommandCallback CmdParserTable[] =
   {
-    CLS1_ParseCommand,
-	LED1_ParseCommand,
-	CAM_SERVO1_ParseCommand,
-	GREIF_SERVO3_ParseCommand,
-	LADEN_SERVO4_ParseCommand,
-	ENTLADEN_SERVO5_ParseCommand,
-	FRTOS1_ParseCommand,
 	SERVO_Lenkung_ParseCommand,
 	SERVO_Kamera_ParseCommand,
-	PWM3_ParseCommand,
+	LED1_ParseCommand,
+	//CAM_SERVO1_ParseCommand,
+	//GREIF_SERVO3_ParseCommand,
+	//LADEN_SERVO4_ParseCommand,
+	//ENTLADEN_SERVO5_ParseCommand,
+	FRTOS1_ParseCommand,
+	//PWM3_ParseCommand,
 	A_Beladen_ParseCommand,
 	A_Entladen_ParseCommand,
 	start_ParseCommand,
 	stopp_ParseCommand,
 	Rasp_Check_ParseCommand,
+	CLS1_ParseCommand,
     NULL /* sentinel */
   };
 
@@ -95,6 +95,10 @@ unsigned int MyXprintf(const char *fmt, ...) {
 unsigned int debugPrintf(const char *fmt, ...) {
 #if CFG_DEBUG_MSG
 	return MyXprintf(fmt);
+	//CLS1_StdIO_OutErr_FctType dummy;
+	//uint8 dummy;
+	//CLS1_SendStr(fmt,dummy);
+	//return 1;
 #endif
 }
 

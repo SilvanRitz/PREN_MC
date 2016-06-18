@@ -14,6 +14,7 @@
 #include "UART_Shell.h"
 #include "config.h"
 #include "FRTOS1.h"
+#include "handleActions.h"
 
 #define UL_RESULT_NOT_READY 0xffff
 
@@ -76,7 +77,7 @@ void startMeasurement(void){
 			break;
 		case US_CALC_DIST:
 			distance_cm=US_usToCentimeters(echotime_us,25);
-			debugPrintfUltraSonic("%s: %i\r\n",US_MSG_CMD,distance_cm);
+			debugPrintfUltraSonic("%s %i\r\n",US_MSG_CMD,distance_cm);
 			US_GenaralState=US_TRIGGERED;
 		    FRTOS1_vTaskDelay(1000/(portTICK_RATE_MS*16));
 			break;
@@ -147,6 +148,9 @@ uint16_t US_usToCentimeters(uint16_t microseconds, uint8_t temperatureCelsius) {
 
 void debugPrintfUltraSonic(const char *fmt, ...) {
 #if CFG_ULTRASONIC_MSG
-	debugPrintf(fmt);
+	handle_actions_t actionsState=getHandleActionsState();
+	if(actionsState!=INIT_ALL && actionsState!=FERTIG && actionsState!=AKKU_LEER){	// ||actionsState==INIT_ALL
+		debugPrintf(fmt);
+	}
 #endif
 }
