@@ -47,7 +47,7 @@ static uint16 actSpeedValue=0;
 
 static uint16 nomValue=0;		//OFF
 static uint16 nomValueOld=0;		//istwert
-static uint16 setValue=0;
+static volatile uint16 setValue=0;
 static uint16 setValueOld=0;		//sollwert
 static int32 integ=0;
 static int32 devOld=0;
@@ -77,12 +77,9 @@ void DCDhandleSpeed(void){
 	case INIT:
 		debugPrintfDCDrive("%s %s: intialized\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);
 		dcDriveStates=HANDLE_SPEED;
-		//setDCVorwaerts();
 		break;
 	case HANDLE_SPEED:
 		pidDoWork();
-
-		//getCommands();
 		break;
 	case EXIT:
 		debugPrintfDCDrive("%s %s:Exit\r\n",DEBUG_MSG_CMD,DCDRIVE_MSG_CMD);

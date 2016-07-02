@@ -80,7 +80,7 @@ enum aBeladenStates_t{
 	GREIF_OFFEN_12,
 	SEND_REPORT,
 	EXIT
-}aBeladenStates=INIT;
+}volatile aBeladenStates=INIT;
 
 
 static uint16 distance=0;
@@ -96,9 +96,11 @@ void autoBeladen(void){
 			#if TEST_AUFLADEN
 			aBeladenStates=GREIF_ZU_1;
 			break;
-		#endif
+			#endif
 			//------Setze Spd und warte gewisse Zeit------
+			CS1_EnterCritical();
 			setDCSpeed(BELADEN_SPD);	//fahre mit 10cm pro sekunde
+			CS1_ExitCritical();
 			if(distance>BELADEN_SICHERHEIT_DIST){
 				wait_time=((uint32)(distance*1000)/BELADEN_SPD);
 				debugPrintfABeladen("%s %s: Warte ms: %i",DEBUG_MSG_CMD,A_BELADEN_SHELL_NAME_STR,wait_time);
@@ -116,6 +118,7 @@ void autoBeladen(void){
 			//ev delete zeit
 			LED_BLUE_On();
 			aBeladenStates=CHECK_IR;
+			break;
 		case CHECK_IR:
 			//get IR Interrupt
 
@@ -134,7 +137,9 @@ void autoBeladen(void){
 			}
 			break;
 		case HALT:
+			CS1_EnterCritical();
 			setDCSpeed(0);
+			CS1_ExitCritical();
 			//if(beladen_Active==)
 			beladen_Active=AUFLADEN;//ERROR
 			//Container Found
@@ -171,10 +176,12 @@ void autoBeladen(void){
 			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=GET_CONTAINER;
+			break;
 		case GET_CONTAINER:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU_GREIFEN);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
 			aBeladenStates=EMPTY_CONTAINER;
+			break;
 		case EMPTY_CONTAINER:
 			LADEN_SERVO4_SetPos(LADE_SERVO_OBEN);
 			FRTOS1_vTaskDelay(SERVO_DELAY_ALG*2/(portTICK_RATE_MS));
@@ -224,8 +231,10 @@ void autoBeladen(void){
 			break;
 		case SEND_REPORT:
 			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
-			changeToDrive();
+			CS1_EnterCritical();
 			aBeladenStates=INIT;
+			changeToDrive();
+			CS1_ExitCritical();
 			FRTOS1_vTaskDelay(2000/(portTICK_RATE_MS));
 			break;
 		}

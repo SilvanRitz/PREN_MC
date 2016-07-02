@@ -53,7 +53,9 @@ void autoEntladen(void){
 		debugPrintfAEntladen("%s\r\n",A_ENTLADEN_FIN_RESP);
 		break;
 	case HALT:
+		CS1_EnterCritical();
 		setDCSpeed(0);
+		CS1_ExitCritical();
 		aEntladenStates=OPEN;
 		FRTOS1_vTaskDelay(SERVO_DELAY_ALG_E/(portTICK_RATE_MS));
 		break;

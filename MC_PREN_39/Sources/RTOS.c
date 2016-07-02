@@ -17,9 +17,7 @@
 static portTASK_FUNCTION(Task_Shell, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
-	  //CS1_EnterCritical();
-	  handleCommunication();
-	  //CS1_ExitCritical();
+	handleCommunication();
     FRTOS1_vTaskDelay(5/(portTICK_RATE_MS));
   }
 }
@@ -114,7 +112,7 @@ bool CreateTasks(void){
         configMINIMAL_STACK_SIZE+50, /* task stack size */
         (void*)NULL, /* optional task startup argument */
 		//1,
-        tskIDLE_PRIORITY+3,  /* initial priority */
+        tskIDLE_PRIORITY+4,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */
       ) != pdPASS){
 		return FALSE;
@@ -127,7 +125,7 @@ bool CreateTasks(void){
         "Handl_Act", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE+100, /* task stack size */
         (void*)NULL, /* optional task startup argument */
-        tskIDLE_PRIORITY+4,  /* initial priority */
+        tskIDLE_PRIORITY+3,  /* initial priority */
         (xTaskHandle*)NULL /* optional task handle to create */
       ) != pdPASS){
 		return FALSE;

@@ -53,7 +53,7 @@ uint16 volatile istWert=0;
 //PID
 static uint16 nomValue=0;		//OFF
 static uint16 nomValueOld=0;		//istwert
-static uint16 setValue=SOLLWERT;
+static uint16 setValueADC=SOLLWERT;
 static uint16 setValueOld;		//sollwert
 static int16 integ, devOld;
 static int16 val,dev;
@@ -173,12 +173,12 @@ void Lenk_pidDoWork(void)
 	nomValueOld = nomValue;			//ist Wert (old)
 	nomValue=lenkUpdateNomValue();
   //nomValue = (nomValueOld+nomValue);
-  if (setValue == 0) val = integ = devOld = 0;
+  if (setValueADC == 0) val = integ = devOld = 0;
   else
   {
     // deviation (max devL = +1000 - -1000 = 2000)
     //dev = (setValue - nomValue) / 8;
-	 dev = (setValue - nomValue);
+	 dev = (setValueADC - nomValue);
     // P-Part (max kpL =
 	 if(dev>0){
 		 val = (kp2 * dev);

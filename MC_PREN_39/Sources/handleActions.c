@@ -128,8 +128,10 @@ void changeToBeladen(void){
 	if(handleActionsState!=DRIVE){
 		debugPrintfHandleActions("%s %s Ungültiger state wechsel zu beladen!! Vorher %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,handleActionsState);
 	}
-	handleActionsState=BELADEN;
-	beladenCount++;
+	else{
+		handleActionsState=BELADEN;
+		beladenCount++;
+	}
 #endif
 #if TEST_LADEN_NO_ACTION
 	debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
