@@ -29,7 +29,7 @@
 
 //------Aufladen distanzen-------
 #define BELADEN_SICHERHEIT_DIST		30
-#define CONTAINER_LENGTH			25		//in mm
+#define CONTAINER_LENGTH			18		//in mm
 
 //-----SERVO Positionen-------
 #define GREIF_SERVO_ZU				190				//45 =>Greifklemme offen
@@ -43,7 +43,7 @@
 #define LADE_SERVO_UNTEN			60				//Hebel 0° //60
 #define LADE_SERVO_UNTEN_ABDRUECKEN	LADE_SERVO_UNTEN-30
 
-
+#define SERVO_DELAY_SHORT			400
 #define SERVO_DELAY_ALG				800
 #define SERVO_DELAY_LONG			1500
 
@@ -154,32 +154,32 @@ void autoBeladen(void){
 		case GREIF_ZU_1:
 			//init container greifen
 			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=HEBEL_RUNTER_2;
 			break;
 		case HEBEL_RUNTER_2:
 			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN_MITTEL);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=GREIF_AUF_3;
 			break;
 		case GREIF_AUF_3:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_OFFEN);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=HEBEL_RUNTER_4;
 			break;
 		case HEBEL_RUNTER_4:
 			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=GET_CONTAINER_HALB;
 			break;
 		case GET_CONTAINER_HALB:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=GET_CONTAINER;
 			break;
 		case GET_CONTAINER:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU_GREIFEN);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=EMPTY_CONTAINER;
 			break;
 		case EMPTY_CONTAINER:
@@ -196,37 +196,37 @@ void autoBeladen(void){
 		case LOCKER_CONTAINER:
 			//init container zurückstellen (herunterfahren)
 			GREIF_SERVO3_SetPos(GREIF_SERVO_HALB_OFFEN);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=CONTAINER_ABDRUECKEN;
 			break;
 		case CONTAINER_ABDRUECKEN:
 			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN_ABDRUECKEN);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=PLACE_CONTAINER;
 			break;
 		case PLACE_CONTAINER:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_OFFEN);		// Container loslassen
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=HEBEL_HOCH_9;
 			break;
 		case HEBEL_HOCH_9:
 			LADEN_SERVO4_SetPos(LADE_SERVO_UNTEN_MITTEL);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=GREIF_ZU_10;
 			break;
 		case GREIF_ZU_10:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_ZU);		// Container loslassen
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=HEBEL_HOCH_11;
 			break;
 		case HEBEL_HOCH_11:
 			LADEN_SERVO4_SetPos(LADE_SERVO_OBEN);
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=GREIF_OFFEN_12;
 			break;
 		case GREIF_OFFEN_12:
 			GREIF_SERVO3_SetPos(GREIF_SERVO_OFFEN);		// Container loslassen
-			FRTOS1_vTaskDelay(SERVO_DELAY_ALG/(portTICK_RATE_MS));
+			FRTOS1_vTaskDelay(SERVO_DELAY_SHORT/(portTICK_RATE_MS));
 			aBeladenStates=SEND_REPORT;
 			break;
 		case SEND_REPORT:
@@ -234,6 +234,9 @@ void autoBeladen(void){
 			CS1_EnterCritical();
 			aBeladenStates=INIT;
 			changeToDrive();
+			if(secondBeladenWait==FALSE){
+				setDCSpeed(speedShell);
+			}
 			CS1_ExitCritical();
 			FRTOS1_vTaskDelay(2000/(portTICK_RATE_MS));
 			break;
@@ -285,8 +288,9 @@ return ERR_OK;
 
 void beladen_Aufgerufen(uint16 dist){
 	if(getHandleActionsState()==BELADEN){
-		if(beladen_Active==ANFAHREN_BELADEN)
-		beladen_Active=ANFAHREN_BELADEN_CNT;			//Startet die Zeitmessung
+		if(beladen_Active==ANFAHREN_BELADEN){
+			beladen_Active=ANFAHREN_BELADEN_CNT;			//Startet die Zeitmessung
+		}
 		secondBeladenWait=TRUE;
 		beladen_Counter=0;
 		zweiteDistanz=dist;

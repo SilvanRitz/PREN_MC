@@ -57,7 +57,7 @@ static handle_actions_t handleActionsState=INIT_ALL;
 //---------SERVO Konstanten---------
 
 //#define CAM_SERVO_INIT		125
-#define LENK_SERVO_INIT		125
+#define LENK_SERVO_INIT		105
 #define GREIF_SERVO_INIT	200				//45 =>Greifklemme offen
 #define LADE_SERVO_INIT		200				//Hebel 0°
 #define	ENTLADE_SERVO_INIT	245				//Entladeklappe geschlossen
@@ -160,12 +160,12 @@ void changeToDrive(void){
 #if MULTIPLE_STOP_ENABLE
 	if(secondBeladenWait==TRUE){
 		secondBeladenWait=FALSE;
-		int16 result= zweiteDistanz-beladen_Counter*BELADEN_SPD/1000;
+		int16 result=zweiteDistanz-beladen_Counter*2-20; //zweiteDistanz-beladen_Counter*20*BELADEN_SPD/1000-20;
 		if (result<0){
 			result=0;
 		}
 		setDistance(result);
-		setDCSpeed(0);
+		//setDCSpeed(0);
 		changeToBeladen();
 	}
 #endif
@@ -173,16 +173,16 @@ void changeToDrive(void){
 
 
 void changeToFertig(void){
-	if (handleActionsState!=BELADEN){
+	//if (handleActionsState!=BELADEN){
 		debugPrintfHandleActions("%s %s State Fertig aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
 		debugPrintfHandleActions("%s\r\n",STOP_SHELL_NAME_STR);
 		beladen_Active=NICHT_BELADEN;
 		beladenCount=0;
 		handleActionsState=FERTIG;
-	}
-	else{
+	//}
+	/*else{
 		debugPrintfHandleActions("%s %s Beladen aktiv, darf nicht wechseln\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-	}
+	}*/
 }
 
 void changeToInitDone(void){

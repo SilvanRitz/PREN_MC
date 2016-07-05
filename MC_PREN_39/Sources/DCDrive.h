@@ -29,4 +29,6 @@ void sendSpdReached(void);
 void setDCRueckwaerts();
 void setDCVorwaerts();
 
+extern volatile uint16 speedShell;
+
 #endif /* SOURCES_DCDRIVE_H_ */

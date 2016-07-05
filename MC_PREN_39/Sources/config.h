@@ -52,8 +52,8 @@ volatile uint16 zweiteDistanz;
 	//DEBUG
 	#define CFG_FLEXSENSOR_DBG		(0)			//SPAM
 	#define CFG_DCDRIVE_MSG_DGB		(0)			//fast ungebraucht
-	#define CFG_SHELL_DEBUG_OUT		(1)			//ungebraucht
-	#define CFG_SERVOPARSE_MSG 		(1)			//ungebraucht
+	#define CFG_SHELL_DEBUG_OUT		(0)			//ungebraucht
+	#define CFG_SERVOPARSE_MSG 		(0)			//ungebraucht
 	#define CFG_ENCODER_MSG			(0)			//SPAM => Für Debug DC Motor
 
 
@@ -61,11 +61,11 @@ volatile uint16 zweiteDistanz;
 	#define CFG_ULTRASONIC_MSG		(1)
 	#define CFG_FLEXSENSOR_CMD		(0)
 	#define CFG_IR_CMD				(0)
-	#define CFG_AKKU				(0)			//Meldet Low akku (schaltet nicht ab)
+	#define CFG_AKKU				(1)			//Meldet Low akku (schaltet nicht ab)
 	#define	CFG_RASP_CHECK			(1)			//auf 1 lassen, rasp check über task ausschalten
 	#define CFG_AENTLADEN_MSG		(1)
 	#define CFG_ABELADEN_MSG 		(1)
-	#define CFG_DCDRIVE_MSG_CMD		(1)			//SPAM
+	#define CFG_DCDRIVE_MSG_CMD		(0)			//SPAM
 #endif
 
 
@@ -74,7 +74,7 @@ volatile uint16 zweiteDistanz;
  */
 #define FLEX_LENK_ENABLE			(0)			//Schaltet die Flexlenkung aus
 #define AKKU_ABSCHALTEN				(0)			//Akku überwachung
-#define MULTIPLE_STOP_ENABLE		(1)			//Normal 1, 0 zu debuggen damit keine Fehler auftreten
+#define MULTIPLE_STOP_ENABLE		(0)			//Normal 1, 0 zu debuggen damit keine Fehler auftreten
 
 
 //TEST's	Im normalfall 0 !

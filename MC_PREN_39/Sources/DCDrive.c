@@ -48,6 +48,7 @@ static uint16 actSpeedValue=0;
 static uint16 nomValue=0;		//OFF
 static uint16 nomValueOld=0;		//istwert
 static volatile uint16 setValue=0;
+volatile uint16 speedShell=0;
 static uint16 setValueOld=0;		//sollwert
 static int32 integ=0;
 static int32 devOld=0;
@@ -170,7 +171,8 @@ uint8_t PWM3_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
       if (UTIL1_xatoi(&p, &val)==ERR_OK && val>=0 && val<=DC_MAXSPEED) {
     	handle_actions_t actionsState=getHandleActionsState();
     	if(actionsState==DRIVE ||actionsState==INIT_DONE){	// ||actionsState==INIT_ALL
-    	  setDCSpeed(val);
+    		speedShell=val;
+    		setDCSpeed(val);
     	}
 		*handled = TRUE;
       } else {
