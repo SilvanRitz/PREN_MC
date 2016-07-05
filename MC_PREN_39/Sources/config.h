@@ -58,7 +58,7 @@ volatile uint16 zweiteDistanz;
 
 
 	//COMMANDS and INFOS for Rasp
-	#define CFG_ULTRASONIC_MSG		(1)
+	#define CFG_ULTRASONIC_MSG		(0)
 	#define CFG_FLEXSENSOR_CMD		(0)
 	#define CFG_IR_CMD				(0)
 	#define CFG_AKKU				(1)			//Meldet Low akku (schaltet nicht ab)

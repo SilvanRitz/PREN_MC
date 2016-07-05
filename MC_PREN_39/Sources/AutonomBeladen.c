@@ -25,6 +25,7 @@
 	#define A_BELADEN_MAXDIST_STR	"1000"
 #define A_BELADEN_FIN_RESP			"StAf"		//auch im handleActions
 
+#define A_BELADEN_STOPPED			"Halted"
 
 
 //------Aufladen distanzen-------
@@ -83,6 +84,8 @@ enum aBeladenStates_t{
 }volatile aBeladenStates=INIT;
 
 
+static uint8 failureCounter=0;
+
 static uint16 distance=0;
 uint16 IR_Counter=0;
 
@@ -133,6 +136,21 @@ void autoBeladen(void){
 					wait_time_halt=((uint32)(DISTANCE_HALT*1000)/BELADEN_SPD);
 					FRTOS1_vTaskDelay(wait_time_halt/(portTICK_RATE_MS));
 					aBeladenStates=HALT;
+					failureCounter=0;
+				}
+				else{
+					failureCounter++;
+					if(failureCounter>=35){
+						failureCounter=0;
+						aBeladenStates=SEND_REPORT;
+					}
+				}
+			}
+			else{
+				failureCounter++;
+				if(failureCounter>=35){
+					failureCounter=0;
+					aBeladenStates=SEND_REPORT;
 				}
 			}
 			break;
@@ -140,6 +158,10 @@ void autoBeladen(void){
 			CS1_EnterCritical();
 			setDCSpeed(0);
 			CS1_ExitCritical();
+			debugPrintfABeladen("%s\r\n",A_BELADEN_STOPPED);		//Response for Rasp
+			debugPrintfABeladen("%s\r\n",A_BELADEN_STOPPED);
+			debugPrintfABeladen("%s\r\n",A_BELADEN_STOPPED);
+			debugPrintfABeladen("%s\r\n",A_BELADEN_STOPPED);
 			//if(beladen_Active==)
 			beladen_Active=AUFLADEN;//ERROR
 			//Container Found
@@ -231,12 +253,16 @@ void autoBeladen(void){
 			break;
 		case SEND_REPORT:
 			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);		//Response for Rasp
+			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);
+			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);
+			debugPrintfABeladen("%s\r\n",A_BELADEN_FIN_RESP);
 			CS1_EnterCritical();
 			aBeladenStates=INIT;
 			changeToDrive();
-			if(secondBeladenWait==FALSE){
+			/*if(secondBeladenWait==FALSE){
 				setDCSpeed(speedShell);
-			}
+			}*/
+			setDCSpeed(speedShell);
 			CS1_ExitCritical();
 			FRTOS1_vTaskDelay(2000/(portTICK_RATE_MS));
 			break;

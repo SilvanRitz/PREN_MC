@@ -71,6 +71,7 @@ void autoEntladen(void){
 		break;
 	case EXIT:
 		changeToFertig();
+		aEntladenStates=DO_NOTHING;
 		break;
 	}
 }

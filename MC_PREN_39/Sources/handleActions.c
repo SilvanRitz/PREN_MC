@@ -145,12 +145,12 @@ void changeToInitAll(void){
 
 void changeToEntladen(void){
 	debugPrintfHandleActions("%s %s State Entladen aktiv\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD);
-	if(handleActionsState!=DRIVE){
+	/*if(handleActionsState!=DRIVE){
 		debugPrintfHandleActions("%s %s Ungültiger state wechsel zu entladen!! Vorher %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,handleActionsState);
 	}
 	if(beladenCount!=2){
 		debugPrintfHandleActions("%s %s Beladen nicht zwei mal ausgeführt. Anz: %u\r\n",DEBUG_MSG_CMD,HANDLE_ACTION_MSG_CMD,beladenCount);
-	}
+	}*/
 	handleActionsState=ENTLADEN;
 }
 
